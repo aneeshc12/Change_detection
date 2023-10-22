@@ -1,1 +1,1 @@
-# Change_detection repo, contains the codebase used to obtain resulst so far
+# Change detection repo, contains the codebase used to obtain results so far
