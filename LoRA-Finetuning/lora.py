@@ -115,7 +115,7 @@ def train(model, train_loader, val_loader, optimizer, config):
 
 optimizer = optim.Adam(lora_model.parameters(), lr=0.001, betas=(0.9, 0.999), eps=1e-08, weight_decay=0)
 
-train_cfg = train_config(bias=2.5)
+train_cfg = train_config(r=8, bias=2.5)
 train(lora_model, train_loader, val_loader, optimizer, train_cfg)
 
 # Visualise test set images
@@ -162,7 +162,7 @@ w = []
 with torch.no_grad():
   for row in test_images:
     r = []
-    for i in row[:18]:
+    for i in row[:10]:
       im = test_transforms(i)
       k = lora_model(im.unsqueeze(0).cuda(), output_hidden_states=True).last_hidden_state[0,0,:]
 
@@ -190,6 +190,6 @@ for i in range(1, len(scores)):
 
 
 # Show the heatmap
-plt.title("Base ViT vision encoder, no finetuning")
+plt.title(f"ViT, LoRa r=8, bias=2.5, 50% hard triplets")
 
 plt.show()
