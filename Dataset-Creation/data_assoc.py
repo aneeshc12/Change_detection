@@ -7,9 +7,10 @@ from GroundingDINO.groundingdino.models import build_model
 from GroundingDINO.groundingdino.util.slconfig import SLConfig
 from GroundingDINO.groundingdino.util.utils import clean_state_dict
 
+import shutil
 from func import objectDetectionPipeline
 
-device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+device = torch.device('cuda:1' if torch.cuda.is_available() else 'cpu')
 print(device)
 
 def load_model_hf(repo_id, filename, ckpt_config_filename, device='cpu'):
@@ -69,37 +70,46 @@ groundingdino_model = load_model_hf(ckpt_repo_id, ckpt_filenmae, ckpt_config_fil
 
 # ! wget https://huggingface.co/spaces/xinyu1205/recognize-anything/resolve/main/ram_swin_large_14m.pth
 # load RAM model
-ram_model = ram(pretrained='/scratch/sarthak.chittawar/ram_swin_large_14m.pth', image_size=384, vit='swin_l')
+ram_model = ram(pretrained='/scratch/sarthak.chittawar/checkpoint/ram_swin_large_14m.pth', image_size=384, vit='swin_l')
 ram_model.eval()
 ram_model.to(device)
 
 # ! wget https://dl.fbaipublicfiles.com/segment_anything/sam_vit_h_4b8939.pth
 
-sam_checkpoint = '/scratch/sarthak.chittawar/sam_vit_h_4b8939.pth'
+sam_checkpoint = '/scratch/sarthak.chittawar/checkpoint/sam_vit_h_4b8939.pth'
 
 # load SAM predictor model
 sam_predictor = SamPredictor(build_sam(checkpoint=sam_checkpoint).to(device))
 
-# Loading the AI2-THOR images from drive onto local memory
-img_cropped_images = [0 for i in range(8)]
-bboxes = [0 for i in range(8)]
-for i in range(8):
-  img_cropped_images[i], bboxes[i] = objectDetectionPipeline("/scratch/sarthak.chittawar/dataset/orientation1/view{}/view{}.png".format(i+1, i+1), ram_model, groundingdino_model, sam_predictor, False, device)
-
+x = os.listdir('/scratch/sarthak.chittawar/dataset')
 try:
-  os.mkdir("./Dataset")
-  os.mkdir("./Dataset/orientation1")
+  shutil.rmtree('./Dataset')
 except:
   pass
+os.mkdir("./Dataset")
+for orientation in sorted(x, key=lambda x: int(x[len('orientation'):])):
+  # Loading the AI2-THOR images from drive onto local memory
+  img_cropped_images = [0 for i in range(8)]
+  bboxes = [0 for i in range(8)]
+  for i in range(8):
+    img_cropped_images[i], bboxes[i] = objectDetectionPipeline("/scratch/sarthak.chittawar/dataset/{}/view{}/view{}.png".format(orientation, i+1, i+1), ram_model, groundingdino_model, sam_predictor, False, device)
 
-fig = [0 for i in range(8)]
-axs = [0 for i in range(8)]
-for i in range(8):
-  os.mkdir("./Dataset/orientation1/view{}".format(i+1))
-  fig[i], axs[i] = plt.subplots(1, len(img_cropped_images[i]), figsize=(2*len(img_cropped_images[i]), 2))
-  for j, img in enumerate(img_cropped_images[i]):
-    axs[i][j].imshow(img)
-    Image.fromarray(img).save("./Dataset/orientation1/view{}/{}.png".format(i+1, j+1))
-  plt.subplots_adjust(wspace=0.4)
+  try:
+    os.mkdir("./Dataset/{}".format(orientation))
+  except:
+    pass
+
+  fig = [0 for _ in range(8)]
+  axs = [0 for _ in range(8)]
+  c = 1
+  for i in range(8):
+    os.mkdir("./Dataset/{}/view{}".format(orientation, i+1))
+    fig[i], axs[i] = plt.subplots(1, len(img_cropped_images[i]), figsize=(2*len(img_cropped_images[i]), 2))
+    for j, img in enumerate(img_cropped_images[i]):
+      # axs[i][j] = plt.subplot(8, len(img_cropped_images[i]), c)
+      axs[i][j].imshow(img)
+      c += 1
+      Image.fromarray(img).save("./Dataset/{}/view{}/{}.png".format(orientation, i+1, j+1))
+    plt.subplots_adjust(wspace=0.4)
+    print()
   plt.show()
-  print()
