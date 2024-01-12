@@ -1,0 +1,10 @@
+python>=3.10
+numpy
+matplotlib
+torch
+torchvision
+scipy
+PIL
+peft
+transformers
+glob
