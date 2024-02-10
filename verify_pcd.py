@@ -7,7 +7,7 @@ import os
 
 pcds = []
 # for f in os.listdir("pcds"):
-for f in ['3.npy', '4.npy']:
+for f in ['new0.npy', 'new1.npy', 'new2.npy']:
     pts = np.load(os.path.join("pcds", f))
     pcd = o3d.geometry.PointCloud()
 
