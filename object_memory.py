@@ -45,6 +45,8 @@ from diffusers import StableDiffusionInpaintPipeline
 
 from huggingface_hub import hf_hub_download
 
+import open3d as o3d
+
 import os
 
 # load models
@@ -242,10 +244,7 @@ class ObjectFinder:
 
     # given a phrase, filter and get all boxes and phrases
     def getBoxes(self, image, text_prompt, show=False, intersection_threshold=0.7, size_threshold=0.75):
-        total_time = 0
-
         keywords = [k.strip() for k in text_prompt.split('.')]
-        # print(text_prompt, keywords)
 
         with torch.no_grad():
             boxes = []
@@ -265,8 +264,6 @@ class ObjectFinder:
 
                 # print("FIND: ", word, detected_phrases, detected)
                 # works??
-                phrases.append(word)
-
                 if show:
                     print(i)
                 unique_enough = True
@@ -275,6 +272,7 @@ class ObjectFinder:
                     if unique_boxes_num == 0:
                         for box in detected:
                             boxes.append(box)
+                            phrases.append(word)
                             unique_boxes_num += 1
                     else:
                         # print("boxes: ", boxes)
@@ -298,6 +296,7 @@ class ObjectFinder:
 
                             if unique_enough:
                                 boxes.append(box)
+                                phrases.append(word)
                                 unique_boxes_num += 1
 
             return torch.stack(boxes), phrases
@@ -341,6 +340,7 @@ class ObjectFinder:
         return grounded_objects, boxes, masks, phrases
     
     # return a 3xN pointcloud corresponding to each object
+    # TODO determine whether outliers need to be filtered here
     def getDepth(self, depth_image_path, masks, f=300):
         if depth_image_path == None:
             raise NotImplementedError
@@ -405,8 +405,9 @@ def transform_pcd_to_global_frame(pcd, pose):
 
     q /= np.linalg.norm(q)                  # normalise
     R = Rotation.from_quat(q).as_matrix()
+    R = R @ np.array([[-1,0,0],[0,-1,0],[0,0,1]])   # o3d frame (ig? # TODO find out why)
 
-    transformed_pcd = R.T @ pcd
+    transformed_pcd = R @ pcd
     transformed_pcd -= t.reshape(3, 1)
 
     return transformed_pcd
@@ -442,6 +443,33 @@ def calculate_3d_IoU(pcd1, pcd2):
 
         return v
 
+def calculate_strict_overlap(pcd1, pcd2):
+    # get [min_X, min_Y, min_Z, max_X, max_Y, max_Z] for both pcds
+    bb1_min = pcd1.min(axis=-1)
+    bb1_max = pcd1.max(axis=-1)
+
+    bb2_min = pcd2.min(axis=-1)
+    bb2_max = pcd2.max(axis=-1)
+
+    overlap_min_corner = np.stack([bb1_min, bb2_min], axis=0).max(axis=0)
+    overlap_max_corner = np.stack([bb1_max, bb2_max], axis=0).min(axis=0)
+
+    # no overlap case
+    if (overlap_min_corner > overlap_max_corner).any():
+        return 0
+    else:
+        v = overlap_max_corner - overlap_min_corner
+        overlap_volume = v[0] * v[1] * v[2]
+        
+        bb1 = bb1_max - bb1_min
+        bb2 = bb2_max - bb2_min
+
+        v1 = bb1[0] * bb1[1] * bb1[2]
+        v2 = bb2[0] * bb2[1] * bb2[2]
+
+        v = overlap_volume/(min(v1,v2))
+
+        return v
 
 # Classes
 """
@@ -496,20 +524,45 @@ class ObjectMemory:
         print()
 
     """
-     takes in an rgb-d image and associated pose, detects all objects present, stores into memory
+    takes in an rgb-d image and associated pose, detects all objects present, stores into memory
+     
+    image_path: path to png file containing the rgb image (3,W,H)
+    depth_image_path: path to .npy file containing the depth img in npy format
+    pose: [x, y, z, qw, qx, qy, qz]
+    bounding_box_threshold: lax condition that checks for 3d bounding box IoU
+    occlusion_overlap_threshold: very strict condition that only checks for overlap
+                                 included to make sure heavily occluded objects are aggregated properly
     """
-    def process_image(self, image_path=None, depth_image_path=None, pose=None, bounding_box_threshold=0.3, testname=""):
+    def process_image(self, image_path=None, depth_image_path=None, pose=None, bounding_box_threshold=0.3,  occlusion_overlap_threshold=0.9, testname="", outlier_removal_config=None):
+        if outlier_removal_config == None:
+            outlier_removal_config = {
+                "radius_nb_points": 8,
+                "radius": 0.05,
+            }
+        
         if image_path == None or depth_image_path == None:
             raise NotImplementedError
         else:
             # segment objects, get (grounded_image bounding boxes, segmentation mask and label) per box
-            obj_grounded_imgs, obj_bounding_boxes, obj_masks, obj_phrases = self.objectFinder.find(image_path, caption="chair . sofa. table")
+            obj_grounded_imgs, obj_bounding_boxes, obj_masks, obj_phrases = self.objectFinder.find(image_path, caption="sofa . chair. table")
             
             # get ViT+LoRA embeddings, use bounding boxes and the image to get grounded images
             i = PIL.Image.open("/home2/aneesh.chavan/Change_detection/360_zip/view2/view2.png")
             embs = self.loraModule.encode_image(obj_grounded_imgs)
+            
+            # filter and transform pcds to the global frame
             obj_pointclouds = self.objectFinder.getDepth(depth_image_path, obj_masks)
-            transformed_pointclouds = [transform_pcd_to_global_frame(pcd, pose) for pcd in obj_pointclouds]
+            
+            filtered_pointclouds = []
+            for points in obj_pointclouds:  # filter
+                pcd = o3d.geometry.PointCloud()
+                pcd.points = o3d.utility.Vector3dVector(points.T)
+                inlier_pcd, _ = pcd.remove_radius_outlier(nb_points=outlier_removal_config["radius_nb_points"],
+                                                              radius=outlier_removal_config["radius"])
+                filtered_pointclouds.append(np.asarray(inlier_pcd.points).T)
+
+            transformed_pointclouds = [transform_pcd_to_global_frame(pcd, pose) for pcd in filtered_pointclouds]
+
 
             # check that all info recovered
             assert(len(obj_grounded_imgs) == len(obj_bounding_boxes) \
@@ -525,17 +578,18 @@ class ObjectMemory:
             for obj_phrase, emb, q_pcd in zip(obj_phrases, embs, transformed_pointclouds):
                 obj_exists = False
 
-                np.save("pcds/" + testname + "_" + obj_phrase + ".npy", q_pcd)
+                # np.save("pcds/" + testname + "_" + obj_phrase + ".npy", q_pcd)
 
                 print("Detected: ", obj_phrase)
 
                 for obj_id, info in self.memory.items():
                     object_pcd = info.pcd
                     IoU3d = calculate_3d_IoU(q_pcd, object_pcd)
-                    print("\tFound in mem: ", info, IoU3d)
+                    overlap3d = calculate_strict_overlap(q_pcd, object_pcd)
+                    print("\tFound in mem (info, iou, strict_overlap): ", info, IoU3d, overlap3d)
 
                     # if the iou is above the threshold, consider it to be the same object/instance
-                    if IoU3d > bounding_box_threshold:
+                    if IoU3d > bounding_box_threshold or overlap3d > occlusion_overlap_threshold:
                         info.addInfo(obj_phrase ,emb, q_pcd)
                         obj_exists = True
                         break
@@ -556,27 +610,44 @@ class ObjectMemory:
 
 # Main func
 from scipy.spatial.transform import Rotation as R
+import json
 
 if __name__ == "__main__":
     print("Begin")
     mem = ObjectMemory()
     print("Memory Init'ed")
 
-    q = R.from_euler('zyx', [0, 135, 0], degrees=True).as_quat()
-    t = np.array([-4.5, 0.9, 6.25, ])
-    pose = np.concatenate([t, q])
-    print("pose: ", pose)
+    # q = R.from_euler('zyx', [0, 135, 0], degrees=True).as_quat()
+    # t = np.array([-4.5, 0.9, 6.25, ])
+    # pose = np.concatenate([t, q])
+    # print("pose: ", pose)
 
-    print("Processing img 2")
-    mem.process_image(testname="view2", image_path='360_zip/view2/view2.png', depth_image_path='360_zip/view2/view2.npy', pose=pose)
-    print("Processed image\n")
+    # print("Processing img 2")
+    # mem.process_image(testname="view2", image_path='360_zip/view2/view2.png', depth_image_path='360_zip/view2/view2.npy', pose=pose)
+    # print("Processed image\n")
 
-    q = R.from_euler('zyx', [0, 90, 0], degrees=True).as_quat()
-    t = np.array([-4.5, 0.9, 3.25, ])
-    pose = np.concatenate([t, q])
+    # q = R.from_euler('zyx', [0, 90, 0], degrees=True).as_quat()
+    # t = np.array([-4.5, 0.9, 3.25, ])
+    # pose = np.concatenate([t, q])
 
-    print("Processing img 3")
-    mem.process_image(testname="view3", image_path='360_zip/view3/view3.png', depth_image_path='360_zip/view3/view3.npy', pose=pose)
-    print("Processed image\n")
+    # print("Processing img 3")
+    # mem.process_image(testname="view3", image_path='360_zip/view3/view3.png', depth_image_path='360_zip/view3/view3.npy', pose=pose)
+    # print("Processed image\n")
+
+    with open('/home2/aneesh.chavan/Change_detection/360_zip/json_poses.json', 'r') as f:
+        poses = json.load(f)
+
+    for i, view in enumerate(poses["views"]):
+        num = i+1
+        print(f"Processing img %d" % num)
+        q = R.from_euler('zyx', [r for _, r in view["rotation"].items()], degrees=True).as_quat()
+        t = np.array([x for _, x in view["position"].items()])
+        pose = np.concatenate([t, q])
+        print("Pose: ", pose)
+        mem.process_image(testname=f"view%d" % num, image_path=f"360_zip/view%d/view%d.png" % (num, num), depth_image_path=f"360_zip/view%d/view%d.npy" % (num, num), pose=pose)
+        print("Processed\n")
 
     mem.view_memory()
+
+    for _, m in mem.memory.items():
+        np.save(f"pcds/new%d.npy" % m.id, m.pcd)
