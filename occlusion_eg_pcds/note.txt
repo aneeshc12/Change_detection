@@ -1,0 +1,5 @@
+the last 2 pcds are a heavily occluded sofa and table
+they overlap perfectly, but because their bounding box is small compared to the actual pcd, the IoU is minimal
+
+thus, we could either include a last comparison step in process image to combine all of these cases,
+      or add a very strict overlap only condition when aggregating

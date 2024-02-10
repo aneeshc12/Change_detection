@@ -3,6 +3,24 @@ import open3d as o3d
 import matplotlib.pyplot as plt
 from scipy.spatial.transform import Rotation
 
+import os
+
+pcds = []
+# for f in os.listdir("pcds"):
+for f in ['3.npy', '4.npy']:
+    pts = np.load(os.path.join("pcds", f))
+    pcd = o3d.geometry.PointCloud()
+
+    print(pts.shape)
+
+    pcd.points = o3d.utility.Vector3dVector(pts.T)
+    pcd.paint_uniform_color(np.random.random(3))
+    pcds.append(pcd)
+
+o3d.visualization.draw_geometries(pcds)
+
+exit(0)
+
 def transform_pcd_to_global_frame(pcd, pose):
     t = pose[:3]
     q = pose[3:]
@@ -110,8 +128,19 @@ for a in range(1,9):
 num = 10
 for pose,pcd in zip(allPoses, pcds[:num]):
     bigR = pcd.get_rotation_matrix_from_quaternion(pose[3:])
-    pcd.rotate(bigR.T, center=(0,0,0))
+
+    R = Rotation.from_quat(pose[3:]).as_matrix()
+    # R = R.T
+    # R[:, :2] *= -1
+    b = R@ np.array([[-1,0,0],[0,-1,0],[0,0,1]])
+    
+
+
+    pcd.rotate(b, center=(0,0,0))
     pcd.translate(-pose[:3])
+
+    print(bigR - R, bigR.T@R)
+    print(bigR.T@b)
 
 
 # bigR = pcds[0].get_rotation_matrix_from_xyz((0, np.pi, 0))
