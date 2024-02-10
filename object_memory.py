@@ -1,12 +1,10 @@
 import os, sys
 
+# add gsam, gdino, ram to python path
 sys.path.append(os.path.join(os.getcwd(), "Grounded-Segment-Anything"))
 sys.path.append(os.path.join(os.getcwd(), "Grounded-Segment-Anything", "GroundingDINO"))
 sys.path.append(os.path.join(os.getcwd(), "GroundingDINO"))
 sys.path.append(os.path.join(os.getcwd(), "recognize-anything"))
-
-print(os.getcwd(), os.path.join(os.getcwd(), "Grounded-Segment-Anything", "GroundingDINO"))
-print(sys.path)
 
 import argparse
 import copy
@@ -64,6 +62,8 @@ def load_model_hf(repo_id, filename, ckpt_config_filename, device='cpu'):
     checkpoint = torch.load(cache_file, map_location=device)
     log = model.load_state_dict(clean_state_dict(checkpoint['model']), strict=False)
     print("Model loaded from {} \n => {}".format(cache_file, log))
+    print()
+    print()
     _ = model.eval()
     return model
 
@@ -89,11 +89,10 @@ from torchvision.transforms import (
 from tqdm import tqdm
 from transformers import ViTConfig, ViTModel, ViTForImageClassification
 from transformers import AutoImageProcessor, CLIPVisionModel
-
-# %%
 from peft import LoraConfig, get_peft_model
 
 # %%
+
 # ! mkdir -p /scratch/aneesh/
 # ! wget -O /scratch/aneesh/sam_vit_h_4b8939.pth https://dl.fbaipublicfiles.com/segment_anything/sam_vit_h_4b8939.pth
 
@@ -327,21 +326,15 @@ class ObjectFinder:
         
         # get object names
         if caption == None:
-            caption = "sofa | chair | table"    # TODO replace with RAM
+            caption = "sofa . chair . table"    # TODO replace with RAM
         
         # ground them, get associated phrases
         cxcy_boxes, phrases = self.getBoxes(image, caption)
 
         boxes, masks = self.segment(image_source, cxcy_boxes)
 
-        # if type(image_source) == None:
-        #     annotated_frame = None
-        # else:
-        #     annotated_frame = gd_annotate(image_source=image_source, boxes=boxes, logits=logits, phrases=phrases)
-        #     annotated_frame = annotated_frame[...,::-1] # BGR to RGB
 
         # ground objects
-
         grounded_objects = [image_source[int(bb[1]):int(bb[3]),
                                          int(bb[0]):int(bb[2]), :] for bb in boxes]
 
@@ -359,14 +352,14 @@ class ObjectFinder:
             num_objs = masks.shape[0]
 
             stacked_depth = np.tile(depth_image, (num_objs, 1, 1)) # get all centroids/pcds together
-            stacked_depth[masks.squeeze().cpu() == False] = 0
+            stacked_depth[masks.squeeze(dim=1).cpu() == False] = 0    # remove the depth channel from the masks
 
             horizontal_distance = np.tile(np.linspace(-h/2, h/2, h, dtype=np.float32), (num_objs, w,1))
-            vertical_distance =   np.tile(np.linspace(w/2, -w/2, w, dtype=np.float32).reshape(1,-1).T, (num_objs, 1, h))
+            vertical_distance =   np.tile(np.linspace(-w/2, w/2, w, dtype=np.float32).reshape(1,-1).T, (num_objs, 1, h))
 
-            X = horizontal_distance * depth_image/f
-            Y = vertical_distance * depth_image/f
-            Z = stacked_depth
+            X = horizontal_distance * stacked_depth/f
+            Y = vertical_distance * stacked_depth/f
+            Z = -stacked_depth
 
             # combine caluclated X,Y,Z points
             all_pointclouds = np.stack([X, Y, Z], 1).reshape((num_objs, 3, -1))
@@ -402,7 +395,9 @@ from scipy.spatial.transform import Rotation
 
 # Utility functions
 """
-Given a point cloud and an [x y z qw qx qy qz] pose in a frame, transform a pcd into that frame
+Given a point cloud and an [x y z qw qx qy qz] pose for the camera frame wrt
+world frame, 
+transform a pcd into the world frame
 """
 def transform_pcd_to_global_frame(pcd, pose):
     t = pose[:3]
@@ -411,9 +406,8 @@ def transform_pcd_to_global_frame(pcd, pose):
     q /= np.linalg.norm(q)                  # normalise
     R = Rotation.from_quat(q).as_matrix()
 
-
-    transformed_pcd = R @ pcd
-    transformed_pcd += t.reshape(3, 1)
+    transformed_pcd = R.T @ pcd
+    transformed_pcd -= t.reshape(3, 1)
 
     return transformed_pcd
 
@@ -428,8 +422,8 @@ def calculate_3d_IoU(pcd1, pcd2):
     bb2_min = pcd2.min(axis=-1)
     bb2_max = pcd2.max(axis=-1)
 
-    overlap_min_corner = np.stack([bb1_min, bb2_min], axis=0).min(axis=0)
-    overlap_max_corner = np.stack([bb1_max, bb2_max], axis=0).max(axis=0)
+    overlap_min_corner = np.stack([bb1_min, bb2_min], axis=0).max(axis=0)
+    overlap_max_corner = np.stack([bb1_max, bb2_max], axis=0).min(axis=0)
 
     # no overlap case
     if (overlap_min_corner > overlap_max_corner).any():
@@ -495,26 +489,25 @@ class ObjectMemory:
 
     # visualisation and utility
     def view_memory(self):
-        print(self.memory)
+        print("Objects stored in memory:")
         for _, info in self.memory.items():
             print(info.names)
             print(info)
+        print()
 
     """
      takes in an rgb-d image and associated pose, detects all objects present, stores into memory
     """
-    def process_image(self, image_path=None, depth_image_path=None, pose=None, bounding_box_threshold=0.3):
+    def process_image(self, image_path=None, depth_image_path=None, pose=None, bounding_box_threshold=0.3, testname=""):
         if image_path == None or depth_image_path == None:
             raise NotImplementedError
         else:
             # segment objects, get (grounded_image bounding boxes, segmentation mask and label) per box
-            obj_grounded_imgs, obj_bounding_boxes, obj_masks, obj_phrases = self.objectFinder.find(image_path)
+            obj_grounded_imgs, obj_bounding_boxes, obj_masks, obj_phrases = self.objectFinder.find(image_path, caption="chair . sofa. table")
             
             # get ViT+LoRA embeddings, use bounding boxes and the image to get grounded images
             i = PIL.Image.open("/home2/aneesh.chavan/Change_detection/360_zip/view2/view2.png")
-
             embs = self.loraModule.encode_image(obj_grounded_imgs)
-
             obj_pointclouds = self.objectFinder.getDepth(depth_image_path, obj_masks)
             transformed_pointclouds = [transform_pcd_to_global_frame(pcd, pose) for pcd in obj_pointclouds]
 
@@ -530,20 +523,25 @@ class ObjectMemory:
             print(obj_phrases)
             
             for obj_phrase, emb, q_pcd in zip(obj_phrases, embs, transformed_pointclouds):
-                obj_added = False
+                obj_exists = False
+
+                np.save("pcds/" + testname + "_" + obj_phrase + ".npy", q_pcd)
+
+                print("Detected: ", obj_phrase)
+
                 for obj_id, info in self.memory.items():
                     object_pcd = info.pcd
                     IoU3d = calculate_3d_IoU(q_pcd, object_pcd)
-                    print(obj_phrase, info.names, IoU3d)
+                    print("\tFound in mem: ", info, IoU3d)
 
-                    # if the iou is above the threshold, consider it to be the same object
+                    # if the iou is above the threshold, consider it to be the same object/instance
                     if IoU3d > bounding_box_threshold:
                         info.addInfo(obj_phrase ,emb, q_pcd)
-                        obj_added = True
+                        obj_exists = True
                         break
 
                 # new object detected
-                if not obj_added:
+                if not obj_exists:
                     new_obj_info = ObjectInfo(self.num_objects_stored,
                                                 obj_phrase,
                                                 emb,
@@ -553,22 +551,32 @@ class ObjectMemory:
                     
                     self.memory[self.num_objects_stored] = new_obj_info
                     self.num_objects_stored += 1
+                else:
+                    print('Object exists, aggregated to\n', info, '\n')
 
+# Main func
 from scipy.spatial.transform import Rotation as R
-q = R.from_euler('zyx', [0, 135, 0], degrees=True).as_quat()
-t = np.array([-4.5, 0.9, 6.25, ])
-pose = np.concatenate([t, q])
-print("pose: ", pose)
 
-mem = ObjectMemory()
-print("Memory Init")
+if __name__ == "__main__":
+    print("Begin")
+    mem = ObjectMemory()
+    print("Memory Init'ed")
 
-mem.process_image(image_path='360_zip/view2/view2.png', depth_image_path='360_zip/view2/view2.npy', pose=pose)
+    q = R.from_euler('zyx', [0, 135, 0], degrees=True).as_quat()
+    t = np.array([-4.5, 0.9, 6.25, ])
+    pose = np.concatenate([t, q])
+    print("pose: ", pose)
 
-q = R.from_euler('zyx', [0, 90, 0], degrees=True).as_quat()
-t = np.array([-4.5, 0.9, 6.25, ])
-pose = np.concatenate([t, q])
-# mem.process_image(image_path='360_zip/view3/view3.png', depth_image_path='360_zip/view3/view3.npy', pose=pose)
-print("Processed image")
+    print("Processing img 2")
+    mem.process_image(testname="view2", image_path='360_zip/view2/view2.png', depth_image_path='360_zip/view2/view2.npy', pose=pose)
+    print("Processed image\n")
 
-mem.view_memory()
+    q = R.from_euler('zyx', [0, 90, 0], degrees=True).as_quat()
+    t = np.array([-4.5, 0.9, 3.25, ])
+    pose = np.concatenate([t, q])
+
+    print("Processing img 3")
+    mem.process_image(testname="view3", image_path='360_zip/view3/view3.png', depth_image_path='360_zip/view3/view3.npy', pose=pose)
+    print("Processed image\n")
+
+    mem.view_memory()
