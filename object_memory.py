@@ -392,6 +392,9 @@ class ObjectFinder:
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy.spatial.transform import Rotation
+import torch.nn.functional as F
+
+from jcbb import JCBB
 
 # Utility functions
 """
@@ -483,11 +486,20 @@ class ObjectInfo:
         self.pcd = pcd
         # self.centroid = np.empty(3, np.float64)
 
+        self.mean_emb = None
+        self.centroid = None
+
     def addInfo(self, name, embedding, pcd):
         if name not in self.names:
             self.names.append(name)
         self.embeddings.append(embedding)
         self.pcd = np.concatenate([self.pcd, pcd], axis=-1)
+
+    def computeMeans(self):
+        # TODO messy, clean this up
+        self.mean_emb = np.mean(np.asarray(
+            [e.cpu() for e in self.embeddings]), axis=0)
+        self.centroid = np.mean(self.pcd, axis=-1)
 
     def __repr__(self):
         return(f"ID: %d | Names: [%s] |  Num embs: %d | Pcd size: " % \
@@ -501,6 +513,8 @@ class ObjectInfo:
 """
 class ObjectMemory:
     def __init__(self, lora_path=None):
+        self.device = 'cuda' if torch.cuda.is_available else 'cpu'
+
         self.objectFinder = ObjectFinder()
         self.loraModule = LoraRevolver()
 
@@ -523,6 +537,40 @@ class ObjectMemory:
             print(info)
         print()
 
+
+    """
+    Takes in an image and depth_image path, returns the following:
+        object phrases
+        embeddings of grounded images containing that object
+        backprojected pointclouds
+
+        there are an equal number of each, phrase_i <=> emb_i <=> pcd_i <=>
+    """
+    def _get_object_info(self, image_path, depth_image_path):
+        if image_path == None or depth_image_path == None:
+            raise NotImplementedError
+        else:
+            # segment objects, get (grounded_image bounding boxes, segmentation mask and label) per box
+            # TODO RAM
+            obj_grounded_imgs, obj_bounding_boxes, obj_masks, obj_phrases = self.objectFinder.find(image_path, caption="sofa . chair. table")
+            
+            # get ViT+LoRA embeddings, use bounding boxes and the image to get grounded images
+            embs = self.loraModule.encode_image(obj_grounded_imgs)
+            
+            # filter and transform pcds to the global frame
+            obj_pointclouds = self.objectFinder.getDepth(depth_image_path, obj_masks)
+
+            # check that all info recovered
+            assert(len(obj_grounded_imgs) == len(obj_bounding_boxes) \
+                    and len(obj_bounding_boxes) == len(obj_masks) \
+                    and len(obj_masks) == len(obj_phrases) \
+                    and len(embs) == len(obj_phrases))
+
+            # can return (obj_grounded_imgs, obj_bounding_boxes) if needed
+
+            return obj_phrases, embs, obj_pointclouds
+
+
     """
     takes in an rgb-d image and associated pose, detects all objects present, stores into memory
      
@@ -543,15 +591,7 @@ class ObjectMemory:
         if image_path == None or depth_image_path == None:
             raise NotImplementedError
         else:
-            # segment objects, get (grounded_image bounding boxes, segmentation mask and label) per box
-            obj_grounded_imgs, obj_bounding_boxes, obj_masks, obj_phrases = self.objectFinder.find(image_path, caption="sofa . chair. table")
-            
-            # get ViT+LoRA embeddings, use bounding boxes and the image to get grounded images
-            i = PIL.Image.open("/home2/aneesh.chavan/Change_detection/360_zip/view2/view2.png")
-            embs = self.loraModule.encode_image(obj_grounded_imgs)
-            
-            # filter and transform pcds to the global frame
-            obj_pointclouds = self.objectFinder.getDepth(depth_image_path, obj_masks)
+            obj_phrases, embs, obj_pointclouds = self._get_object_info(image_path, depth_image_path)
             
             filtered_pointclouds = []
             for points in obj_pointclouds:  # filter
@@ -563,12 +603,6 @@ class ObjectMemory:
 
             transformed_pointclouds = [transform_pcd_to_global_frame(pcd, pose) for pcd in filtered_pointclouds]
 
-
-            # check that all info recovered
-            assert(len(obj_grounded_imgs) == len(obj_bounding_boxes) \
-                   and len(obj_bounding_boxes) == len(obj_masks) \
-                   and len(obj_masks) == len(obj_phrases) \
-                   and len(embs) == len(obj_phrases))
 
             # for each tuple, consult already stored memory, match tuples to stored memory (based on 3d IoU)
                 # TODO optimise and batch, fetch all memory bounding boxes once
@@ -607,9 +641,117 @@ class ObjectMemory:
                     self.num_objects_stored += 1
                 else:
                     print('Object exists, aggregated to\n', info, '\n')
+            
+            # TODO consider downsampling points (optimisation)
+
+
+    """
+    Given an image and a corresponding depth image in an unknown frame, consult the stored memory
+    and output a pose in the world frame of the pcds stored in memory
+
+    pose returned as [x, y, z, qw, qx, qy, qz]
+    """
+    def localise(self, image_path, depth_image_path, icp_threshold=0.2):
+        localized_pose = np.zeros(7, dtype=np.float32)      # default pose, no translation or rotation
+        localized_pose[3] = 1.
+
+        # extract all objects currently seen, get embeddings, pcds in the local unknown frame
+        if image_path == None or depth_image_path == None:
+            raise NotImplementedError
+        else:
+            # get relevant obj info
+            _, detected_embs, detected_pointclouds = self._get_object_info(image_path, depth_image_path)
+
+            # correlate embeddings with objects in memory for all seen objects
+            # TODO maybe a KNN search will do better?
+            for _, m in self.memory.items(): m.computeMeans()       # update object info means
+            memory_embs = torch.Tensor([m.mean_emb for _, m in self.memory.items()]).to(self.device)
+
+            assert(len(detected_embs) <= len(memory_embs))
+
+            # Detected x Mem x Emb sized
+            cosine_similarities = F.cosine_similarity(detected_embs.unsqueeze(1), memory_embs.unsqueeze(0), axis=-1).cpu()
+
+            # TODO optimisations may be possible
+            # run ICP/FPFH loop closure to get an estimated transform for each seen object
+            R_matrices = np.zeros((len(detected_pointclouds), len(memory_embs), 3, 3), dtype=np.float32)
+            t_vectors = np.zeros((len(detected_pointclouds), len(memory_embs), 3), dtype=np.float32)
+
+            detected_pcd = o3d.geometry.PointCloud()
+            memory_pcd = o3d.geometry.PointCloud()
+            for i, d in enumerate(detected_pointclouds):
+                detected_pcd.points = o3d.utility.Vector3dVector(d.T)
+                for j, (_, m) in enumerate(self.memory.items()):
+                    memory_pcd.points = o3d.utility.Vector3dVector(m.pcd.T)
+
+                    registration = o3d.pipelines.registration.registration_icp(
+                        detected_pcd, memory_pcd, icp_threshold, np.eye(4),
+                        o3d.pipelines.registration.TransformationEstimationPointToPoint(),
+                        o3d.pipelines.registration.ICPConvergenceCriteria(max_iteration=200))
+
+                    transform = registration.transformation
+                    R = transform[:3,:3]
+                    t = transform[:3, 3]
+
+                    R_matrices[i, j] = R
+                    t_vectors[i, j] = t
+
+            # jcbb association using lora embeddings, estimated rotation/transform for each object to encode cost
+                    
+            # precalculation done, begin assigning objects
+            # TODO unseen objects in detected objects are not being dealt with, assuming that all detected objects can be assigned to mem objs
+            j = JCBB(cosine_similarities, R_matrices)
+            assns = j.get_assignments()
+
+            # calculate paths for all assingments, pick the best one
+            best_assignment = assns[0]
+            min_cost = 1e11
+            for assn in assns:
+                # for now, normalized product of cosine differences
+                cost = 0
+
+                ### COST FUNCTION ###
+                for i,j in enumerate(assn):
+                    cost += (1 - cosine_similarities[i,j])      
+                cost = np.log(cost) * 1./len(assn)      # normalized product of cosine DIFFERENCES
+
+                # get min cost
+                if cost < min_cost:
+                    min_cost = cost
+                    best_assignment = assn
+            
+            # using https://math.stackexchange.com/questions/61146/averaging-quaternions direct/fast averaging
+            qAvg = np.zeros(4)
+            q0 = None
+            tAvg = np.zeros(3)
+
+            print(best_assignment)
+
+            for i,j in enumerate(best_assignment):
+                # roughly avg rotation
+                q = Rot.from_matrix(R_matrices[i,j])
+                q = q.as_quat()
+
+                print("Quaternion obtained: ", i, " | ", q, '\n', R_matrices[i,j], "\n")
+
+                if i > 0:
+                    if np.dot(q, q0) < 0:
+                        q = -q
+                else:
+                    q0 = q
+                qAvg += q
+
+                # avg translation
+                tAvg += t_vectors[i,j]
+
+            qAvg = qAvg / np.mean(qAvg)
+            tAvg /= len(best_assignment)
+            
+            localised_pose = np.concatenate((tAvg, qAvg))
+            return localised_pose
 
 # Main func
-from scipy.spatial.transform import Rotation as R
+from scipy.spatial.transform import Rotation as Rot
 import json
 
 if __name__ == "__main__":
@@ -637,17 +779,36 @@ if __name__ == "__main__":
     with open('/home2/aneesh.chavan/Change_detection/360_zip/json_poses.json', 'r') as f:
         poses = json.load(f)
 
+    target_pose = None
     for i, view in enumerate(poses["views"]):
         num = i+1
+
+        # view 6 is our unseen view, skip
+
         print(f"Processing img %d" % num)
-        q = R.from_euler('zyx', [r for _, r in view["rotation"].items()], degrees=True).as_quat()
+        q = Rot.from_euler('zyx', [r for _, r in view["rotation"].items()], degrees=True).as_quat()
         t = np.array([x for _, x in view["position"].items()])
         pose = np.concatenate([t, q])
-        print("Pose: ", pose)
+        if num == 6:
+            target_pose = pose
+            continue
+        else:
+            print("Pose: ", pose)
+
+        
+
+        
         mem.process_image(testname=f"view%d" % num, image_path=f"360_zip/view%d/view%d.png" % (num, num), depth_image_path=f"360_zip/view%d/view%d.npy" % (num, num), pose=pose)
         print("Processed\n")
 
     mem.view_memory()
 
-    for _, m in mem.memory.items():
-        np.save(f"pcds/new%d.npy" % m.id, m.pcd)
+    # localise image 6
+    print("Target pose: ", target_pose)
+    target_num = 6
+    estimated_pose = mem.localise(image_path=f"360_zip/view%d/view%d.png" % (target_num, target_num), depth_image_path=f"360_zip/view%d/view%d.npy" % (target_num, target_num))
+
+    print("Estimated pose: ", estimated_pose)
+
+    # for _, m in mem.memory.items():
+    #     np.save(f"pcds/new%d.npy" % m.id, m.pcd)
