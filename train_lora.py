@@ -46,8 +46,8 @@ from transformers import AutoImageProcessor, CLIPVisionModel
 hyp = {
     "hard_triplet_percent": 0.5,
     "ignore_classes": True,
-    "ignore_start": 25,
-    "exp_name": "5x25"
+    "ignore_start": 40,
+    "exp_name": "vit_finegrained_5x40"
 }
 
 hyp["ignored_classes"] = \
@@ -742,7 +742,7 @@ for i in range(1, len(scores)):
 
 
 # Show the heatmap
-plt.title("Base ViT vision encoder, no finetuning")
+plt.title("Finetuned")
 
 plt.show()
 

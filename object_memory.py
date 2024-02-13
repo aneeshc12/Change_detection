@@ -263,7 +263,6 @@ class ObjectFinder:
                 )
 
                 # print("FIND: ", word, detected_phrases, detected)
-                # works??
                 if show:
                     print(i)
                 unique_enough = True
@@ -355,11 +354,11 @@ class ObjectFinder:
             stacked_depth[masks.squeeze(dim=1).cpu() == False] = 0    # remove the depth channel from the masks
 
             horizontal_distance = np.tile(np.linspace(-h/2, h/2, h, dtype=np.float32), (num_objs, w,1))
-            vertical_distance =   np.tile(np.linspace(-w/2, w/2, w, dtype=np.float32).reshape(1,-1).T, (num_objs, 1, h))
+            vertical_distance =   np.tile(np.linspace(w/2, -w/2, w, dtype=np.float32).reshape(-1,1), (num_objs, 1, h))
 
             X = horizontal_distance * stacked_depth/f
             Y = vertical_distance * stacked_depth/f
-            Z = -stacked_depth
+            Z = stacked_depth
 
             # combine caluclated X,Y,Z points
             all_pointclouds = np.stack([X, Y, Z], 1).reshape((num_objs, 3, -1))
@@ -408,10 +407,9 @@ def transform_pcd_to_global_frame(pcd, pose):
 
     q /= np.linalg.norm(q)                  # normalise
     R = Rotation.from_quat(q).as_matrix()
-    R = R @ np.array([[-1,0,0],[0,-1,0],[0,0,1]])   # o3d frame (ig? # TODO find out why)
 
     transformed_pcd = R @ pcd
-    transformed_pcd -= t.reshape(3, 1)
+    transformed_pcd += t.reshape(3, 1)
 
     return transformed_pcd
 
@@ -651,7 +649,7 @@ class ObjectMemory:
 
     pose returned as [x, y, z, qw, qx, qy, qz]
     """
-    def localise(self, image_path, depth_image_path, icp_threshold=0.2):
+    def localise(self, image_path, depth_image_path, icp_threshold=2):
         localized_pose = np.zeros(7, dtype=np.float32)      # default pose, no translation or rotation
         localized_pose[3] = 1.
 
@@ -676,6 +674,12 @@ class ObjectMemory:
             # run ICP/FPFH loop closure to get an estimated transform for each seen object
             R_matrices = np.zeros((len(detected_pointclouds), len(memory_embs), 3, 3), dtype=np.float32)
             t_vectors = np.zeros((len(detected_pointclouds), len(memory_embs), 3), dtype=np.float32)
+
+
+            # save pcds
+            for i, d in enumerate(detected_pointclouds): np.save("pcds/detected_pcd" + str(i) + ".npy", d)
+            for j, (_, m) in enumerate(self.memory.items()): np.save("pcds/memory_pcd" + str(j) + ".npy", m.pcd)
+            print("Pcds saved")
 
             detected_pcd = o3d.geometry.PointCloud()
             memory_pcd = o3d.geometry.PointCloud()
@@ -744,7 +748,7 @@ class ObjectMemory:
                 # avg translation
                 tAvg += t_vectors[i,j]
 
-            qAvg = qAvg / np.mean(qAvg)
+            qAvg = qAvg / np.linalg.norm(qAvg)
             tAvg /= len(best_assignment)
             
             localised_pose = np.concatenate((tAvg, qAvg))

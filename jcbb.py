@@ -52,11 +52,12 @@ def JCBBNode(tree, max_depth, depth, path, choices_left):
             child_choices_left
         )
 
-j = JCBB(np.zeros((3,4)), None)
-paths = j.get_assignments()
-# for p in paths:
-#     for k, v in p.items():
-#         print(k,v, sep="|", end=" ")
-#     print()
+if __name__ ==  '__main__':
+    j = JCBB(np.zeros((3,4)), None)
+    paths = j.get_assignments()
+    # for p in paths:
+    #     for k, v in p.items():
+    #         print(k,v, sep="|", end=" ")
+    #     print()
 
-print(paths)
+    print(paths)
