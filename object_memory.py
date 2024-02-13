@@ -649,7 +649,7 @@ class ObjectMemory:
 
     pose returned as [x, y, z, qw, qx, qy, qz]
     """
-    def localise(self, image_path, depth_image_path, icp_threshold=2):
+    def localise(self, image_path, depth_image_path, icp_threshold=.2):
         localized_pose = np.zeros(7, dtype=np.float32)      # default pose, no translation or rotation
         localized_pose[3] = 1.
 
@@ -683,22 +683,35 @@ class ObjectMemory:
 
             detected_pcd = o3d.geometry.PointCloud()
             memory_pcd = o3d.geometry.PointCloud()
+            # use centered pcds to get a better ICP initialisation
             for i, d in enumerate(detected_pointclouds):
-                detected_pcd.points = o3d.utility.Vector3dVector(d.T)
-                for j, (_, m) in enumerate(self.memory.items()):
-                    memory_pcd.points = o3d.utility.Vector3dVector(m.pcd.T)
+                detected_mean = np.mean(d, axis=-1)
+                detected_pcd.points = o3d.utility.Vector3dVector(d.T - detected_mean)
 
+                for j, (_, m) in enumerate(self.memory.items()):
+                    memory_mean = np.mean(m.pcd, axis=-1)
+                    memory_pcd.points = o3d.utility.Vector3dVector(m.pcd.T - memory_mean)
+
+                    # voxel downsample for equal point density
                     registration = o3d.pipelines.registration.registration_icp(
-                        detected_pcd, memory_pcd, icp_threshold, np.eye(4),
+                        detected_pcd.voxel_down_sample(0.05), 
+                        memory_pcd.voxel_down_sample(0.05),
+                        icp_threshold,
+                        np.eye(4),
                         o3d.pipelines.registration.TransformationEstimationPointToPoint(),
-                        o3d.pipelines.registration.ICPConvergenceCriteria(max_iteration=200))
+                        o3d.pipelines.registration.ICPConvergenceCriteria(max_iteration=200)
+                    )
 
                     transform = registration.transformation
                     R = transform[:3,:3]
                     t = transform[:3, 3]
-
+                    
                     R_matrices[i, j] = R
                     t_vectors[i, j] = t
+                    
+                    # adjust transformation to account for centered pcds
+                    # M = [R|t]D + (mean_M - R @ mean_D)
+                    t_vectors[i,j] += memory_mean - R@detected_mean
 
             # jcbb association using lora embeddings, estimated rotation/transform for each object to encode cost
                     
@@ -808,10 +821,10 @@ if __name__ == "__main__":
     mem.view_memory()
 
     # localise image 6
-    print("Target pose: ", target_pose)
     target_num = 6
     estimated_pose = mem.localise(image_path=f"360_zip/view%d/view%d.png" % (target_num, target_num), depth_image_path=f"360_zip/view%d/view%d.npy" % (target_num, target_num))
 
+    print("Target pose: ", target_pose)
     print("Estimated pose: ", estimated_pose)
 
     # for _, m in mem.memory.items():
