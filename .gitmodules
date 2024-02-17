@@ -1,7 +1,6 @@
 [submodule "Grounded-Segment-Anything"]
-	path = ./Dataset-Creation/Grounded-Segment-Anything
+	path = Grounded-Segment-Anything
 	url = https://github.com/IDEA-Research/Grounded-Segment-Anything.git
-
 [submodule "recognize-anything"]
-	path = ./Dataset-Creation/recognize-anything
+	path = recognize-anything
 	url = https://github.com/xinyu1205/recognize-anything.git
