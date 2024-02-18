@@ -58,6 +58,7 @@ hyp["ignored_classes"] = \
     [f"dining_tables/dining_table%d" % i for i in range(hyp["ignore_start"],60)] + \
     [f"sofas/sofa%d" % i for i in range(hyp["ignore_start"],60)]
 
+hyp["ignored_classes"] = []
 
 # %%
 # vit
@@ -255,9 +256,13 @@ test_transforms = Compose(
 batch_size = 12
 
 # train_dataset = ObjectTriplets('/home2/aneesh.chavan/Change_detection/condensed_procthor_images/train', train_transforms, num_triplets_per_class=100, difficult_triplet_percentage=hyp["hard_triplet_percent"])
-val_dataset = ObjectTriplets('/home2/aneesh.chavan/Change_detection/condensed_procthor_images/val', val_transforms, num_triplets_per_class=40, difficult_triplet_percentage=hyp["hard_triplet_percent"])
-test_dataset = ObjectTriplets('/home2/aneesh.chavan/Change_detection/condensed_procthor_images/test', test_transforms, num_triplets_per_class=20, difficult_triplet_percentage=hyp["hard_triplet_percent"])
-train_dataset = ObjectTriplets('/home2/aneesh.chavan/Change_detection/condensed_procthor_images/train', train_transforms, num_triplets_per_class=100, difficult_triplet_percentage=hyp["hard_triplet_percent"])
+# val_dataset = ObjectTriplets('/home2/aneesh.chavan/Change_detection/condensed_procthor_images/val', val_transforms, num_triplets_per_class=40, difficult_triplet_percentage=hyp["hard_triplet_percent"])
+# test_dataset = ObjectTriplets('/home2/aneesh.chavan/Change_detection/condensed_procthor_images/test', test_transforms, num_triplets_per_class=20, difficult_triplet_percentage=hyp["hard_triplet_percent"])
+# train_dataset = ObjectTriplets('/home2/aneesh.chavan/Change_detection/condensed_procthor_images/train', train_transforms, num_triplets_per_class=100, difficult_triplet_percentage=hyp["hard_triplet_percent"])
+
+val_dataset = ObjectTriplets('/scratch/aneesh/random/splits/val', val_transforms, num_triplets_per_class=40, difficult_triplet_percentage=hyp["hard_triplet_percent"])
+test_dataset = ObjectTriplets('/scratch/aneesh/random/splits/test', test_transforms, num_triplets_per_class=20, difficult_triplet_percentage=hyp["hard_triplet_percent"])
+train_dataset = ObjectTriplets('/scratch/aneesh/random/splits/train', train_transforms, num_triplets_per_class=100, difficult_triplet_percentage=hyp["hard_triplet_percent"])
 
 # train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
 val_loader = DataLoader(val_dataset, batch_size=batch_size, shuffle=True)
@@ -411,7 +416,8 @@ loss
 import re
 
 # Load all test images
-test_path =  '/home2/aneesh.chavan/Change_detection/condensed_procthor_images/test'
+# test_path =  '/home2/aneesh.chavan/Change_detection/condensed_procthor_images/test'
+test_path =  '/scratch/aneesh/random/splits/test'
 
 categories = os.listdir(test_path)
 test_classes = []
@@ -632,7 +638,8 @@ train(lora_model, train_loader, val_loader, optimizer, train_cfg)
 import re
 
 # Load all test images
-test_path =  '/home2/aneesh.chavan/Change_detection/condensed_procthor_images/test'
+# test_path =  '/home2/aneesh.chavan/Change_detection/condensed_procthor_images/test'
+test_path =  '/scratch/aneesh/random/splits/test'
 
 categories = os.listdir(test_path)
 test_classes = []
@@ -991,7 +998,8 @@ def load_lora_checkpoint(lora_ckpt):
 # !ls -lh /content/drive/MyDrive/change_detection_ckpts
 
 # %%
-save_name = hyp["exp_name"]
+# save_name = hyp["exp_name"]
+save_name = "procthor_1.pt"
 
 # %%
 lora_ckpt_vit = save_lora_checkpoint(lora_model, lora_config, model_checkpoint, save_name)

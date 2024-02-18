@@ -15,8 +15,8 @@ from torchvision.ops import box_convert
 
 # recognise anything
 from ram.models import ram
-from ram import inference_ram as inference
-from ram import get_transform
+from ram import inference_ram
+from ram import get_transform as get_transform_ram
 
 # Grounding DINO
 import GroundingDINO.groundingdino.datasets.transforms as T
@@ -93,12 +93,6 @@ from transformers import ViTConfig, ViTModel, ViTForImageClassification
 from transformers import AutoImageProcessor, CLIPVisionModel
 from peft import LoraConfig, get_peft_model
 
-# %%
-
-# ! mkdir -p /scratch/aneesh/
-# ! wget -O /scratch/aneesh/sam_vit_h_4b8939.pth https://dl.fbaipublicfiles.com/segment_anything/sam_vit_h_4b8939.pth
-
-# %%
 # loads a base ViT and a set of LoRa configs, allows loading and swapping between them
 class LoraRevolver:
     # load base ViT, its preprocessing functions
@@ -141,16 +135,16 @@ class LoraRevolver:
     def load_lora_ckpt_from_file(self, config_path, name):
         ckpt = torch.load(config_path)
         try:
-            self.ckpt_library[name] = ckpt
+            self.ckpt_library[str(name)] = ckpt
             del self.lora_model
-            self.lora_model = self.get_peft_model(self.base_model,
+            self.lora_model = get_peft_model(self.base_model,
                                                 ckpt["lora_config"]).to(self.device)
             self.lora_model.load_state_dict(ckpt["lora_state_dict"], strict=False)
         except:
             print("Lora checkpoint invalid")
             raise IndexError
 
-        self.ckpt_library[str(name): ckpt]
+        # self.ckpt_library[str(name): ckpt]
         
     def train_current_lora_model(self):
         pass
@@ -194,7 +188,10 @@ class ObjectFinder:
     #       
     def _load_models(self):
         # ram
-        # TODO
+        self.ram_model = ram(pretrained='/scratch/aneesh/ram_swin_large_14m.pth', image_size=384, vit='swin_l')
+        self.ram_model.eval()
+        self.ram_model.to(device)
+        self.ram_transform = get_transform_ram(image_size=384)
 
         # grounding dino
         ckpt_repo_id = "ShilongLiu/GroundingDINO"
@@ -210,7 +207,7 @@ class ObjectFinder:
         checkpoint = torch.load(cache_file, map_location=device)
         log = self.groundingdino_model.load_state_dict(clean_state_dict(checkpoint['model']), strict=False)
         print("Model loaded from {} \n => {}".format(cache_file, log))
-        _ = self.groundingdino_model.eval()
+        self.groundingdino_model.eval()
 
     def _load_sam(self, sam_checkpoint_path):
         # segment anything
@@ -324,10 +321,27 @@ class ObjectFinder:
         
         # get object names
         if caption == None:
-            caption = "sofa . chair . table"    # TODO replace with RAM
+            img_ram = self.ram_transform(PIL.Image.fromarray(image_source)).unsqueeze(0).to(self.device)
+            caption = inference_ram(img_ram, self.ram_model)[0].split("|")
+            
+            words_to_ignore = ["carpet", "living room", "ceiling", "room", "curtain", "den", "window", "floor", "wall", "red", "yellow", "white", "blue", "green", "brown"]
+
+            filtered_caption = ""
+            for c in caption:
+                if c.strip() in words_to_ignore:
+                    continue
+                else:
+                    filtered_caption += c
+                    filtered_caption += " . "
+            filtered_caption = filtered_caption[:-2]
+
+            print("caption post ram: ", filtered_caption)
+
+
+            # caption = "sofa . chair . table"    # TODO replace with RAM
         
         # ground them, get associated phrases
-        cxcy_boxes, phrases = self.getBoxes(image, caption)
+        cxcy_boxes, phrases = self.getBoxes(image, filtered_caption)
 
         boxes, masks = self.segment(image_source, cxcy_boxes)
 
@@ -394,6 +408,7 @@ from scipy.spatial.transform import Rotation
 import torch.nn.functional as F
 
 from jcbb import JCBB
+from fpfh.fpfh_register import register_point_clouds
 
 # Utility functions
 """
@@ -520,7 +535,7 @@ class ObjectMemory:
         self.objectFinder._load_sam('/scratch/aneesh/sam_vit_h_4b8939.pth')
 
         if lora_path != None:
-            self.loraModule.load_lora_ckpt_from_file(lora_path)
+            self.loraModule.load_lora_ckpt_from_file(lora_path, "5x40")
 
         self.num_objects_stored = 0
         self.memory = dict() # store ObjectInfo classes here
@@ -535,6 +550,9 @@ class ObjectMemory:
             print(info)
         print()
 
+    def clear_memory(self):
+        self.num_objects_stored = 0
+        self.memory = dict()
 
     """
     Takes in an image and depth_image path, returns the following:
@@ -550,7 +568,7 @@ class ObjectMemory:
         else:
             # segment objects, get (grounded_image bounding boxes, segmentation mask and label) per box
             # TODO RAM
-            obj_grounded_imgs, obj_bounding_boxes, obj_masks, obj_phrases = self.objectFinder.find(image_path, caption="sofa . chair. table")
+            obj_grounded_imgs, obj_bounding_boxes, obj_masks, obj_phrases = self.objectFinder.find(image_path)
             
             # get ViT+LoRA embeddings, use bounding boxes and the image to get grounded images
             embs = self.loraModule.encode_image(obj_grounded_imgs)
@@ -665,10 +683,13 @@ class ObjectMemory:
             for _, m in self.memory.items(): m.computeMeans()       # update object info means
             memory_embs = torch.Tensor([m.mean_emb for _, m in self.memory.items()]).to(self.device)
 
-            assert(len(detected_embs) <= len(memory_embs))
+            if len(detected_embs) > len(memory_embs):
+                detected_embs = detected_embs[:len(memory_embs)]
 
             # Detected x Mem x Emb sized
             cosine_similarities = F.cosine_similarity(detected_embs.unsqueeze(1), memory_embs.unsqueeze(0), axis=-1).cpu()
+
+
 
             # TODO optimisations may be possible
             # run ICP/FPFH loop closure to get an estimated transform for each seen object
@@ -693,16 +714,18 @@ class ObjectMemory:
                     memory_pcd.points = o3d.utility.Vector3dVector(m.pcd.T - memory_mean)
 
                     # voxel downsample for equal point density
-                    registration = o3d.pipelines.registration.registration_icp(
-                        detected_pcd.voxel_down_sample(0.05), 
-                        memory_pcd.voxel_down_sample(0.05),
-                        icp_threshold,
-                        np.eye(4),
-                        o3d.pipelines.registration.TransformationEstimationPointToPoint(),
-                        o3d.pipelines.registration.ICPConvergenceCriteria(max_iteration=200)
-                    )
+                    # registration = o3d.pipelines.registration.registration_icp(
+                    #     detected_pcd.voxel_down_sample(0.05), 
+                    #     memory_pcd.voxel_down_sample(0.05),
+                    #     icp_threshold,
+                    #     np.eye(4),
+                    #     o3d.pipelines.registration.TransformationEstimationPointToPoint(),
+                    #     o3d.pipelines.registration.ICPConvergenceCriteria(max_iteration=2000)
+                    # )
+                    # transform = registration.transformation
 
-                    transform = registration.transformation
+                    transform = register_point_clouds(detected_pcd, memory_pcd, voxel_size=0.1)
+                    
                     R = transform[:3,:3]
                     t = transform[:3, 3]
                     
@@ -723,6 +746,12 @@ class ObjectMemory:
             # calculate paths for all assingments, pick the best one
             best_assignment = assns[0]
             min_cost = 1e11
+
+            # print()
+            # print()
+            # print(cosine_similarities)
+            # print()
+            # print()
             for assn in assns:
                 # for now, normalized product of cosine differences
                 cost = 0
@@ -737,6 +766,40 @@ class ObjectMemory:
                     min_cost = cost
                     best_assignment = assn
             
+            #TODO use best assignment
+
+            # use ALL object pointclouds together
+            all_detected_points = []
+            all_memory_points = []
+            for i,j in enumerate(best_assignment):
+                all_detected_points.append(detected_pointclouds[i])
+                all_memory_points.append(self.memory[i].pcd)
+            all_detected_points = np.concatenate(all_detected_points, axis=-1)
+            all_memory_points = np.concatenate(all_memory_points, axis=-1)
+
+            detected_mean = np.mean(all_detected_points, axis=-1)
+            memory_mean = np.mean(all_memory_points, axis=-1)
+            
+            all_detected_pcd = o3d.geometry.PointCloud()
+            all_detected_pcd.points = o3d.utility.Vector3dVector(all_detected_points.T - detected_mean)
+            
+            all_memory_pcd = o3d.geometry.PointCloud()
+            all_memory_pcd.points = o3d.utility.Vector3dVector(all_memory_points.T - memory_mean)
+
+            transform = register_point_clouds(all_detected_pcd, all_memory_pcd, voxel_size=0.1)
+
+            R = copy.copy(transform[:3,:3])
+            t = copy.copy(transform[:3, 3])
+            
+            tAvg = t + memory_mean - R@detected_mean
+            qAvg = Rot.from_matrix(R).as_quat()
+
+            localised_pose = np.concatenate((tAvg, qAvg))
+
+
+            """
+            # object wise alignment
+
             # using https://math.stackexchange.com/questions/61146/averaging-quaternions direct/fast averaging
             qAvg = np.zeros(4)
             q0 = None
@@ -748,6 +811,10 @@ class ObjectMemory:
                 # roughly avg rotation
                 q = Rot.from_matrix(R_matrices[i,j])
                 q = q.as_quat()
+
+                print("Rotation: ", R_matrices[i,j])
+                print(i,j)
+                print()
 
                 print("Quaternion obtained: ", i, " | ", q, '\n', R_matrices[i,j], "\n")
 
@@ -765,67 +832,64 @@ class ObjectMemory:
             tAvg /= len(best_assignment)
             
             localised_pose = np.concatenate((tAvg, qAvg))
+            """
             return localised_pose
 
-# Main func
+############# Main func #############
 from scipy.spatial.transform import Rotation as Rot
 import json
 
 if __name__ == "__main__":
+    tgt = []
+    pred = []
+
     print("Begin")
-    mem = ObjectMemory()
+    mem = ObjectMemory(lora_path='models/vit_finegrained_5x40_procthor.pt')
     print("Memory Init'ed")
-
-    # q = R.from_euler('zyx', [0, 135, 0], degrees=True).as_quat()
-    # t = np.array([-4.5, 0.9, 6.25, ])
-    # pose = np.concatenate([t, q])
-    # print("pose: ", pose)
-
-    # print("Processing img 2")
-    # mem.process_image(testname="view2", image_path='360_zip/view2/view2.png', depth_image_path='360_zip/view2/view2.npy', pose=pose)
-    # print("Processed image\n")
-
-    # q = R.from_euler('zyx', [0, 90, 0], degrees=True).as_quat()
-    # t = np.array([-4.5, 0.9, 3.25, ])
-    # pose = np.concatenate([t, q])
-
-    # print("Processing img 3")
-    # mem.process_image(testname="view3", image_path='360_zip/view3/view3.png', depth_image_path='360_zip/view3/view3.npy', pose=pose)
-    # print("Processed image\n")
 
     with open('/home2/aneesh.chavan/Change_detection/360_zip/json_poses.json', 'r') as f:
         poses = json.load(f)
 
-    target_pose = None
-    for i, view in enumerate(poses["views"]):
-        num = i+1
+    for target in range(1,9):
+    # for target in [6]:
+        target_num = target
+        target_pose = None
+        for i, view in enumerate(poses["views"]):
+            num = i+1
 
-        # view 6 is our unseen view, skip
+            # view 6 is our unseen view, skip
+            print(f"Processing img %d" % num)
+            q = Rot.from_euler('zyx', [r for _, r in view["rotation"].items()], degrees=True).as_quat()
+            t = np.array([x for _, x in view["position"].items()])
+            pose = np.concatenate([t, q])
+            if num == target_num:
+                target_pose = pose
+                continue
+            else:
+                print("Pose: ", pose)
+            
+            mem.process_image(testname=f"view%d" % num, image_path=f"360_zip/view%d/view%d.png" % (num, num), depth_image_path=f"360_zip/view%d/view%d.npy" % (num, num), pose=pose)
+            print("Processed\n")
 
-        print(f"Processing img %d" % num)
-        q = Rot.from_euler('zyx', [r for _, r in view["rotation"].items()], degrees=True).as_quat()
-        t = np.array([x for _, x in view["position"].items()])
-        pose = np.concatenate([t, q])
-        if num == 6:
-            target_pose = pose
-            continue
-        else:
-            print("Pose: ", pose)
+        mem.view_memory()
 
+        estimated_pose = mem.localise(image_path=f"360_zip/view%d/view%d.png" % (target_num, target_num), depth_image_path=f"360_zip/view%d/view%d.npy" % (target_num, target_num))
+
+        print("Target pose: ", target_pose)
+        print("Estimated pose: ", estimated_pose)
+
+        mem.clear_memory()
+
+        tgt.append(target_pose)
+        pred.append(estimated_pose)
+
+        # for _, m in mem.memory.items():
+        #     np.save(f"pcds/new%d.npy" % m.id, m.pcd)
+        torch.cuda.empty_cache()
+
+    for i, t, p in zip(range(1,9), tgt, pred):
+        print("Pose: ", i)
+        print("Target pose:", t)
+        print("Estimated pose:", p)
+        print()
         
-
-        
-        mem.process_image(testname=f"view%d" % num, image_path=f"360_zip/view%d/view%d.png" % (num, num), depth_image_path=f"360_zip/view%d/view%d.npy" % (num, num), pose=pose)
-        print("Processed\n")
-
-    mem.view_memory()
-
-    # localise image 6
-    target_num = 6
-    estimated_pose = mem.localise(image_path=f"360_zip/view%d/view%d.png" % (target_num, target_num), depth_image_path=f"360_zip/view%d/view%d.npy" % (target_num, target_num))
-
-    print("Target pose: ", target_pose)
-    print("Estimated pose: ", estimated_pose)
-
-    # for _, m in mem.memory.items():
-    #     np.save(f"pcds/new%d.npy" % m.id, m.pcd)
