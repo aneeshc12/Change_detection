@@ -44,7 +44,7 @@ def register_point_clouds(source, target, voxel_size):
                 0.9),
             o3d.pipelines.registration.CorrespondenceCheckerBasedOnDistance(
                 distance_threshold)
-        ], o3d.pipelines.registration.RANSACConvergenceCriteria(200000, 0.999))
+        ], o3d.pipelines.registration.RANSACConvergenceCriteria(500000, 500))
 
     # Refine the registration using ICP
     result_icp = o3d.pipelines.registration.registration_icp(
