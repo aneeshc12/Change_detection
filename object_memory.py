@@ -1,4 +1,5 @@
 import os, sys
+import tqdm
 
 # add gsam, gdino, ram to python path
 sys.path.append(os.path.join(os.getcwd(), "Grounded-Segment-Anything"))
@@ -324,7 +325,7 @@ class ObjectFinder:
             img_ram = self.ram_transform(PIL.Image.fromarray(image_source)).unsqueeze(0).to(self.device)
             caption = inference_ram(img_ram, self.ram_model)[0].split("|")
             
-            words_to_ignore = ["carpet", "living room", "ceiling", "room", "curtain", "den", "window", "floor", "wall", "red", "yellow", "white", "blue", "green", "brown"]
+            words_to_ignore = ["carpet", "living room", "ceiling", "room", "curtain", "den", "window", "floor", "wall", "red", "yellow", "white", "blue", "green", "brown", "wood floor", "picture frame"]
 
             filtered_caption = ""
             for c in caption:
@@ -625,10 +626,10 @@ class ObjectMemory:
                 # remove double loop
             print(obj_phrases)
             
-            for obj_phrase, emb, q_pcd in zip(obj_phrases, embs, transformed_pointclouds):
+            for i, (obj_phrase, emb, q_pcd) in enumerate(zip(obj_phrases, embs, transformed_pointclouds)):
                 obj_exists = False
 
-                # np.save("pcds/" + testname + "_" + obj_phrase + ".npy", q_pcd)
+                # np.save("pcds/" + testname + "_" + str(i) + ".npy", q_pcd)
 
                 print("Detected: ", obj_phrase)
 
@@ -667,7 +668,7 @@ class ObjectMemory:
 
     pose returned as [x, y, z, qw, qx, qy, qz]
     """
-    def localise(self, image_path, depth_image_path, icp_threshold=.2):
+    def localise(self, image_path, depth_image_path, icp_threshold=.2, testname=""):
         localized_pose = np.zeros(7, dtype=np.float32)      # default pose, no translation or rotation
         localized_pose[3] = 1.
 
@@ -699,42 +700,45 @@ class ObjectMemory:
 
             # save pcds
             for i, d in enumerate(detected_pointclouds): np.save("pcds/detected_pcd" + str(i) + ".npy", d)
-            for j, (_, m) in enumerate(self.memory.items()): np.save("pcds/memory_pcd" + str(j) + ".npy", m.pcd)
+            for j, (_, m) in enumerate(self.memory.items()): np.save(f"pcds/%smemory_pcd" % str(testname) + str(j) + ".npy", m.pcd)
             print("Pcds saved")
 
             detected_pcd = o3d.geometry.PointCloud()
             memory_pcd = o3d.geometry.PointCloud()
             # use centered pcds to get a better ICP initialisation
-            for i, d in enumerate(detected_pointclouds):
-                detected_mean = np.mean(d, axis=-1)
-                detected_pcd.points = o3d.utility.Vector3dVector(d.T - detected_mean)
+            # with tqdm(total=len(detected_pointclouds) * len(self.memory)) as pbar:
+            #     for i, d in enumerate(detected_pointclouds):
+            #         detected_mean = np.mean(d, axis=-1)
+            #         detected_pcd.points = o3d.utility.Vector3dVector(d.T - detected_mean)
 
-                for j, (_, m) in enumerate(self.memory.items()):
-                    memory_mean = np.mean(m.pcd, axis=-1)
-                    memory_pcd.points = o3d.utility.Vector3dVector(m.pcd.T - memory_mean)
+            #         for j, (_, m) in enumerate(self.memory.items()):
+            #             memory_mean = np.mean(m.pcd, axis=-1)
+            #             memory_pcd.points = o3d.utility.Vector3dVector(m.pcd.T - memory_mean)
 
-                    # voxel downsample for equal point density
-                    # registration = o3d.pipelines.registration.registration_icp(
-                    #     detected_pcd.voxel_down_sample(0.05), 
-                    #     memory_pcd.voxel_down_sample(0.05),
-                    #     icp_threshold,
-                    #     np.eye(4),
-                    #     o3d.pipelines.registration.TransformationEstimationPointToPoint(),
-                    #     o3d.pipelines.registration.ICPConvergenceCriteria(max_iteration=2000)
-                    # )
-                    # transform = registration.transformation
+            #             # voxel downsample for equal point density
+            #             # registration = o3d.pipelines.registration.registration_icp(
+            #             #     detected_pcd.voxel_down_sample(0.05), 
+            #             #     memory_pcd.voxel_down_sample(0.05),
+            #             #     icp_threshold,
+            #             #     np.eye(4),
+            #             #     o3d.pipelines.registration.TransformationEstimationPointToPoint(),
+            #             #     o3d.pipelines.registration.ICPConvergenceCriteria(max_iteration=2000)
+            #             # )
+            #             # transform = registration.transformation
 
-                    transform = register_point_clouds(detected_pcd, memory_pcd, voxel_size=0.1)
-                    
-                    R = transform[:3,:3]
-                    t = transform[:3, 3]
-                    
-                    R_matrices[i, j] = R
-                    t_vectors[i, j] = t
-                    
-                    # adjust transformation to account for centered pcds
-                    # M = [R|t]D + (mean_M - R @ mean_D)
-                    t_vectors[i,j] += memory_mean - R@detected_mean
+            #             transform = register_point_clouds(detected_pcd, memory_pcd, voxel_size=0.1)
+                        
+            #             R = transform[:3,:3]
+            #             t = transform[:3, 3]
+                        
+            #             R_matrices[i, j] = R
+            #             t_vectors[i, j] = t
+                        
+            #             # adjust transformation to account for centered pcds
+            #             # M = [R|t]D + (mean_M - R @ mean_D)
+            #             t_vectors[i,j] += memory_mean - R@detected_mean
+
+            #             pbar.update(1)
 
             # jcbb association using lora embeddings, estimated rotation/transform for each object to encode cost
                     
@@ -842,6 +846,7 @@ import json
 if __name__ == "__main__":
     tgt = []
     pred = []
+
 
     print("Begin")
     mem = ObjectMemory(lora_path='models/vit_finegrained_5x40_procthor.pt')

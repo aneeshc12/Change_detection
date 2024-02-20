@@ -5,20 +5,18 @@ from scipy.spatial.transform import Rotation as Rot
 if __name__ == "__main__":
     tgt = []
     pred = []
-
+    
     # get paths
     lora_path = 'models/vit_finegrained_5x40_procthor.pt'
     dataset_root = '/scratch/aneesh/procthor_spinaround/'
     
     # get poses
-    with open('/scratch/aneesh/procthor_spinaround/pose/poses.txt', 'r') as f:
-        p = json.load(f)
-    p = np.array(p["corners"], dtype=np.float64)
+    p = np.load(os.path.join(dataset_root, "pose.npy"))
 
     poses = np.zeros((8,7), dtype=np.float64)
-    poses[:, :3] = p[:, :3]
-    for i, zyx in enumerate(p):
-        poses[i, 3:] = Rot.from_euler('zyx', zyx[3:], degrees=True).as_quat()
+    for i, pose in enumerate(p):
+        poses[i, :3] = pose[:3]
+        poses[i, 3:] = Rot.from_euler('xyz', pose[3:], degrees=True).as_quat()
 
     # list objects
     objects = [
@@ -38,26 +36,31 @@ if __name__ == "__main__":
     print("Memory Init'ed")
 
     for obj_num, obj in enumerate(objects):
-        # treat each view as the query view
-        for target in range(0,7):
-            target_pose = None
-            for i, pose in enumerate(poses):
-                num = i+1
+        print(obj, " beign processed")
 
+        # treat each view as the query view
+        for target in range(0,8):
+            target_pose = None
+
+
+            for i, pose in enumerate(poses):
+                num = i
                 print(f"Processing img %d" % num)
-                t = view[:3]
-                q = view[3:]
+                print(pose)
                 if num == target:
                     target_pose = pose
                     continue
+
+                t = pose[:3]
+                q = pose[3:]
                 
-                mem.process_image(testname=f"view%d" % num, image_path=f"/scratch/aneesh/procthor_spinaround/rgb/%s/%d.png" % (obj, num), 
+                mem.process_image(testname=f"%s_view%d" % (obj, num), image_path=f"/scratch/aneesh/procthor_spinaround/rgb/%s/%d.png" % (obj, num), 
                                 depth_image_path=f"/scratch/aneesh/procthor_spinaround/depth/%s/%d.npy" % (obj, num), pose=pose)
                 print("Processed\n")
 
             mem.view_memory()
 
-            estimated_pose = mem.localise(image_path=f"/scratch/aneesh/procthor_spinaround/rgb/%s/%d.png" % (obj, target), 
+            estimated_pose = mem.localise(testname=str(obj) ,image_path=f"/scratch/aneesh/procthor_spinaround/rgb/%s/%d.png" % (obj, target), 
                                         depth_image_path=f"/scratch/aneesh/procthor_spinaround/depth/%s/%d.npy" % (obj, target))
 
             print("Target pose: ", target_pose)
@@ -79,6 +82,5 @@ if __name__ == "__main__":
             print("Estimated pose:", p)
             print()
         
-        break
         
 
