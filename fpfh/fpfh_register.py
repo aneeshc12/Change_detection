@@ -31,7 +31,7 @@ def register_point_clouds(source, target, voxel_size):
     source_down, source_fpfh = downsample_and_compute_fpfh(source, voxel_size)
     target_down, target_fpfh = downsample_and_compute_fpfh(target, voxel_size)
 
-    distance_threshold = voxel_size * 1.5
+    distance_threshold = voxel_size * 2
     # print(":: RANSAC registration on downsampled point clouds.")
     # print("   Since the downsampling voxel size is %.3f," % voxel_size)
     # print("   we use a liberal distance threshold %.3f." % distance_threshold)
@@ -44,7 +44,7 @@ def register_point_clouds(source, target, voxel_size):
                 0.9),
             o3d.pipelines.registration.CorrespondenceCheckerBasedOnDistance(
                 distance_threshold)
-        ], o3d.pipelines.registration.RANSACConvergenceCriteria(200000, 0.999))
+        ], o3d.pipelines.registration.RANSACConvergenceCriteria(500000, 500))
 
     # Refine the registration using ICP
     result_icp = o3d.pipelines.registration.registration_icp(
