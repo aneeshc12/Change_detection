@@ -46,6 +46,7 @@ def register_point_clouds(source, target, voxel_size):
                 distance_threshold)
         ], o3d.pipelines.registration.RANSACConvergenceCriteria(500000, 500))
 
+    # TODO: correct this and maybe shift to pointToPlane
     # Refine the registration using ICP
     result_icp = o3d.pipelines.registration.registration_icp(
         source, target, 0.2, result_ransac.transformation,
@@ -53,39 +54,3 @@ def register_point_clouds(source, target, voxel_size):
     )
 
     return result_icp.transformation
-
-# class FPFH_RANSAC:
-#     @staticmethod
-#     def preprocess_point_cloud(pcd: PointCloudGen, voxel_size):
-#         pcd_down = copy.deepcopy(pcd)
-
-#         radius_normal = voxel_size * 2
-#         pcd_down.estimate_normals(
-#             o3d.geometry.KDTreeSearchParamHybrid(radius=radius_normal, max_nn=30))
-
-#         radius_feature = voxel_size * 5
-#         pcd_fpfh = o3d.pipelines.registration.compute_fpfh_feature(
-#             pcd_down,
-#             o3d.geometry.KDTreeSearchParamHybrid(radius=radius_feature, max_nn=100))
-#         return pcd_down, pcd_fpfh
-
-#     @staticmethod        
-#     def run(source_pcd, target_pcd: PointCloudGen, voxel_size = 0.05):
-#         source_down, source_fpfh = FPFH_RANSAC.preprocess_point_cloud(source_pcd, voxel_size)
-#         target_down, target_fpfh = FPFH_RANSAC.preprocess_point_cloud(target_pcd, voxel_size)
-
-#         distance_threshold = voxel_size * 2
-
-#         result = o3d.pipelines.registration.registration_ransac_based_on_feature_matching(
-#             source_down, target_down, source_fpfh, target_fpfh, True, distance_threshold,
-#             o3d.pipelines.registration.TransformationEstimationPointToPoint(False),
-#             4, [
-#                 o3d.pipelines.registration.CorrespondenceCheckerBasedOnEdgeLength(
-#                     0.9),
-#                 o3d.pipelines.registration.CorrespondenceCheckerBasedOnDistance(
-#                     distance_threshold)
-#             ], o3d.pipelines.registration.RANSACConvergenceCriteria(1000, 200))
-
-#         estimated_transformation = result.transformation
-
-#         return estimated_transformation

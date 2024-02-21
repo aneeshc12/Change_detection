@@ -68,18 +68,6 @@ end_time = time.time()
 print(f"Imports completed in {end_time - start_time} seconds")
 
 
-@dataclass
-class LocalArgs:
-    """
-    Class to hold local configuration arguments.
-    """
-    lora_path: str='models/vit_finegrained_5x40_procthor.pt'
-    poses_json_path: str='/home2/aneesh.chavan/Change_detection/360_zip/json_poses.json'
-    device: str='cuda'
-    sam_checkpoint_path: str = '/scratch/aneesh/sam_vit_h_4b8939.pth'
-    ram_pretrained_path: str = '/scratch/aneesh/ram_swin_large_14m.pth'
-
-
 """
 #################
         Object Detection Classes
@@ -689,6 +677,15 @@ class ObjectInfo:
 
 class ObjectMemory:
     def __init__(self, device, ram_pretrained_path, sam_checkpoint_path, lora_path=None):
+        """
+        Initializes the ObjectMemory instance.
+
+        Parameters:
+        - device (str): Device to be used for computation (e.g., 'cuda' or 'cpu').
+        - ram_pretrained_path (str): Path to the pre-trained RAM model checkpoint.
+        - sam_checkpoint_path (str): Path to the SAM model checkpoint.
+        - lora_path (str, optional): Path to the LoRA checkpoint file. Default is None.
+        """
         self.device = device
 
         self.objectFinder = ObjectFinder(self.device)
@@ -703,8 +700,10 @@ class ObjectMemory:
         self.num_objects_stored = 0
         self.memory = dict() # store ObjectInfo classes here
 
-    # visualisation and utility
     def view_memory(self):
+        """
+        Prints information about the objects stored in memory.
+        """
         print("Objects stored in memory:")
         for _, info in self.memory.items():
             print(info.names)
@@ -712,316 +711,263 @@ class ObjectMemory:
         print()
 
     def clear_memory(self):
+        """
+        Clears the memory by resetting the number of stored objects and the memory dictionary.
+        """
         self.num_objects_stored = 0
         self.memory = dict()
 
-
-    """
-    Takes in an image and depth_image path, returns the following:
-        object phrases
-        embeddings of grounded images containing that object
-        backprojected pointclouds
-
-        there are an equal number of each, phrase_i <=> emb_i <=> pcd_i <=>
-    """
     def _get_object_info(self, image_path, depth_image_path):
+        """
+        Processes an RGB-D image and depth image to obtain object information.
+
+        Parameters:
+        - image_path (str): Path to the PNG file containing the RGB image.
+        - depth_image_path (str): Path to the NPY file containing the depth image.
+
+        Returns:
+        Tuple containing phrases, embeddings, and point clouds of detected objects.
+        """
         if image_path == None or depth_image_path == None:
             raise NotImplementedError
-        else:
-            # segment objects, get (grounded_image bounding boxes, segmentation mask and label) per box
-            # TODO RAM
-            obj_grounded_imgs, obj_bounding_boxes, obj_masks, obj_phrases = self.objectFinder.find(image_path)
-            
-            # get ViT+LoRA embeddings, use bounding boxes and the image to get grounded images
-            embs = self.loraModule.encode_image(obj_grounded_imgs)
-            
-            # filter and transform pcds to the global frame
-            obj_pointclouds = self.objectFinder.getDepth(depth_image_path, obj_masks)
 
-            # check that all info recovered
-            assert(len(obj_grounded_imgs) == len(obj_bounding_boxes) \
-                    and len(obj_bounding_boxes) == len(obj_masks) \
-                    and len(obj_masks) == len(obj_phrases) \
-                    and len(embs) == len(obj_phrases))
+        # segment objects, get (grounded_image bounding boxes, segmentation mask and label) per box
+        obj_grounded_imgs, obj_bounding_boxes, obj_masks, obj_phrases = self.objectFinder.find(image_path)
+        
+        # get ViT+LoRA embeddings, use bounding boxes and the image to get grounded images
+        embs = self.loraModule.encode_image(obj_grounded_imgs)
+        
+        # filter out the pointclouds. NOTE: pointclouds are transformed to global pose later.
+        obj_pointclouds = self.objectFinder.getDepth(depth_image_path, obj_masks)
 
-            # can return (obj_grounded_imgs, obj_bounding_boxes) if needed
+        # check that all info recovered
+        assert(len(obj_grounded_imgs) == len(obj_bounding_boxes) \
+                and len(obj_bounding_boxes) == len(obj_masks) \
+                and len(obj_masks) == len(obj_phrases) \
+                and len(embs) == len(obj_phrases))
 
-            return obj_phrases, embs, obj_pointclouds
+        # can return (obj_grounded_imgs, obj_bounding_boxes) if needed
+
+        return obj_phrases, embs, obj_pointclouds
 
 
-    """
-    takes in an rgb-d image and associated pose, detects all objects present, stores into memory
-     
-    image_path: path to png file containing the rgb image (3,W,H)
-    depth_image_path: path to .npy file containing the depth img in npy format
-    pose: [x, y, z, qw, qx, qy, qz]
-    bounding_box_threshold: lax condition that checks for 3d bounding box IoU
-    occlusion_overlap_threshold: very strict condition that only checks for overlap
-                                 included to make sure heavily occluded objects are aggregated properly
-    """
-    def process_image(self, image_path=None, depth_image_path=None, pose=None, bounding_box_threshold=0.3,  occlusion_overlap_threshold=0.9, testname="", outlier_removal_config=None):
+    def process_image(self, image_path=None, depth_image_path=None, pose=None, verbose=True,
+                      bounding_box_threshold=0.3,  occlusion_overlap_threshold=0.9, testname="", outlier_removal_config=None):
+        """
+        Processes an RGB-D image, detects objects within and updates the object memory.
+
+        Parameters:
+        - image_path (str): Path to the PNG file containing the RGB image.
+        - depth_image_path (str): Path to the NPY file containing the depth image.
+        - pose (list or np.ndarray): Pose information [x, y, z, qw, qx, qy, qz].
+        - bounding_box_threshold (float): IoU threshold for bounding boxes. Default is 0.3.
+        - occlusion_overlap_threshold (float): Overlap threshold for heavily occluded objects. Default is 0.9.
+        - testname (str): Test name for saving point clouds. Default is an empty string.
+        - outlier_removal_config (dict, optional): Configuration for outlier removal. Default is None.
+        """
+
+        if image_path == None or depth_image_path == None:
+            raise NotImplementedError
+
+        # Default outlier removal config
         if outlier_removal_config == None:
             outlier_removal_config = {
                 "radius_nb_points": 8,
                 "radius": 0.05,
             }
+
+        # Detect all objects within the config
+        obj_phrases, embs, obj_pointclouds = self._get_object_info(image_path, depth_image_path)
         
-        if image_path == None or depth_image_path == None:
-            raise NotImplementedError
-        else:
-            obj_phrases, embs, obj_pointclouds = self._get_object_info(image_path, depth_image_path)
-            
-            filtered_pointclouds = []
-            for points in obj_pointclouds:  # filter
-                pcd = o3d.geometry.PointCloud()
-                pcd.points = o3d.utility.Vector3dVector(points.T)
-                inlier_pcd, _ = pcd.remove_radius_outlier(nb_points=outlier_removal_config["radius_nb_points"],
-                                                              radius=outlier_removal_config["radius"])
-                filtered_pointclouds.append(np.asarray(inlier_pcd.points).T)
+        # Outlier removal
+        filtered_pointclouds = []
+        for points in obj_pointclouds:
+            pcd = o3d.geometry.PointCloud()
+            pcd.points = o3d.utility.Vector3dVector(points.T)
+            inlier_pcd, _ = pcd.remove_radius_outlier(nb_points=outlier_removal_config["radius_nb_points"],
+                                                            radius=outlier_removal_config["radius"])
+            filtered_pointclouds.append(np.asarray(inlier_pcd.points).T)
 
-            transformed_pointclouds = [transform_pcd_to_global_frame(pcd, pose) for pcd in filtered_pointclouds]
+        if pose is None:
+            raise NotImplementedError # TODO: mapping without pose :)
 
+        transformed_pointclouds = [transform_pcd_to_global_frame(pcd, pose) for pcd in filtered_pointclouds]
 
-            # for each tuple, consult already stored memory, match tuples to stored memory (based on 3d IoU)
-                # TODO optimise and batch, fetch all memory bounding boxes once
-                # remove double loop
-            print(obj_phrases)
-            
-            for i, (obj_phrase, emb, q_pcd) in enumerate(zip(obj_phrases, embs, transformed_pointclouds)):
-                obj_exists = False
+        # for each tuple, consult already stored memory, match tuples to stored memory (based on 3d IoU)
+            # TODO optimise and batch, fetch all memory bounding boxes once
+            # remove double loop
+        if verbose:
+            print("Object phrases detected in RGBD input of ObjectMemory.process_image", obj_phrases)
+        
+        # Loop over every object detected and add to memory
+        for i, (obj_phrase, emb, q_pcd) in enumerate(zip(obj_phrases, embs, transformed_pointclouds)):
+            obj_exists = False
+            if verbose:
+                print("\tCurrent Object Phrase under consideration", obj_phrase)
 
-                # np.save("pcds/" + testname + "_" + str(i) + ".npy", q_pcd)
+            for obj_id, info in self.memory.items():
+                object_pcd = info.pcd
+                IoU3d = calculate_3d_IoU(q_pcd, object_pcd)
+                overlap3d = calculate_strict_overlap(q_pcd, object_pcd)
 
-                print("Detected: ", obj_phrase)
-
-                for obj_id, info in self.memory.items():
-                    object_pcd = info.pcd
-                    IoU3d = calculate_3d_IoU(q_pcd, object_pcd)
-                    overlap3d = calculate_strict_overlap(q_pcd, object_pcd)
+                if verbose:
                     print("\tFound in mem (info, iou, strict_overlap): ", info, IoU3d, overlap3d)
 
-                    # if the iou is above the threshold, consider it to be the same object/instance
-                    if IoU3d > bounding_box_threshold or overlap3d > occlusion_overlap_threshold:
-                        info.addInfo(obj_phrase ,emb, q_pcd)
-                        obj_exists = True
-                        break
+                # if the iou is above the threshold, consider it to be the same object/instance
+                if IoU3d > bounding_box_threshold or overlap3d > occlusion_overlap_threshold:
+                    info.addInfo(obj_phrase ,emb, q_pcd)
+                    obj_exists = True
+                    break
 
-                # new object detected
-                if not obj_exists:
-                    new_obj_info = ObjectInfo(self.num_objects_stored,
-                                                obj_phrase,
-                                                emb,
-                                                q_pcd)
-                    
-                    print('Object added\n', obj_phrase, '\n', new_obj_info, '\n')
-                    
-                    self.memory[self.num_objects_stored] = new_obj_info
-                    self.num_objects_stored += 1
-                else:
-                    print('Object exists, aggregated to\n', info, '\n')
-            
-            # TODO consider downsampling points (optimisation)
+            # new object detected
+            if not obj_exists:
+                new_obj_info = ObjectInfo(self.num_objects_stored,
+                                            obj_phrase,
+                                            emb,
+                                            q_pcd)
+                
+                if verbose:
+                    print('\tObject added\n\t\t', obj_phrase, '\n\t\t', new_obj_info, '\n')
+                
+                self.memory[self.num_objects_stored] = new_obj_info
+                self.num_objects_stored += 1
+            else:
+                if verbose:
+                    print('\tObject exists, aggregated to\n', info, '\n')
+        
+        # TODO consider downsampling points (optimisation)
 
 
+    def localise(self, image_path, depth_image_path, testname="", save_point_clouds=False):
+        """
+        Given an image and a corresponding depth image in an unknown frame, consult the stored memory
+        and output a pose in the world frame of the point clouds stored in memory.
+
+        Args:
+        - image_path (str): Path to the RGB image file.
+        - depth_image_path (str): Path to the depth image file in .npy format.
+        - icp_threshold (float): Threshold for ICP (Iterative Closest Point) algorithm.
+        - testname (str): Name for test-specific files.
+
+        Returns:
+        - np.ndarray: Localized pose in the world frame as [x, y, z, qw, qx, qy, qz].
+        """
+
+        # NOTE: removed redundant code - refer to older commits
+
+        # Extract all objects currently seen, get embeddings, point clouds in the local unknown frame
+        _, detected_embs, detected_pointclouds = self._get_object_info(image_path, depth_image_path)
+
+        # Correlate embeddings with objects in memory for all seen objects
+        # TODO maybe a KNN search will do better?
+        for _, m in self.memory.items():
+            m.computeMeans()  # Update object info means
+        memory_embs = torch.Tensor([m.mean_emb for _, m in self.memory.items()]).to(self.device)
+
+        if len(detected_embs) > len(memory_embs):
+            detected_embs = detected_embs[:len(memory_embs)]
+
+        # Detected x Mem x Emb sized
+        cosine_similarities = F.cosine_similarity(detected_embs.unsqueeze(1), memory_embs.unsqueeze(0),
+                                                    axis=-1).cpu()
+
+        # Run ICP/FPFH loop closure to get an estimated transform for each seen object
+        R_matrices = np.zeros((len(detected_pointclouds), len(memory_embs), 3, 3), dtype=np.float32)
+        t_vectors = np.zeros((len(detected_pointclouds), len(memory_embs), 3), dtype=np.float32)
+
+        # Save point clouds
+        if save_point_clouds:
+            for i, d in enumerate(detected_pointclouds):
+                np.save("pcds/detected_pcd" + str(i) + ".npy", d)
+            for j, (_, m) in enumerate(self.memory.items()):
+                np.save(f"pcds/%smemory_pcd" % str(testname) + str(j) + ".npy", m.pcd)
+            print("Point clouds saved")
+
+        # TODO unseen objects in detected objects are not being dealt with, 
+        # assuming that all detected objects can be assigned to mem objs
+        # TODO calculate rotation matrices
+        j = JCBB(cosine_similarities, R_matrices)
+        assns = j.get_assignments()
+
+        # calculate paths for all assingments, pick the best one
+        best_assignment = assns[0]
+        min_cost = 1e11
+
+        for assn in assns:
+            cost = 0
+
+            ### COST FUNCTION ###
+            for i,j in enumerate(assn):
+                cost += (1 - cosine_similarities[i,j])      
+            cost = np.log(cost) * 1./len(assn) # normalized product of cosine DIFFERENCES
+            # NOTE: diving by length of assignments doesn't matter as all are same rn
+
+            # get min cost
+            if cost < min_cost:
+                min_cost = cost
+                best_assignment = assn
+
+        # use ALL object pointclouds together
+        all_detected_points = []
+        all_memory_points = []
+        for i,j in enumerate(best_assignment):
+            all_detected_points.append(detected_pointclouds[i])
+            all_memory_points.append(self.memory[j].pcd)
+        all_detected_points = np.concatenate(all_detected_points, axis=-1)
+        all_memory_points = np.concatenate(all_memory_points, axis=-1)
+
+        # centering all the pointclouds
+        detected_mean = np.mean(all_detected_points, axis=-1)
+        memory_mean = np.mean(all_memory_points, axis=-1)
+        all_detected_pcd = o3d.geometry.PointCloud()
+        all_detected_pcd.points = o3d.utility.Vector3dVector(all_detected_points.T - detected_mean)
+        all_memory_pcd = o3d.geometry.PointCloud()
+        all_memory_pcd.points = o3d.utility.Vector3dVector(all_memory_points.T - memory_mean)
+
+        transform = register_point_clouds(all_detected_pcd, all_memory_pcd, voxel_size=0.1)
+
+        R = copy.copy(transform[:3,:3])
+        t = copy.copy(transform[:3, 3])
+        
+        tAvg = t + memory_mean - R@detected_mean
+        qAvg = Rotation.from_matrix(R).as_quat()
+
+        localised_pose = np.concatenate((tAvg, qAvg))
+
+        return localised_pose
+
+@dataclass
+class LocalArgs:
     """
-    Given an image and a corresponding depth image in an unknown frame, consult the stored memory
-    and output a pose in the world frame of the pcds stored in memory
-
-    pose returned as [x, y, z, qw, qx, qy, qz]
+    Class to hold local configuration arguments.
     """
-    def localise(self, image_path, depth_image_path, icp_threshold=.2, testname=""):
-        localized_pose = np.zeros(7, dtype=np.float32)      # default pose, no translation or rotation
-        localized_pose[3] = 1.
-
-        # extract all objects currently seen, get embeddings, pcds in the local unknown frame
-        if image_path == None or depth_image_path == None:
-            raise NotImplementedError
-        else:
-            # get relevant obj info
-            _, detected_embs, detected_pointclouds = self._get_object_info(image_path, depth_image_path)
-
-            # correlate embeddings with objects in memory for all seen objects
-            # TODO maybe a KNN search will do better?
-            for _, m in self.memory.items(): m.computeMeans()       # update object info means
-            memory_embs = torch.Tensor([m.mean_emb for _, m in self.memory.items()]).to(self.device)
-
-            if len(detected_embs) > len(memory_embs):
-                detected_embs = detected_embs[:len(memory_embs)]
-
-            # Detected x Mem x Emb sized
-            cosine_similarities = F.cosine_similarity(detected_embs.unsqueeze(1), memory_embs.unsqueeze(0), axis=-1).cpu()
-
-
-
-            # TODO optimisations may be possible
-            # run ICP/FPFH loop closure to get an estimated transform for each seen object
-            R_matrices = np.zeros((len(detected_pointclouds), len(memory_embs), 3, 3), dtype=np.float32)
-            t_vectors = np.zeros((len(detected_pointclouds), len(memory_embs), 3), dtype=np.float32)
-
-
-            # save pcds
-            for i, d in enumerate(detected_pointclouds): np.save("pcds/detected_pcd" + str(i) + ".npy", d)
-            for j, (_, m) in enumerate(self.memory.items()): np.save(f"pcds/%smemory_pcd" % str(testname) + str(j) + ".npy", m.pcd)
-            print("Pcds saved")
-
-            detected_pcd = o3d.geometry.PointCloud()
-            memory_pcd = o3d.geometry.PointCloud()
-            # use centered pcds to get a better ICP initialisation
-            # with tqdm(total=len(detected_pointclouds) * len(self.memory)) as pbar:
-            #     for i, d in enumerate(detected_pointclouds):
-            #         detected_mean = np.mean(d, axis=-1)
-            #         detected_pcd.points = o3d.utility.Vector3dVector(d.T - detected_mean)
-
-            #         for j, (_, m) in enumerate(self.memory.items()):
-            #             memory_mean = np.mean(m.pcd, axis=-1)
-            #             memory_pcd.points = o3d.utility.Vector3dVector(m.pcd.T - memory_mean)
-
-            #             # voxel downsample for equal point density
-            #             # registration = o3d.pipelines.registration.registration_icp(
-            #             #     detected_pcd.voxel_down_sample(0.05), 
-            #             #     memory_pcd.voxel_down_sample(0.05),
-            #             #     icp_threshold,
-            #             #     np.eye(4),
-            #             #     o3d.pipelines.registration.TransformationEstimationPointToPoint(),
-            #             #     o3d.pipelines.registration.ICPConvergenceCriteria(max_iteration=2000)
-            #             # )
-            #             # transform = registration.transformation
-
-            #             transform = register_point_clouds(detected_pcd, memory_pcd, voxel_size=0.1)
-                        
-            #             R = transform[:3,:3]
-            #             t = transform[:3, 3]
-                        
-            #             R_matrices[i, j] = R
-            #             t_vectors[i, j] = t
-                        
-            #             # adjust transformation to account for centered pcds
-            #             # M = [R|t]D + (mean_M - R @ mean_D)
-            #             t_vectors[i,j] += memory_mean - R@detected_mean
-
-            #             pbar.update(1)
-
-            # jcbb association using lora embeddings, estimated rotation/transform for each object to encode cost
-                    
-            # precalculation done, begin assigning objects
-            # TODO unseen objects in detected objects are not being dealt with, assuming that all detected objects can be assigned to mem objs
-            j = JCBB(cosine_similarities, R_matrices)
-            assns = j.get_assignments()
-
-            # calculate paths for all assingments, pick the best one
-            best_assignment = assns[0]
-            min_cost = 1e11
-
-            # print()
-            # print()
-            # print(cosine_similarities)
-            # print()
-            # print()
-            for assn in assns:
-                # for now, normalized product of cosine differences
-                cost = 0
-
-                ### COST FUNCTION ###
-                for i,j in enumerate(assn):
-                    cost += (1 - cosine_similarities[i,j])      
-                cost = np.log(cost) * 1./len(assn)      # normalized product of cosine DIFFERENCES
-
-                # get min cost
-                if cost < min_cost:
-                    min_cost = cost
-                    best_assignment = assn
-            
-            #TODO use best assignment
-
-            # use ALL object pointclouds together
-            all_detected_points = []
-            all_memory_points = []
-            for i,j in enumerate(best_assignment):
-                all_detected_points.append(detected_pointclouds[i])
-                all_memory_points.append(self.memory[i].pcd)
-            all_detected_points = np.concatenate(all_detected_points, axis=-1)
-            all_memory_points = np.concatenate(all_memory_points, axis=-1)
-
-            detected_mean = np.mean(all_detected_points, axis=-1)
-            memory_mean = np.mean(all_memory_points, axis=-1)
-            
-            all_detected_pcd = o3d.geometry.PointCloud()
-            all_detected_pcd.points = o3d.utility.Vector3dVector(all_detected_points.T - detected_mean)
-            
-            all_memory_pcd = o3d.geometry.PointCloud()
-            all_memory_pcd.points = o3d.utility.Vector3dVector(all_memory_points.T - memory_mean)
-
-            transform = register_point_clouds(all_detected_pcd, all_memory_pcd, voxel_size=0.1)
-
-            R = copy.copy(transform[:3,:3])
-            t = copy.copy(transform[:3, 3])
-            
-            tAvg = t + memory_mean - R@detected_mean
-            qAvg = Rotation.from_matrix(R).as_quat()
-
-            localised_pose = np.concatenate((tAvg, qAvg))
-
-
-            """
-            # object wise alignment
-
-            # using https://math.stackexchange.com/questions/61146/averaging-quaternions direct/fast averaging
-            qAvg = np.zeros(4)
-            q0 = None
-            tAvg = np.zeros(3)
-
-            print(best_assignment)
-
-            for i,j in enumerate(best_assignment):
-                # roughly avg rotation
-                q = Rot.from_matrix(R_matrices[i,j])
-                q = q.as_quat()
-
-                print("Rotation: ", R_matrices[i,j])
-                print(i,j)
-                print()
-
-                print("Quaternion obtained: ", i, " | ", q, '\n', R_matrices[i,j], "\n")
-
-                if i > 0:
-                    if np.dot(q, q0) < 0:
-                        q = -q
-                else:
-                    q0 = q
-                qAvg += q
-
-                # avg translation
-                tAvg += t_vectors[i,j]
-
-            qAvg = qAvg / np.linalg.norm(qAvg)
-            tAvg /= len(best_assignment)
-            
-            localised_pose = np.concatenate((tAvg, qAvg))
-            """
-            return localised_pose
-
-
+    lora_path: str='models/vit_finegrained_5x40_procthor.pt'
+    test_folder_path: str='/home2/aneesh.chavan/Change_detection/360_zip/'
+    device: str='cuda'
+    sam_checkpoint_path: str = '/scratch/aneesh/sam_vit_h_4b8939.pth'
+    ram_pretrained_path: str = '/scratch/aneesh/ram_swin_large_14m.pth'
 
 if __name__ == "__main__":
     largs = tyro.cli(LocalArgs, description=__doc__)
     print(largs)
 
+    poses_json_path = os.path.join(largs.test_folder_path, "json_poses.json")
+
     tgt = []
     pred = []
 
-    print("Begin")
+    print("\nBegin Memory Initialization")
     mem = ObjectMemory(device = largs.device, 
                        ram_pretrained_path=largs.ram_pretrained_path,
                        sam_checkpoint_path = largs.sam_checkpoint_path,
                        lora_path=largs.lora_path)
-    print("\nMemory Init'ed")
+    print("Memory Init'ed\n")
 
-    with open(largs.poses_json_path, 'r') as f:
+    with open(poses_json_path, 'r') as f:
         poses = json.load(f)
 
     # for target in range(1,9): # all of them
-    # for target in [6]: # sanity check
-    for target in [1]:
+    for target in [6]: # sanity check
         target_num = target
         target_pose = None
         for i, view in enumerate(poses["views"]):
@@ -1034,19 +980,26 @@ if __name__ == "__main__":
             pose = np.concatenate([t, q])
             if num == target_num:
                 target_pose = pose
+                print("This is the target pose")
                 continue
             else:
                 print("Pose: ", pose)
             
-            mem.process_image(testname=f"view%d" % num, image_path=f"360_zip/view%d/view%d.png" % (num, num), depth_image_path=f"360_zip/view%d/view%d.npy" % (num, num), pose=pose)
+            mem.process_image(testname=f"view%d" % num, 
+                              image_path = os.path.join(largs.test_folder_path, f"view%d/view%d.png" % (num, num)), 
+                              depth_image_path=os.path.join(largs.test_folder_path,f"view%d/view%d.npy" % (num, num)), pose=pose)
             print("Processed\n")
 
         mem.view_memory()
 
-        estimated_pose = mem.localise(image_path=f"360_zip/view%d/view%d.png" % (target_num, target_num), depth_image_path=f"360_zip/view%d/view%d.npy" % (target_num, target_num))
+        estimated_pose = mem.localise(image_path=os.path.join(largs.test_folder_path,f"view%d/view%d.png" % 
+                                                              (target_num, target_num)), 
+                                      depth_image_path=(os.path.join(largs.test_folder_path,"view%d/view%d.npy" % 
+                                                                     (target_num, target_num))))
 
         print("Target pose: ", target_pose)
         print("Estimated pose: ", estimated_pose)
+        print("----\n")
 
         mem.clear_memory()
 
