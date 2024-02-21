@@ -966,8 +966,8 @@ if __name__ == "__main__":
     with open(poses_json_path, 'r') as f:
         poses = json.load(f)
 
-    # for target in range(1,9): # all of them
-    for target in [6]: # sanity check
+    for target in range(1,9): # all of them
+    # for target in [6]: # sanity check
         target_num = target
         target_pose = None
         for i, view in enumerate(poses["views"]):
