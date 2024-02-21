@@ -1,83 +1,43 @@
-import os, sys
-import tqdm
+import os, sys, time
 
-# add gsam, gdino, ram to python path
+print("Starting imports")
+start_time = time.time()
+
 sys.path.append(os.path.join(os.getcwd(), "Grounded-Segment-Anything"))
 sys.path.append(os.path.join(os.getcwd(), "Grounded-Segment-Anything", "GroundingDINO"))
 sys.path.append(os.path.join(os.getcwd(), "GroundingDINO"))
 sys.path.append(os.path.join(os.getcwd(), "recognize-anything"))
 
+import os, sys, time
+import tyro
 import argparse
 import copy
-
 from IPython.display import display
 from PIL import Image, ImageDraw, ImageFont
 from torchvision.ops import box_convert
-
-# recognise anything
 from ram.models import ram
 from ram import inference_ram
 from ram import get_transform as get_transform_ram
-
-# Grounding DINO
 import GroundingDINO.groundingdino.datasets.transforms as T
 from GroundingDINO.groundingdino.models import build_model
 from GroundingDINO.groundingdino.util import box_ops
 from GroundingDINO.groundingdino.util.slconfig import SLConfig
 from GroundingDINO.groundingdino.util.utils import clean_state_dict, get_phrases_from_posmap
 from GroundingDINO.groundingdino.util.inference import annotate, load_image, predict
-
 import supervision as sv
-
-# segment anything
 from segment_anything import build_sam, SamPredictor
 import cv2
 import numpy as np
 import matplotlib.pyplot as plt
-
-
-# diffusers
 import PIL
 import requests
 import torch
 from io import BytesIO
 from diffusers import StableDiffusionInpaintPipeline
-
-
-from huggingface_hub import hf_hub_download
-
 import open3d as o3d
-
-import os
-
-# load models
-
-device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-
-def load_model_hf(repo_id, filename, ckpt_config_filename, device='cpu'):
-    cache_config_file = hf_hub_download(repo_id=repo_id, filename=ckpt_config_filename)
-
-    args = SLConfig.fromfile(cache_config_file)
-    args.device = device
-    model = build_model(args)
-
-    cache_file = hf_hub_download(repo_id=repo_id, filename=filename)
-    checkpoint = torch.load(cache_file, map_location=device)
-    log = model.load_state_dict(clean_state_dict(checkpoint['model']), strict=False)
-    print("Model loaded from {} \n => {}".format(cache_file, log))
-    print()
-    print()
-    _ = model.eval()
-    return model
-
-# %%
-import torch
+from huggingface_hub import hf_hub_download
 from torch.utils.data import Dataset, DataLoader
 from PIL import Image
-import PIL
-import os
-import random
-
 from torchvision.transforms import (
     CenterCrop,
     Compose,
@@ -88,20 +48,61 @@ from torchvision.transforms import (
     ToTensor,
     ToPILImage
 )
-
 from tqdm import tqdm
 from transformers import ViTConfig, ViTModel, ViTForImageClassification
 from transformers import AutoImageProcessor, CLIPVisionModel
 from peft import LoraConfig, get_peft_model
+from GroundingDINO.groundingdino.util.inference import annotate as gd_annotate 
+from GroundingDINO.groundingdino.util.inference import load_image as gd_load_image
+from GroundingDINO.groundingdino.util.inference import predict as gd_predict
+import numpy as np
+import matplotlib.pyplot as plt
+from scipy.spatial.transform import Rotation
+import torch.nn.functional as F
+import json
+from dataclasses import dataclass, field
+from jcbb import JCBB
+from fpfh.fpfh_register import register_point_clouds
 
-# loads a base ViT and a set of LoRa configs, allows loading and swapping between them
+end_time = time.time()
+print(f"Imports completed in {end_time - start_time} seconds")
+
+
+@dataclass
+class LocalArgs:
+    """
+    Class to hold local configuration arguments.
+    """
+    lora_path: str='models/vit_finegrained_5x40_procthor.pt'
+    poses_json_path: str='/home2/aneesh.chavan/Change_detection/360_zip/json_poses.json'
+    device: str='cuda'
+    sam_checkpoint_path: str = '/scratch/aneesh/sam_vit_h_4b8939.pth'
+    ram_pretrained_path: str = '/scratch/aneesh/ram_swin_large_14m.pth'
+
+
+"""
+#################
+        Object Detection Classes
+#################
+"""
+
+
 class LoraRevolver:
-    # load base ViT, its preprocessing functions
-    def __init__(self, model_checkpoint="google/vit-base-patch16-224-in21k"):
-        self.device = 'cuda' if torch.cuda.is_available() else 'cpu'
+    """
+    Loads a base ViT and a set of LoRa configs, allows loading and swapping between them.
+    """
+    def __init__(self, device, model_checkpoint="google/vit-base-patch16-224-in21k"):
+        """
+        Initializes the LoraRevolver object.
+        
+        Parameters:
+        - device (str): Device to be used for compute.
+        - model_checkpoint (str): Checkpoint for the base ViT model.
+        """
+        self.device = device
         
         # self.base_model will be augmented with a saved set of lora_weights
-        # self.lora_model is the augmented model
+        # self.lora_model is the augmented model (NOTE)
         self.base_model = ViTModel.from_pretrained(
             model_checkpoint,
             ignore_mismatched_sizes=True
@@ -132,8 +133,15 @@ class LoraRevolver:
         # only expects store lora_checkpoints.pt objects created by this class
         self.ckpt_library = {}
 
-    # load a config into the config library from a saved file
+
     def load_lora_ckpt_from_file(self, config_path, name):
+        """
+        Load a LoRa config from a saved file.
+        
+        Parameters:
+        - config_path (str): Path to the LoRa config file.
+        - name (str): Name to associate with the loaded config.
+        """
         ckpt = torch.load(config_path)
         try:
             self.ckpt_library[str(name)] = ckpt
@@ -145,16 +153,16 @@ class LoraRevolver:
             print("Lora checkpoint invalid")
             raise IndexError
 
-        # self.ckpt_library[str(name): ckpt]
-        
-    def train_current_lora_model(self):
-        pass
-
-    def save_lora_ckpt(self):
-        pass
-
-    # use the current lora_model to encode a batch of images
     def encode_image(self, imgs):
+        """
+        Use the current LoRa model to encode a batch of images.
+        
+        Parameters:
+        - imgs (list): List of images to encode.
+        
+        Returns:
+        - emb (torch.Tensor): Encoded embeddings for the input images.
+        """
         with torch.no_grad():
             if isinstance(imgs[0], np.ndarray):
                 img_batch = torch.stack([Compose([ToPILImage(),
@@ -166,32 +174,51 @@ class LoraRevolver:
             emb = self.lora_model(img_batch.to(self.device), output_hidden_states=True).last_hidden_state[:,0,:]
         
         return emb
+    
+    def train_current_lora_model(self):
+        """
+        Train the current LoRa model.
+        """
+        pass
 
-# detector and segmenter class
+    def save_lora_ckpt(self):
+        """
+        Save the current LoRa model checkpoint.
+        """
+        pass
 
-from GroundingDINO.groundingdino.util.inference import annotate as gd_annotate 
-from GroundingDINO.groundingdino.util.inference import load_image as gd_load_image
-from GroundingDINO.groundingdino.util.inference import predict as gd_predict
+
 
 class ObjectFinder:
-    def __init__(self, sam_checkpoint_path='/scratch/aneesh/sam_vit_h_4b8939.pth', box_threshold=0.35, text_threshold=0.55):
-        self.device =  'cuda' if torch.cuda.is_available() else 'cpu'
+    """
+    Class that detects objects through segmentation.
+    """
+    def __init__(self, device, box_threshold=0.35, text_threshold=0.55):
+        """
+        Initializes the ObjectFinder object.
+        
+        Parameters:
+        - device (str): Device to be used for compute.
+        - box_threshold (float): Threshold for bounding box detection.
+        - text_threshold (float): Threshold for text detection.
+        """
+        self.device =  device
         
         self.box_threshold = box_threshold
         self.text_threshold = text_threshold
 
-        # self._load_models(sam_checkpoint_path)
 
-
-    # loads GROUNDINGDINO
-    #       SAM
-    #       RAM
-    #       
-    def _load_models(self):
+    def _load_models(self, ram_pretrained_path):
+        """
+        Load RAM and Grounding Dino models.
+        
+        Parameters:
+        - ram_pretrained_path (str): Path to the pretrained RAM model.
+        """
         # ram
-        self.ram_model = ram(pretrained='/scratch/aneesh/ram_swin_large_14m.pth', image_size=384, vit='swin_l')
+        self.ram_model = ram(pretrained=ram_pretrained_path, image_size=384, vit='swin_l')
         self.ram_model.eval()
-        self.ram_model.to(device)
+        self.ram_model.to(self.device)
         self.ram_transform = get_transform_ram(image_size=384)
 
         # grounding dino
@@ -201,23 +228,40 @@ class ObjectFinder:
 
         cache_config_file = hf_hub_download(repo_id=ckpt_repo_id, filename=ckpt_config_filename)
         args = SLConfig.fromfile(cache_config_file)
-        args.device = device
+        args.device = self.device
         self.groundingdino_model = build_model(args)
 
         cache_file = hf_hub_download(repo_id=ckpt_repo_id, filename=ckpt_filenmae)
-        checkpoint = torch.load(cache_file, map_location=device)
+        checkpoint = torch.load(cache_file, map_location=self.device)
         log = self.groundingdino_model.load_state_dict(clean_state_dict(checkpoint['model']), strict=False)
         print("Model loaded from {} \n => {}".format(cache_file, log))
         self.groundingdino_model.eval()
 
+
     def _load_sam(self, sam_checkpoint_path):
-        # segment anything
+        """
+        Load SAM model from checkpoint.
+        
+        Parameters:
+        - sam_checkpoint_path (str): Path to the SAM model checkpoint.
+        """
         self.sam_predictor = SamPredictor(build_sam(checkpoint=sam_checkpoint_path).to(self.device).eval())
         # self.sam_predictor.to(self.device)
         # self.sam_predictor.eval()
         print("SAM loaded")
 
+
     def _getIoU(self, rect1, rect2):
+        """
+        Calculate the intersection over union (IoU) between two rectangles.
+        
+        Parameters:
+        - rect1 (tuple): Coordinates of the first rectangle (x, y, width, height).
+        - rect2 (tuple): Coordinates of the second rectangle (x, y, width, height).
+        
+        Returns:
+        - percent_overlap (float): Percentage of overlap between the rectangles.
+        """
         area_rect1 = rect1[2]*rect1[3]
         area_rect2 = rect2[2]*rect2[3]
 
@@ -233,15 +277,40 @@ class ObjectFinder:
 
         return percent_overlap
 
-    def _compSize(sefl, rect1, rect2):
+
+    def _compSize(self, rect1, rect2):
+        """
+        Compare the sizes of two rectangles.
+        
+        Parameters:
+        - rect1 (tuple): Coordinates of the first rectangle (x, y, width, height).
+        - rect2 (tuple): Coordinates of the second rectangle (x, y, width, height).
+        
+        Returns:
+        - diff (float): Size difference between the rectangles.
+        """
         area_rect1 = rect1[2]*rect1[3]
         area_rect2 = rect2[2]*rect2[3]
 
         diff = min(area_rect1, area_rect2)/max(area_rect1, area_rect2)
         return diff
 
-    # given a phrase, filter and get all boxes and phrases
+
     def getBoxes(self, image, text_prompt, show=False, intersection_threshold=0.7, size_threshold=0.75):
+        """
+        Given a phrase, filter and get all boxes and phrases.
+        
+        Parameters:
+        - image (np.ndarray): Input image.
+        - text_prompt (str): Phrase for object detection.
+        - show (bool): Whether to display intermediate results.
+        - intersection_threshold (float): Threshold for box intersection.
+        - size_threshold (float): Threshold for box size difference.
+        
+        Returns:
+        - boxes (torch.Tensor): Detected bounding boxes.
+        - phrases (list): List of detected phrases.
+        """
         keywords = [k.strip() for k in text_prompt.split('.')]
 
         with torch.no_grad():
@@ -297,14 +366,25 @@ class ObjectFinder:
                                 unique_boxes_num += 1
 
             return torch.stack(boxes), phrases
-
+        
     def segment(self, image, boxes):
+        """
+        Segment objects in the image based on provided bounding boxes.
+        
+        Parameters:
+        - image (np.ndarray): Input image.
+        - boxes (torch.Tensor): Bounding boxes for object segmentation.
+        
+        Returns:
+        - boxes_xyxy (torch.Tensor): Transformed bounding boxes.
+        - masks (torch.Tensor): Segmentation masks.
+        """
         with torch.no_grad():
             self.sam_predictor.set_image(image)
             H, W, _ = image.shape
             boxes_xyxy = box_ops.box_cxcywh_to_xyxy(boxes) * torch.Tensor([W, H, W, H])
 
-            transformed_boxes = self.sam_predictor.transform.apply_boxes_torch(boxes_xyxy.to(device), image.shape[:2])
+            transformed_boxes = self.sam_predictor.transform.apply_boxes_torch(boxes_xyxy.to(self.device), image.shape[:2])
             masks, _, _ = self.sam_predictor.predict_torch(
                 point_coords = None,
                 point_labels = None,
@@ -313,8 +393,21 @@ class ObjectFinder:
                 )
             return boxes_xyxy, masks
 
-    # # use the saved model to return grounded images, bounding boxes, masks and phrases
+
     def find(self, image_path=None, caption=None):
+        """
+        Find and ground objects in the given image.
+        
+        Parameters:
+        - image_path (str): Path to the input image.
+        - caption (str): Caption for object detection.
+        
+        Returns:
+        - grounded_objects (list): List of grounded object images.
+        - boxes (torch.Tensor): Detected bounding boxes.
+        - masks (torch.Tensor): Segmentation masks.
+        - phrases (list): List of detected phrases.
+        """
         if type(image_path) == None:
             raise NotImplementedError
         else:
@@ -325,7 +418,7 @@ class ObjectFinder:
             img_ram = self.ram_transform(PIL.Image.fromarray(image_source)).unsqueeze(0).to(self.device)
             caption = inference_ram(img_ram, self.ram_model)[0].split("|")
             
-            words_to_ignore = ["carpet", "living room", "ceiling", "room", "curtain", "den", "window", "floor", "wall", "red", "yellow", "white", "blue", "green", "brown", "wood floor", "picture frame"]
+            words_to_ignore = ["carpet", "living room", "ceiling", "room", "curtain", "den", "window", "floor", "wall", "red", "yellow", "white", "blue", "green", "brown"]
 
             filtered_caption = ""
             for c in caption:
@@ -337,15 +430,11 @@ class ObjectFinder:
             filtered_caption = filtered_caption[:-2]
 
             print("caption post ram: ", filtered_caption)
-
-
-            # caption = "sofa . chair . table"    # TODO replace with RAM
         
         # ground them, get associated phrases
         cxcy_boxes, phrases = self.getBoxes(image, filtered_caption)
 
         boxes, masks = self.segment(image_source, cxcy_boxes)
-
 
         # ground objects
         grounded_objects = [image_source[int(bb[1]):int(bb[3]),
@@ -353,38 +442,15 @@ class ObjectFinder:
 
         return grounded_objects, boxes, masks, phrases
     
-    # return a 3xN pointcloud corresponding to each object
-    # TODO determine whether outliers need to be filtered here
-    def getDepth(self, depth_image_path, masks, f=300):
-        if depth_image_path == None:
-            raise NotImplementedError
-        else:
-            # TODO convert to torch
-            depth_image = np.load(depth_image_path)
-            
-            w, h = depth_image.shape
-            num_objs = masks.shape[0]
-
-            stacked_depth = np.tile(depth_image, (num_objs, 1, 1)) # get all centroids/pcds together
-            stacked_depth[masks.squeeze(dim=1).cpu() == False] = 0    # remove the depth channel from the masks
-
-            horizontal_distance = np.tile(np.linspace(-h/2, h/2, h, dtype=np.float32), (num_objs, w,1))
-            vertical_distance =   np.tile(np.linspace(w/2, -w/2, w, dtype=np.float32).reshape(-1,1), (num_objs, 1, h))
-
-            X = horizontal_distance * stacked_depth/f
-            Y = vertical_distance * stacked_depth/f
-            Z = stacked_depth
-
-            # combine caluclated X,Y,Z points
-            all_pointclouds = np.stack([X, Y, Z], 1).reshape((num_objs, 3, -1))
-
-            # filter out [0,0,0]
-            all_pointclouds = [pcd[:, pcd[2, :] != 0] for pcd in all_pointclouds]
-            
-            return all_pointclouds
-
 
     def _show_detections(self, image_path=None, caption=None):
+        """
+        Display object detections on the given image.
+        
+        Parameters:
+        - image_path (str): Path to the input image.
+        - caption (str): Caption for object detection.
+        """
         if type(image_path) == None:
             raise NotImplementedError
         else:
@@ -396,32 +462,76 @@ class ObjectFinder:
 
         Image.fromarray(image_source)
         b, l, p = gd_predict(model=self.groundingdino_model, 
-                                           image=image, caption="sofa . chair . table",
+                                           image=image, caption=caption,
                                            box_threshold=0.35,
                                            text_threshold=0.55)
         af = gd_annotate(image_source=image_source, boxes=b, logits=l, phrases=p)[...,::-1]
         Image.fromarray(af)
         plt.imshow(af)
 
-import numpy as np
-import matplotlib.pyplot as plt
-from scipy.spatial.transform import Rotation
-import torch.nn.functional as F
+    # TODO determine whether outliers need to be filtered here
+    def getDepth(self, depth_image_path, masks, f=300):
+        """
+        Returns a 3D point cloud corresponding to each object based on depth information.
 
-from jcbb import JCBB
-from fpfh.fpfh_register import register_point_clouds
+        Parameters:
+        - depth_image_path (str): Path to the depth image file.
+        - masks (torch.Tensor): Binary segmentation masks for each object.
+        - f (float): Focal length for depth-to-distance conversion.
 
-# Utility functions
+        Returns:
+        - all_pointclouds (list): List of 3D point clouds for each segmented object.
+        """
+        if depth_image_path is None:
+            raise NotImplementedError
+        else:
+            depth_image = np.load(depth_image_path)
+            
+            w, h = depth_image.shape
+            num_objs = masks.shape[0]
+
+            stacked_depth = np.tile(depth_image, (num_objs, 1, 1))  # Get all centroids/point clouds together
+            stacked_depth[masks.squeeze(dim=1).cpu() == False] = 0  # Remove the depth channel from the masks
+
+            horizontal_distance = np.tile(np.linspace(-h/2, h/2, h, dtype=np.float32), (num_objs, w, 1))
+            vertical_distance = np.tile(np.linspace(w/2, -w/2, w, dtype=np.float32).reshape(-1, 1), (num_objs, 1, h))
+
+            X = horizontal_distance * stacked_depth / f
+            Y = vertical_distance * stacked_depth / f
+            Z = stacked_depth
+
+            # Combine calculated X, Y, Z points
+            all_pointclouds = np.stack([X, Y, Z], 1).reshape((num_objs, 3, -1))
+
+            # Filter out [0,0,0]
+            all_pointclouds = [pcd[:, pcd[2, :] != 0] for pcd in all_pointclouds]
+            
+            return all_pointclouds
+        
+
 """
-Given a point cloud and an [x y z qw qx qy qz] pose for the camera frame wrt
-world frame, 
-transform a pcd into the world frame
+#################
+        Utility Functions
+#################
 """
+
+
 def transform_pcd_to_global_frame(pcd, pose):
+    """
+    Transforms a point cloud into the global frame based on a given pose.
+
+    Parameters:
+    - pcd (numpy.ndarray): 3D point cloud represented as a 3xN array.
+    - pose (numpy.ndarray): Pose of the camera frame with respect to the world frame
+      represented as [x, y, z, qw, qx, qy, qz].
+
+    Returns:
+    - transformed_pcd (numpy.ndarray): Transformed point cloud in the global frame.
+    """
     t = pose[:3]
     q = pose[3:]
 
-    q /= np.linalg.norm(q)                  # normalise
+    q /= np.linalg.norm(q)
     R = Rotation.from_quat(q).as_matrix()
 
     transformed_pcd = R @ pcd
@@ -429,11 +539,17 @@ def transform_pcd_to_global_frame(pcd, pose):
 
     return transformed_pcd
 
-"""
-Assume 3xN pcds, 
-"""
 def calculate_3d_IoU(pcd1, pcd2):
-    # get [min_X, min_Y, min_Z, max_X, max_Y, max_Z] for both pcds
+    """
+    Calculates the 3D Intersection over Union (IoU) between two 3D point clouds.
+
+    Parameters:
+    - pcd1 (numpy.ndarray): First 3D point cloud represented as a 3xN array.
+    - pcd2 (numpy.ndarray): Second 3D point cloud represented as a 3xN array.
+
+    Returns:
+    - IoU (float): 3D Intersection over Union between the two point clouds.
+    """
     bb1_min = pcd1.min(axis=-1)
     bb1_max = pcd1.max(axis=-1)
 
@@ -443,7 +559,6 @@ def calculate_3d_IoU(pcd1, pcd2):
     overlap_min_corner = np.stack([bb1_min, bb2_min], axis=0).max(axis=0)
     overlap_max_corner = np.stack([bb1_max, bb2_max], axis=0).min(axis=0)
 
-    # no overlap case
     if (overlap_min_corner > overlap_max_corner).any():
         return 0
     else:
@@ -456,12 +571,21 @@ def calculate_3d_IoU(pcd1, pcd2):
         v1 = bb1[0] * bb1[1] * bb1[2]
         v2 = bb2[0] * bb2[1] * bb2[2]
 
-        v = overlap_volume/(v1 + v2 - overlap_volume)
+        IoU = overlap_volume / (v1 + v2 - overlap_volume)
 
-        return v
+        return IoU
 
 def calculate_strict_overlap(pcd1, pcd2):
-    # get [min_X, min_Y, min_Z, max_X, max_Y, max_Z] for both pcds
+    """
+    Calculates the strict overlap between two 3D point clouds.
+
+    Parameters:
+    - pcd1 (numpy.ndarray): First 3D point cloud represented as a 3xN array.
+    - pcd2 (numpy.ndarray): Second 3D point cloud represented as a 3xN array.
+
+    Returns:
+    - overlap (float): Strict overlap between the two point clouds.
+    """
     bb1_min = pcd1.min(axis=-1)
     bb1_max = pcd1.max(axis=-1)
 
@@ -471,7 +595,6 @@ def calculate_strict_overlap(pcd1, pcd2):
     overlap_min_corner = np.stack([bb1_min, bb2_min], axis=0).max(axis=0)
     overlap_max_corner = np.stack([bb1_max, bb2_max], axis=0).min(axis=0)
 
-    # no overlap case
     if (overlap_min_corner > overlap_max_corner).any():
         return 0
     else:
@@ -484,64 +607,101 @@ def calculate_strict_overlap(pcd1, pcd2):
         v1 = bb1[0] * bb1[1] * bb1[2]
         v2 = bb2[0] * bb2[1] * bb2[2]
 
-        v = overlap_volume/(min(v1,v2))
+        overlap = overlap_volume / min(v1, v2)
 
-        return v
+        return overlap
 
-# Classes
+
+
 """
-Bundles together object information for distinct objects
+#################
+        Object Memory Classes
+#################
 """
+
+
 class ObjectInfo:
+    """
+    Bundles together object information for distinct objects.
+
+    Attributes:
+    - id (int): Object ID.
+    - names (list): List of object names.
+    - embeddings (list): List of embeddings associated with the object.
+    - pcd (numpy.ndarray): Point cloud data for the object.
+    - mean_emb (numpy.ndarray): Mean embedding of the object.
+    - centroid (numpy.ndarray): Centroid of the object in 3D space.
+
+    Methods:
+    - addInfo(name, embedding, pcd): Adds information for the object, including name, embedding, and point cloud data.
+    - computeMeans(): Computes the mean embedding and centroid for the object.
+    - __repr__(): Returns a string representation of the object information.
+    """
+
     def __init__(self, id, name, emb, pcd):
+        """
+        Initializes ObjectInfo with the given ID, name, embedding, and point cloud data.
+
+        Parameters:
+        - id (int): Object ID.
+        - name (str): Object name.
+        - emb (numpy.ndarray): Object embedding.
+        - pcd (numpy.ndarray): Object point cloud data.
+        """
         self.id = id
         self.names = [name]
         self.embeddings = [emb]
         self.pcd = pcd
-        # self.centroid = np.empty(3, np.float64)
 
         self.mean_emb = None
         self.centroid = None
 
     def addInfo(self, name, embedding, pcd):
+        """
+        Adds information for the object, including name, embedding, and point cloud data.
+
+        Parameters:
+        - name (str): Object name to be added.
+        - embedding (numpy.ndarray): Object embedding to be added.
+        - pcd (numpy.ndarray): Object point cloud data to be added.
+        """
         if name not in self.names:
             self.names.append(name)
         self.embeddings.append(embedding)
         self.pcd = np.concatenate([self.pcd, pcd], axis=-1)
 
     def computeMeans(self):
+        """
+        Computes the mean embedding and centroid for the object.
+        """
         # TODO messy, clean this up
         self.mean_emb = np.mean(np.asarray(
             [e.cpu() for e in self.embeddings]), axis=0)
         self.centroid = np.mean(self.pcd, axis=-1)
 
     def __repr__(self):
+        """
+        Returns a string representation of the object information.
+        """
         return(f"ID: %d | Names: [%s] |  Num embs: %d | Pcd size: " % \
               (self.id, " ".join(self.names), len(self.embeddings)) + str(self.pcd.shape))
 
-# main object recorder class
 
-# stores all object information, point clouds, embeddings etc
-"""
-
-"""
 class ObjectMemory:
-    def __init__(self, lora_path=None):
-        self.device = 'cuda' if torch.cuda.is_available else 'cpu'
+    def __init__(self, device, ram_pretrained_path, sam_checkpoint_path, lora_path=None):
+        self.device = device
 
-        self.objectFinder = ObjectFinder()
-        self.loraModule = LoraRevolver()
+        self.objectFinder = ObjectFinder(self.device)
+        self.loraModule = LoraRevolver(self.device)
 
-        self.objectFinder._load_models()
-        self.objectFinder._load_sam('/scratch/aneesh/sam_vit_h_4b8939.pth')
+        self.objectFinder._load_models(ram_pretrained_path)
+        self.objectFinder._load_sam(sam_checkpoint_path)
 
         if lora_path != None:
             self.loraModule.load_lora_ckpt_from_file(lora_path, "5x40")
 
         self.num_objects_stored = 0
         self.memory = dict() # store ObjectInfo classes here
-
-        return
 
     # visualisation and utility
     def view_memory(self):
@@ -554,6 +714,7 @@ class ObjectMemory:
     def clear_memory(self):
         self.num_objects_stored = 0
         self.memory = dict()
+
 
     """
     Takes in an image and depth_image path, returns the following:
@@ -796,7 +957,7 @@ class ObjectMemory:
             t = copy.copy(transform[:3, 3])
             
             tAvg = t + memory_mean - R@detected_mean
-            qAvg = Rot.from_matrix(R).as_quat()
+            qAvg = Rotation.from_matrix(R).as_quat()
 
             localised_pose = np.concatenate((tAvg, qAvg))
 
@@ -839,24 +1000,28 @@ class ObjectMemory:
             """
             return localised_pose
 
-############# Main func #############
-from scipy.spatial.transform import Rotation as Rot
-import json
+
 
 if __name__ == "__main__":
+    largs = tyro.cli(LocalArgs, description=__doc__)
+    print(largs)
+
     tgt = []
     pred = []
 
-
     print("Begin")
-    mem = ObjectMemory(lora_path='models/vit_finegrained_5x40_procthor.pt')
-    print("Memory Init'ed")
+    mem = ObjectMemory(device = largs.device, 
+                       ram_pretrained_path=largs.ram_pretrained_path,
+                       sam_checkpoint_path = largs.sam_checkpoint_path,
+                       lora_path=largs.lora_path)
+    print("\nMemory Init'ed")
 
-    with open('/home2/aneesh.chavan/Change_detection/360_zip/json_poses.json', 'r') as f:
+    with open(largs.poses_json_path, 'r') as f:
         poses = json.load(f)
 
-    for target in range(1,9):
-    # for target in [6]:
+    # for target in range(1,9): # all of them
+    # for target in [6]: # sanity check
+    for target in [1]:
         target_num = target
         target_pose = None
         for i, view in enumerate(poses["views"]):
@@ -864,7 +1029,7 @@ if __name__ == "__main__":
 
             # view 6 is our unseen view, skip
             print(f"Processing img %d" % num)
-            q = Rot.from_euler('zyx', [r for _, r in view["rotation"].items()], degrees=True).as_quat()
+            q = Rotation.from_euler('zyx', [r for _, r in view["rotation"].items()], degrees=True).as_quat()
             t = np.array([x for _, x in view["position"].items()])
             pose = np.concatenate([t, q])
             if num == target_num:
@@ -897,4 +1062,3 @@ if __name__ == "__main__":
         print("Target pose:", t)
         print("Estimated pose:", p)
         print()
-        
