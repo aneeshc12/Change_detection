@@ -1,0 +1,49 @@
+[[ 5.00000000e-01  9.00999784e-01  6.00000000e+00  1.83012653e-01
+   6.83012884e-01 -1.83012751e-01  6.83012520e-01]
+ [ 5.00000000e-01  9.00999784e-01  8.00000000e+00  9.90456969e-02
+   8.92399199e-01 -2.39117645e-01  3.69643573e-01]
+ [ 2.50000000e+00  9.00999784e-01  8.00000000e+00 -6.89276810e-08
+   9.65925826e-01 -2.58819045e-01 -2.57241608e-07]
+ [ 4.50000000e+00  9.00999784e-01  7.75000000e+00 -9.90458561e-02
+   8.92398953e-01 -2.39117579e-01 -3.69644167e-01]
+ [ 4.50000000e+00  9.00999784e-01  6.25000000e+00 -1.83012799e-01
+   6.83012338e-01 -1.83012604e-01 -6.83013066e-01]
+ [ 4.50000000e+00  9.00999784e-01  3.75000000e+00 -2.39117645e-01
+   3.69643573e-01 -9.90456969e-02 -8.92399199e-01]
+ [ 2.50000000e+00  9.00999784e-01  3.75000000e+00  2.58819045e-01
+   0.00000000e+00  0.00000000e+00  9.65925826e-01]
+ [ 5.00000000e-01  9.00999784e-01  3.75000000e+00  2.39117569e-01
+   3.69644256e-01 -9.90458799e-02  8.92398916e-01]]
+Begin
+/encoder/layer/0/crossattention/self/query is tied
+/encoder/layer/0/crossattention/self/key is tied
+/encoder/layer/0/crossattention/self/value is tied
+/encoder/layer/0/crossattention/output/dense is tied
+/encoder/layer/0/crossattention/output/LayerNorm is tied
+/encoder/layer/0/intermediate/dense is tied
+/encoder/layer/0/output/dense is tied
+/encoder/layer/0/output/LayerNorm is tied
+/encoder/layer/1/crossattention/self/query is tied
+/encoder/layer/1/crossattention/self/key is tied
+/encoder/layer/1/crossattention/self/value is tied
+/encoder/layer/1/crossattention/output/dense is tied
+/encoder/layer/1/crossattention/output/LayerNorm is tied
+/encoder/layer/1/intermediate/dense is tied
+/encoder/layer/1/output/dense is tied
+/encoder/layer/1/output/LayerNorm is tied
+--------------
+/scratch/aneesh/ram_swin_large_14m.pth
+--------------
+load checkpoint from /scratch/aneesh/ram_swin_large_14m.pth
+vit: swin_l
+final text_encoder_type: bert-base-uncased
+Model loaded from /home2/aneesh.chavan/.cache/huggingface/hub/models--ShilongLiu--GroundingDINO/snapshots/a94c9b567a2a374598f05c584e96798a170c56fb/groundingdino_swinb_cogcoor.pth 
+ => _IncompatibleKeys(missing_keys=[], unexpected_keys=['label_enc.weight'])
+SAM loaded
+Memory Init'ed
+Processing img 0
+[ 0.5         0.90099978  6.          0.18301265  0.68301288 -0.18301275
+  0.68301252]
+Processing img 1
+[ 0.5         0.90099978  8.          0.0990457   0.8923992  -0.23911764
+  0.36964357]
