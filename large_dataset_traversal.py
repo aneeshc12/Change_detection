@@ -48,14 +48,14 @@ if __name__=="__main__":
                 "z": pose_dict[0]['z']
             },
             "rotation": {
-                "x": pose_dict[1]['x'],
+                "x": pose_dict[1]['x'] + 30,
                 "y": pose_dict[1]['y'],
                 "z": pose_dict[1]['z']
             }
         }
 
         print(f"Processing img %d" % i)
-        q = Rotation.from_euler('zyx', [r for _, r in pose_dict["rotation"].items()], degrees=True).as_quat()
+        q = Rotation.from_euler('xyz', [r for _, r in pose_dict["rotation"].items()], degrees=True).as_quat()
         t = np.array([x for _, x in pose_dict["position"].items()])
         pose = np.concatenate([t, q])
 

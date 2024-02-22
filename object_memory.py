@@ -353,8 +353,12 @@ class ObjectFinder:
                                 phrases.append(word)
                                 unique_boxes_num += 1
 
-            return torch.stack(boxes), phrases
-        
+            try:
+                return torch.stack(boxes), phrases
+            except:
+                return None, None
+
+            
     def segment(self, image, boxes):
         """
         Segment objects in the image based on provided bounding boxes.
@@ -406,27 +410,53 @@ class ObjectFinder:
             img_ram = self.ram_transform(PIL.Image.fromarray(image_source)).unsqueeze(0).to(self.device)
             caption = inference_ram(img_ram, self.ram_model)[0].split("|")
             
-            words_to_ignore = ["carpet", 
-                               "living room", 
-                               "ceiling", 
-                               "room", 
-                               "curtain", 
-                               "den", 
-                               "window", 
-                               "floor", 
-                               "wall", 
-                               "red", 
-                               "yellow", 
-                               "white", 
-                               "blue", 
-                               "green", 
-                               "brown",
-                               "corridor"
-                            ]
+            words_to_ignore = [
+                                "carpet", 
+                                "living room", 
+                                "ceiling", 
+                                "room", 
+                                "curtain", 
+                                "den", 
+                                "window", 
+                                "floor", 
+                                "wall", 
+                                "red", 
+                                "yellow", 
+                                "white", 
+                                "blue", 
+                                "green", 
+                                "brown", # new additions start in the next line
+                                "corridor",
+                                "image",
+                                "picture frame",
+                                "mat",
+                                "wood floor",
+                                "shadow",
+                                "hardwood",
+                                "plywood",
+                                "waiting room",
+            ]
+            sub_phrases_to_ignore = [
+                                "room",
+                                "floor",
+                                "wall",
+                                "frame",
+                                "image"
+            ]
+
+
+            def check_whether_in_sub_phrases(text):
+                for sub_phrase in sub_phrases_to_ignore:
+                    if sub_phrase in text:
+                        return True
+
+                return False
 
             filtered_caption = ""
             for c in caption:
                 if c.strip() in words_to_ignore:
+                    continue
+                if check_whether_in_sub_phrases(c.strip()):
                     continue
                 else:
                     filtered_caption += c
@@ -437,6 +467,10 @@ class ObjectFinder:
         
         # ground them, get associated phrases
         cxcy_boxes, phrases = self.getBoxes(image, filtered_caption)
+
+        # no objects considered
+        if cxcy_boxes is None:
+            return None, None, None, None
 
         boxes, masks = self.segment(image_source, cxcy_boxes)
 
@@ -749,6 +783,9 @@ class ObjectMemory:
 
         # segment objects, get (grounded_image bounding boxes, segmentation mask and label) per box
         obj_grounded_imgs, obj_bounding_boxes, obj_masks, obj_phrases = self.objectFinder.find(image_path)
+
+        if obj_grounded_imgs is None:
+            return None, None, None
         
         # get ViT+LoRA embeddings, use bounding boxes and the image to get grounded images
         embs = self.loraModule.encode_image(obj_grounded_imgs)
@@ -796,6 +833,11 @@ class ObjectMemory:
 
         # Detect all objects within the config
         obj_phrases, embs, obj_pointclouds = self._get_object_info(image_path, depth_image_path)
+
+        if obj_phrases is None:
+            if verbose:
+                print("No Objects found")
+            return
         
         # Outlier removal
         filtered_pointclouds = []
