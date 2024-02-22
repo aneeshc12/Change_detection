@@ -406,7 +406,22 @@ class ObjectFinder:
             img_ram = self.ram_transform(PIL.Image.fromarray(image_source)).unsqueeze(0).to(self.device)
             caption = inference_ram(img_ram, self.ram_model)[0].split("|")
             
-            words_to_ignore = ["carpet", "living room", "ceiling", "room", "curtain", "den", "window", "floor", "wall", "red", "yellow", "white", "blue", "green", "brown"]
+            words_to_ignore = ["carpet", 
+                               "living room", 
+                               "ceiling", 
+                               "room", 
+                               "curtain", 
+                               "den", 
+                               "window", 
+                               "floor", 
+                               "wall", 
+                               "red", 
+                               "yellow", 
+                               "white", 
+                               "blue", 
+                               "green", 
+                               "brown",
+                            ]
 
             filtered_caption = ""
             for c in caption:
@@ -752,7 +767,8 @@ class ObjectMemory:
 
 
     def process_image(self, image_path=None, depth_image_path=None, pose=None, verbose=True,
-                      bounding_box_threshold=0.3,  occlusion_overlap_threshold=0.9, testname="", outlier_removal_config=None):
+                      bounding_box_threshold=0.3,  occlusion_overlap_threshold=0.9, testname="", 
+                      outlier_removal_config=None, min_points = 1000):
         """
         Processes an RGB-D image, detects objects within and updates the object memory.
 
@@ -764,6 +780,7 @@ class ObjectMemory:
         - occlusion_overlap_threshold (float): Overlap threshold for heavily occluded objects. Default is 0.9.
         - testname (str): Test name for saving point clouds. Default is an empty string.
         - outlier_removal_config (dict, optional): Configuration for outlier removal. Default is None.
+        - min_points (int): Minimum number of points under which the object is ignored
         """
 
         if image_path == None or depth_image_path == None:
@@ -801,9 +818,14 @@ class ObjectMemory:
         
         # Loop over every object detected and add to memory
         for i, (obj_phrase, emb, q_pcd) in enumerate(zip(obj_phrases, embs, transformed_pointclouds)):
-            obj_exists = False
             if verbose:
                 print("\tCurrent Object Phrase under consideration", obj_phrase)
+
+            if q_pcd.shape[-1] < min_points:
+                if verbose:
+                    print(f"\tObject has {q_pcd.shape[-1]} points which is under {min_points}. Ignored.")
+
+            obj_exists = False
 
             for obj_id, info in self.memory.items():
                 object_pcd = info.pcd
@@ -987,7 +1009,8 @@ if __name__ == "__main__":
             
             mem.process_image(testname=f"view%d" % num, 
                               image_path = os.path.join(largs.test_folder_path, f"view%d/view%d.png" % (num, num)), 
-                              depth_image_path=os.path.join(largs.test_folder_path,f"view%d/view%d.npy" % (num, num)), pose=pose)
+                              depth_image_path=os.path.join(largs.test_folder_path,f"view%d/view%d.npy" % (num, num)), 
+                              pose=pose)
             print("Processed\n")
 
         mem.view_memory()
