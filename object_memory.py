@@ -421,6 +421,7 @@ class ObjectFinder:
                                "blue", 
                                "green", 
                                "brown",
+                               "corridor"
                             ]
 
             filtered_caption = ""
@@ -824,6 +825,7 @@ class ObjectMemory:
             if q_pcd.shape[-1] < min_points:
                 if verbose:
                     print(f"\tObject has {q_pcd.shape[-1]} points which is under {min_points}. Ignored.")
+                continue
 
             obj_exists = False
 
