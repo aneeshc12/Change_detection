@@ -353,8 +353,12 @@ class ObjectFinder:
                                 phrases.append(word)
                                 unique_boxes_num += 1
 
-            return torch.stack(boxes), phrases
-        
+            try:
+                return torch.stack(boxes), phrases
+            except:
+                return None, None
+
+            
     def segment(self, image, boxes):
         """
         Segment objects in the image based on provided bounding boxes.
@@ -406,11 +410,53 @@ class ObjectFinder:
             img_ram = self.ram_transform(PIL.Image.fromarray(image_source)).unsqueeze(0).to(self.device)
             caption = inference_ram(img_ram, self.ram_model)[0].split("|")
             
-            words_to_ignore = ["carpet", "living room", "ceiling", "room", "curtain", "den", "window", "floor", "wall", "red", "yellow", "white", "blue", "green", "brown"]
+            words_to_ignore = [
+                                "carpet", 
+                                "living room", 
+                                "ceiling", 
+                                "room", 
+                                "curtain", 
+                                "den", 
+                                "window", 
+                                "floor", 
+                                "wall", 
+                                "red", 
+                                "yellow", 
+                                "white", 
+                                "blue", 
+                                "green", 
+                                "brown", # new additions start in the next line
+                                "corridor",
+                                "image",
+                                "picture frame",
+                                "mat",
+                                "wood floor",
+                                "shadow",
+                                "hardwood",
+                                "plywood",
+                                "waiting room",
+            ]
+            sub_phrases_to_ignore = [
+                                "room",
+                                "floor",
+                                "wall",
+                                "frame",
+                                "image"
+            ]
+
+
+            def check_whether_in_sub_phrases(text):
+                for sub_phrase in sub_phrases_to_ignore:
+                    if sub_phrase in text:
+                        return True
+
+                return False
 
             filtered_caption = ""
             for c in caption:
                 if c.strip() in words_to_ignore:
+                    continue
+                if check_whether_in_sub_phrases(c.strip()):
                     continue
                 else:
                     filtered_caption += c
@@ -421,6 +467,10 @@ class ObjectFinder:
         
         # ground them, get associated phrases
         cxcy_boxes, phrases = self.getBoxes(image, filtered_caption)
+
+        # no objects considered
+        if cxcy_boxes is None:
+            return None, None, None, None
 
         boxes, masks = self.segment(image_source, cxcy_boxes)
 
@@ -733,6 +783,9 @@ class ObjectMemory:
 
         # segment objects, get (grounded_image bounding boxes, segmentation mask and label) per box
         obj_grounded_imgs, obj_bounding_boxes, obj_masks, obj_phrases = self.objectFinder.find(image_path)
+
+        if obj_grounded_imgs is None:
+            return None, None, None
         
         # get ViT+LoRA embeddings, use bounding boxes and the image to get grounded images
         embs = self.loraModule.encode_image(obj_grounded_imgs)
@@ -752,7 +805,9 @@ class ObjectMemory:
 
 
     def process_image(self, image_path=None, depth_image_path=None, pose=None, verbose=True,
-                      bounding_box_threshold=0.3,  occlusion_overlap_threshold=0.9, testname="", outlier_removal_config=None):
+                      bounding_box_threshold=0.3,  occlusion_overlap_threshold=0.9, testname="", 
+                      outlier_removal_config=None, min_points = 500, pose_noise = {'trans': 0.0005, 'rot': 0.0005},
+                      depth_noise = 0.003):
         """
         Processes an RGB-D image, detects objects within and updates the object memory.
 
@@ -764,6 +819,7 @@ class ObjectMemory:
         - occlusion_overlap_threshold (float): Overlap threshold for heavily occluded objects. Default is 0.9.
         - testname (str): Test name for saving point clouds. Default is an empty string.
         - outlier_removal_config (dict, optional): Configuration for outlier removal. Default is None.
+        - min_points (int): Minimum number of points under which the object is ignored
         """
 
         if image_path == None or depth_image_path == None:
@@ -778,6 +834,11 @@ class ObjectMemory:
 
         # Detect all objects within the config
         obj_phrases, embs, obj_pointclouds = self._get_object_info(image_path, depth_image_path)
+
+        if obj_phrases is None:
+            if verbose:
+                print("No Objects found")
+            return
         
         # Outlier removal
         filtered_pointclouds = []
@@ -790,8 +851,27 @@ class ObjectMemory:
 
         if pose is None:
             raise NotImplementedError # TODO: mapping without pose :)
+        
+        def add_noise(array, noise_level):
+            noise = np.random.normal(0, noise_level, array.shape)
+            noisy_array = array + noise
+            return noisy_array
+        
+        # adding noise to pose
+        pose[:3] = add_noise(pose[:3], pose_noise['trans'])
+        pose[3:] = add_noise(pose[3:], pose_noise['rot'])
+        # normalizing quaternion
+        def normalize_quaternion(quaternion):
+            norm = np.linalg.norm(quaternion)
+            if norm == 0:
+                return quaternion
+            return quaternion / norm
+        pose[3:] = normalize_quaternion(pose[3:])
 
         transformed_pointclouds = [transform_pcd_to_global_frame(pcd, pose) for pcd in filtered_pointclouds]
+        
+        # Adding noise to depth (pointclouds)
+        transformed_pointclouds = [add_noise(pcd, depth_noise) for pcd in transformed_pointclouds]
 
         # for each tuple, consult already stored memory, match tuples to stored memory (based on 3d IoU)
             # TODO optimise and batch, fetch all memory bounding boxes once
@@ -801,9 +881,15 @@ class ObjectMemory:
         
         # Loop over every object detected and add to memory
         for i, (obj_phrase, emb, q_pcd) in enumerate(zip(obj_phrases, embs, transformed_pointclouds)):
-            obj_exists = False
             if verbose:
                 print("\tCurrent Object Phrase under consideration", obj_phrase)
+
+            if q_pcd.shape[-1] < min_points:
+                if verbose:
+                    print(f"\tObject has {q_pcd.shape[-1]} points which is under {min_points}. Ignored.")
+                continue
+
+            obj_exists = False
 
             for obj_id, info in self.memory.items():
                 object_pcd = info.pcd
@@ -946,6 +1032,7 @@ class LocalArgs:
     device: str='cuda'
     sam_checkpoint_path: str = '/scratch/aneesh/sam_vit_h_4b8939.pth'
     ram_pretrained_path: str = '/scratch/aneesh/ram_swin_large_14m.pth'
+    mem_save_dir: str = ''
 
 if __name__ == "__main__":
     largs = tyro.cli(LocalArgs, description=__doc__)
@@ -966,8 +1053,8 @@ if __name__ == "__main__":
     with open(poses_json_path, 'r') as f:
         poses = json.load(f)
 
-    # for target in range(1,9): # all of them
-    for target in [6]: # sanity check
+    for target in range(1,9): # all of them
+    # for target in [6]: # sanity check
         target_num = target
         target_pose = None
         for i, view in enumerate(poses["views"]):
@@ -987,7 +1074,8 @@ if __name__ == "__main__":
             
             mem.process_image(testname=f"view%d" % num, 
                               image_path = os.path.join(largs.test_folder_path, f"view%d/view%d.png" % (num, num)), 
-                              depth_image_path=os.path.join(largs.test_folder_path,f"view%d/view%d.npy" % (num, num)), pose=pose)
+                              depth_image_path=os.path.join(largs.test_folder_path,f"view%d/view%d.npy" % (num, num)), 
+                              pose=pose)
             print("Processed\n")
 
         mem.view_memory()
@@ -1000,6 +1088,27 @@ if __name__ == "__main__":
         print("Target pose: ", target_pose)
         print("Estimated pose: ", estimated_pose)
         print("----\n")
+
+        # saving memory to scratch
+        if largs.mem_save_dir != "":
+            pcd_list = []
+            for obj_id, info in mem.memory.items():
+                object_pcd = info.pcd
+                pcd_list.append(object_pcd)
+
+            combined_pcd = o3d.geometry.PointCloud()
+
+            for pcd_np in pcd_list:
+                pcd_vec = o3d.utility.Vector3dVector(pcd_np.T)
+                pcd = o3d.geometry.PointCloud()
+                pcd.points = pcd_vec
+                combined_pcd += pcd
+
+            os.makedirs(largs.mem_save_dir, exist_ok=True)
+
+            save_path = f"{largs.mem_save_dir}/mem_{target}.pcd"
+            o3d.io.write_point_cloud(save_path, combined_pcd)
+            print("Pointcloud saved to", save_path)
 
         mem.clear_memory()
 
