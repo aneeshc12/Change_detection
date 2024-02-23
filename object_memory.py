@@ -418,7 +418,7 @@ class ObjectFinder:
             img_ram = self.ram_transform(PIL.Image.fromarray(image_source)).unsqueeze(0).to(self.device)
             caption = inference_ram(img_ram, self.ram_model)[0].split("|")
             
-            words_to_ignore = ["carpet", "living room", "ceiling", "room", "curtain", "den", "window", "floor", "wall", "red", "yellow", "white", "blue", "green", "brown"]
+            words_to_ignore = ["image", "floor", "wood floor", "wall", "hardwood floor", "carpet", "living room", "ceiling", "room", "curtain", "den", "window", "floor", "wall", "red", "yellow", "white", "blue", "green", "brown"]
 
             filtered_caption = ""
             for c in caption:
@@ -656,6 +656,11 @@ class ObjectInfo:
         self.mean_emb = None
         self.centroid = None
 
+    def __add__(self, info):
+        self.names += info.names
+        self.embeddings += info.embeddings
+        self.pcd = np.concatenate([self.pcd, info.pcd], axis=-1)
+
     def addInfo(self, name, embedding, pcd):
         """
         Adds information for the object, including name, embedding, and point cloud data.
@@ -821,6 +826,44 @@ class ObjectMemory:
                     print('Object exists, aggregated to\n', info, '\n')
             
             # TODO consider downsampling points (optimisation)
+
+    """
+    Runs through all objects stored in memory, consolidates objects that have a sufficient overlap
+    Performs uniform downsampling on all pointclouds as well
+
+    Consolidates memory in place
+    """
+    def consolidate_memory(self, bounding_box_threshold=0.3,  occlusion_overlap_threshold=0.9, downsample_voxel_size=0.01):
+        new_memory = dict()
+        for obj_id, obj_info in self.memory.items():
+            obj_pcd = obj_info.pcd
+
+            # check all objects in new_memory to try and match them
+            match_found = False
+            for new_id, new_obj_info in new_memory.items():
+                IoU3d = calculate_3d_IoU(new_obj_info.pcd, obj_pcd)
+                overlap3d = calculate_strict_overlap(new_obj_info.pcd, obj_pcd)
+
+                # object overlaps enough to be consolidated with the object in new memory
+                if IoU3d > bounding_box_threshold and overlap3d > occlusion_overlap_threshold:
+                    match_found = True
+                    break
+            
+            if match_found:
+                new_memory[new_id] += obj_info
+            else:
+                new_memory[len(new_memory)] = self.memory[obj_id]
+
+        del self.memory
+        self.memory = new_memory
+
+        # downsample all pcds
+        tempPcd = o3d.geometry.PointCloud()
+        for obj_id in self.memory:
+            tempPcd.points = o3d.utility.Vector3dVector(self.memory[obj_id].pcd.T)
+            tempPcd = tempPcd.voxel_down_sample(downsample_voxel_size)
+            self.memory[obj_id].pcd = np.array(tempPcd.points).T
+
 
 
     """
@@ -1041,6 +1084,10 @@ if __name__ == "__main__":
             mem.process_image(testname=f"view%d" % num, image_path=f"360_zip/view%d/view%d.png" % (num, num), depth_image_path=f"360_zip/view%d/view%d.npy" % (num, num), pose=pose)
             print("Processed\n")
 
+        mem.view_memory()
+
+        print("Consolidating memory")
+        mem.consolidate_memory()
         mem.view_memory()
 
         estimated_pose = mem.localise(image_path=f"360_zip/view%d/view%d.png" % (target_num, target_num), depth_image_path=f"360_zip/view%d/view%d.npy" % (target_num, target_num))
