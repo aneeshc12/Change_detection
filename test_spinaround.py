@@ -8,7 +8,7 @@ if __name__ == "__main__":
     
     # get paths
     lora_path = 'models/vit_finegrained_5x40_procthor.pt'
-    dataset_root = '/scratch/aneesh/procthor_spinaround/'
+    dataset_root = '/scratch/aneesh.chavan/procthor_spinaround/'
     
     # get poses
     p = np.load(os.path.join(dataset_root, "pose.npy"))
@@ -32,7 +32,7 @@ if __name__ == "__main__":
     ]
 
     print("Begin")
-    mem = ObjectMemory(lora_path=lora_path)
+    mem = ObjectMemory(device='cuda', sam_checkpoint_path='/scratch/aneesh.chavan/sam_vit_h_4b8939.pth', ram_pretrained_path='/scratch/aneesh.chavan/ram_swin_large_14m.pth', lora_path=lora_path)
     print("Memory Init'ed")
 
     for obj_num, obj in enumerate(objects):
@@ -54,14 +54,14 @@ if __name__ == "__main__":
                 t = pose[:3]
                 q = pose[3:]
                 
-                mem.process_image(testname=f"%s_view%d" % (obj, num), image_path=f"/scratch/aneesh/procthor_spinaround/rgb/%s/%d.png" % (obj, num), 
-                                depth_image_path=f"/scratch/aneesh/procthor_spinaround/depth/%s/%d.npy" % (obj, num), pose=pose)
+                mem.process_image(testname=f"%s_view%d" % (obj, num), image_path=f"/scratch/aneesh.chavan/procthor_spinaround/rgb/%s/%d.png" % (obj, num), 
+                                depth_image_path=f"/scratch/aneesh.chavan/procthor_spinaround/depth/%s/%d.npy" % (obj, num), pose=pose)
                 print("Processed\n")
 
             mem.view_memory()
 
-            estimated_pose = mem.localise(testname=str(obj) ,image_path=f"/scratch/aneesh/procthor_spinaround/rgb/%s/%d.png" % (obj, target), 
-                                        depth_image_path=f"/scratch/aneesh/procthor_spinaround/depth/%s/%d.npy" % (obj, target))
+            estimated_pose = mem.localise(testname=str(obj) ,image_path=f"/scratch/aneesh.chavan/procthor_spinaround/rgb/%s/%d.png" % (obj, target), 
+                                        depth_image_path=f"/scratch/aneesh.chavan/procthor_spinaround/depth/%s/%d.npy" % (obj, target))
 
             print("Target pose: ", target_pose)
             print("Estimated pose: ", estimated_pose)
@@ -81,6 +81,9 @@ if __name__ == "__main__":
             print("Target pose:", t)
             print("Estimated pose:", p)
             print()
+
+        tgt = []
+        pred = []
         
         
 

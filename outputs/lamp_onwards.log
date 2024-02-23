@@ -1,0 +1,3049 @@
+Begin
+/encoder/layer/0/crossattention/self/query is tied
+/encoder/layer/0/crossattention/self/key is tied
+/encoder/layer/0/crossattention/self/value is tied
+/encoder/layer/0/crossattention/output/dense is tied
+/encoder/layer/0/crossattention/output/LayerNorm is tied
+/encoder/layer/0/intermediate/dense is tied
+/encoder/layer/0/output/dense is tied
+/encoder/layer/0/output/LayerNorm is tied
+/encoder/layer/1/crossattention/self/query is tied
+/encoder/layer/1/crossattention/self/key is tied
+/encoder/layer/1/crossattention/self/value is tied
+/encoder/layer/1/crossattention/output/dense is tied
+/encoder/layer/1/crossattention/output/LayerNorm is tied
+/encoder/layer/1/intermediate/dense is tied
+/encoder/layer/1/output/dense is tied
+/encoder/layer/1/output/LayerNorm is tied
+--------------
+/scratch/aneesh/ram_swin_large_14m.pth
+--------------
+load checkpoint from /scratch/aneesh/ram_swin_large_14m.pth
+vit: swin_l
+final text_encoder_type: bert-base-uncased
+Model loaded from /home2/aneesh.chavan/.cache/huggingface/hub/models--ShilongLiu--GroundingDINO/snapshots/a94c9b567a2a374598f05c584e96798a170c56fb/groundingdino_swinb_cogcoor.pth 
+ => _IncompatibleKeys(missing_keys=[], unexpected_keys=['label_enc.weight'])
+SAM loaded
+Memory Init'ed
+floor_lamps  begin processed
+Processing img 0
+[ 0.5         0.90099978  6.          0.18301265  0.68301288 -0.18301275
+  0.68301252]
+Processing img 1
+[ 0.5         0.90099978  8.          0.0990457   0.8923992  -0.23911764
+  0.36964357]
+Processed
+
+Processing img 2
+[ 2.50000000e+00  9.00999784e-01  8.00000000e+00 -6.89276810e-08
+  9.65925826e-01 -2.58819045e-01 -2.57241608e-07]
+Processed
+
+Processing img 3
+[ 4.5         0.90099978  7.75       -0.09904586  0.89239895 -0.23911758
+ -0.36964417]
+Processed
+
+Processing img 4
+[ 4.5         0.90099978  6.25       -0.1830128   0.68301234 -0.1830126
+ -0.68301307]
+Processed
+
+Processing img 5
+[ 4.5         0.90099978  3.75       -0.23911764  0.36964357 -0.0990457
+ -0.8923992 ]
+Processed
+
+Processing img 6
+[2.5        0.90099978 3.75       0.25881905 0.         0.
+ 0.96592583]
+Processed
+
+Processing img 7
+[ 0.5         0.90099978  3.75        0.23911757  0.36964426 -0.09904588
+  0.89239892]
+Processed
+
+Objects stored in memory:
+
+['lamp', 'lamp shade', 'pole', 'pillar', 'chair']
+ID: 0 | Names: [lamp lamp shade pole pillar chair] |  Num embs: 15 | Pcd size: (3, 114146)
+['lamp', 'easel', 'pole', 'chair', 'lamp shade', 'footstall', 'pillar', 'stool']
+ID: 1 | Names: [lamp easel pole chair lamp shade footstall pillar stool] |  Num embs: 17 | Pcd size: (3, 280481)
+['lamp', 'easel', 'stool', 'lamp shade']
+ID: 2 | Names: [lamp easel stool lamp shade] |  Num embs: 4 | Pcd size: (3, 41505)
+['lamp']
+ID: 3 | Names: [lamp] |  Num embs: 2 | Pcd size: (3, 41347)
+['lamp']
+ID: 4 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 2791)
+['lamp']
+ID: 5 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 3386)
+['lamp']
+ID: 6 | Names: [lamp] |  Num embs: 3 | Pcd size: (3, 3327)
+['lamp']
+ID: 7 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 13343)
+['lamp', 'chair']
+ID: 8 | Names: [lamp chair] |  Num embs: 3 | Pcd size: (3, 49064)
+Target pose:  [ 0.5         0.90099978  6.          0.18301265  0.68301288 -0.18301275
+  0.68301252]
+Estimated pose:  [ 0.50011869  0.90243088  6.00427545  0.18362734  0.68424195 -0.18258531
+  0.68173056]
+Processing img 0
+[ 0.5         0.90099978  6.          0.18301265  0.68301288 -0.18301275
+  0.68301252]
+Processed
+
+Processing img 1
+[ 0.5         0.90099978  8.          0.0990457   0.8923992  -0.23911764
+  0.36964357]
+Processing img 2
+[ 2.50000000e+00  9.00999784e-01  8.00000000e+00 -6.89276810e-08
+  9.65925826e-01 -2.58819045e-01 -2.57241608e-07]
+Processed
+
+Processing img 3
+[ 4.5         0.90099978  7.75       -0.09904586  0.89239895 -0.23911758
+ -0.36964417]
+Processed
+
+Processing img 4
+[ 4.5         0.90099978  6.25       -0.1830128   0.68301234 -0.1830126
+ -0.68301307]
+Processed
+
+Processing img 5
+[ 4.5         0.90099978  3.75       -0.23911764  0.36964357 -0.0990457
+ -0.8923992 ]
+Processed
+
+Processing img 6
+[2.5        0.90099978 3.75       0.25881905 0.         0.
+ 0.96592583]
+Processed
+
+Processing img 7
+[ 0.5         0.90099978  3.75        0.23911757  0.36964426 -0.09904588
+  0.89239892]
+Processed
+
+Objects stored in memory:
+
+['lamp', 'lamp shade', 'pole', 'pillar', 'chair']
+ID: 0 | Names: [lamp lamp shade pole pillar chair] |  Num embs: 16 | Pcd size: (3, 135138)
+['lamp']
+ID: 1 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 3934)
+['lamp', 'stool', 'chair', 'lamp shade', 'footstall', 'pillar']
+ID: 2 | Names: [lamp stool chair lamp shade footstall pillar] |  Num embs: 12 | Pcd size: (3, 260570)
+['lamp', 'lamp shade', 'stool']
+ID: 3 | Names: [lamp lamp shade stool] |  Num embs: 4 | Pcd size: (3, 82200)
+['lamp']
+ID: 4 | Names: [lamp] |  Num embs: 2 | Pcd size: (3, 41347)
+['lamp']
+ID: 5 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 2791)
+['lamp']
+ID: 6 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 3386)
+['lamp']
+ID: 7 | Names: [lamp] |  Num embs: 3 | Pcd size: (3, 3321)
+['lamp', 'stool']
+ID: 8 | Names: [lamp stool] |  Num embs: 4 | Pcd size: (3, 29454)
+['lamp', 'chair']
+ID: 9 | Names: [lamp chair] |  Num embs: 3 | Pcd size: (3, 49064)
+Target pose:  [ 0.5         0.90099978  8.          0.0990457   0.8923992  -0.23911764
+  0.36964357]
+Estimated pose:  [ 0.49995384  0.90201685  7.99864078  0.09813831  0.89195686 -0.24043589
+  0.37009784]
+Processing img 0
+[ 0.5         0.90099978  6.          0.18301265  0.68301288 -0.18301275
+  0.68301252]
+Processed
+
+Processing img 1
+[ 0.5         0.90099978  8.          0.0990457   0.8923992  -0.23911764
+  0.36964357]
+Processed
+
+Processing img 2
+[ 2.50000000e+00  9.00999784e-01  8.00000000e+00 -6.89276810e-08
+  9.65925826e-01 -2.58819045e-01 -2.57241608e-07]
+Processing img 3
+[ 4.5         0.90099978  7.75       -0.09904586  0.89239895 -0.23911758
+ -0.36964417]
+Processed
+
+Processing img 4
+[ 4.5         0.90099978  6.25       -0.1830128   0.68301234 -0.1830126
+ -0.68301307]
+Processed
+
+Processing img 5
+[ 4.5         0.90099978  3.75       -0.23911764  0.36964357 -0.0990457
+ -0.8923992 ]
+Processed
+
+Processing img 6
+[2.5        0.90099978 3.75       0.25881905 0.         0.
+ 0.96592583]
+Processed
+
+Processing img 7
+[ 0.5         0.90099978  3.75        0.23911757  0.36964426 -0.09904588
+  0.89239892]
+Processed
+
+Objects stored in memory:
+
+['lamp', 'lamp shade', 'pillar']
+ID: 0 | Names: [lamp lamp shade pillar] |  Num embs: 8 | Pcd size: (3, 58353)
+['lamp']
+ID: 1 | Names: [lamp] |  Num embs: 2 | Pcd size: (3, 4748)
+['lamp', 'stool', 'easel', 'pole', 'chair', 'footstall', 'lamp shade', 'pillar']
+ID: 2 | Names: [lamp stool easel pole chair footstall lamp shade pillar] |  Num embs: 16 | Pcd size: (3, 264785)
+['lamp', 'lamp shade', 'easel', 'stool']
+ID: 3 | Names: [lamp lamp shade easel stool] |  Num embs: 6 | Pcd size: (3, 101630)
+['lamp']
+ID: 4 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 2791)
+['lamp']
+ID: 5 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 23238)
+['lamp', 'chair', 'lamp shade']
+ID: 6 | Names: [lamp chair lamp shade] |  Num embs: 4 | Pcd size: (3, 43269)
+['lamp']
+ID: 7 | Names: [lamp] |  Num embs: 3 | Pcd size: (3, 3329)
+['lamp']
+ID: 8 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 13343)
+['lamp', 'chair']
+ID: 9 | Names: [lamp chair] |  Num embs: 3 | Pcd size: (3, 49064)
+Target pose:  [ 2.50000000e+00  9.00999784e-01  8.00000000e+00 -6.89276810e-08
+  9.65925826e-01 -2.58819045e-01 -2.57241608e-07]
+Estimated pose:  [ 2.49989129e+00  9.02037460e-01  8.00022631e+00 -6.12173338e-05
+  9.65885502e-01 -2.58969464e-01 -1.01002278e-04]
+Processing img 0
+[ 0.5         0.90099978  6.          0.18301265  0.68301288 -0.18301275
+  0.68301252]
+Processed
+
+Processing img 1
+[ 0.5         0.90099978  8.          0.0990457   0.8923992  -0.23911764
+  0.36964357]
+Processed
+
+Processing img 2
+[ 2.50000000e+00  9.00999784e-01  8.00000000e+00 -6.89276810e-08
+  9.65925826e-01 -2.58819045e-01 -2.57241608e-07]
+Processed
+
+Processing img 3
+[ 4.5         0.90099978  7.75       -0.09904586  0.89239895 -0.23911758
+ -0.36964417]
+Processing img 4
+[ 4.5         0.90099978  6.25       -0.1830128   0.68301234 -0.1830126
+ -0.68301307]
+Processed
+
+Processing img 5
+[ 4.5         0.90099978  3.75       -0.23911764  0.36964357 -0.0990457
+ -0.8923992 ]
+Processed
+
+Processing img 6
+[2.5        0.90099978 3.75       0.25881905 0.         0.
+ 0.96592583]
+Processed
+
+Processing img 7
+[ 0.5         0.90099978  3.75        0.23911757  0.36964426 -0.09904588
+  0.89239892]
+Processed
+
+Objects stored in memory:
+
+['lamp', 'lamp shade', 'pole', 'pillar', 'chair']
+ID: 0 | Names: [lamp lamp shade pole pillar chair] |  Num embs: 16 | Pcd size: (3, 136883)
+['lamp']
+ID: 1 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 3934)
+['lamp', 'stool', 'easel', 'pole', 'chair', 'lamp shade', 'footstall', 'pillar']
+ID: 2 | Names: [lamp stool easel pole chair lamp shade footstall pillar] |  Num embs: 18 | Pcd size: (3, 278204)
+['lamp', 'lamp shade', 'easel']
+ID: 3 | Names: [lamp lamp shade easel] |  Num embs: 5 | Pcd size: (3, 99732)
+['lamp']
+ID: 4 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 18109)
+['lamp']
+ID: 5 | Names: [lamp] |  Num embs: 3 | Pcd size: (3, 3327)
+['lamp']
+ID: 6 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 13343)
+['lamp', 'chair']
+ID: 7 | Names: [lamp chair] |  Num embs: 3 | Pcd size: (3, 49064)
+Target pose:  [ 4.5         0.90099978  7.75       -0.09904586  0.89239895 -0.23911758
+ -0.36964417]
+Estimated pose:  [ 4.49769303  0.88739135  7.7533098  -0.09718497  0.89279039 -0.23844883
+ -0.36962489]
+Processing img 0
+[ 0.5         0.90099978  6.          0.18301265  0.68301288 -0.18301275
+  0.68301252]
+Processed
+
+Processing img 1
+[ 0.5         0.90099978  8.          0.0990457   0.8923992  -0.23911764
+  0.36964357]
+Processed
+
+Processing img 2
+[ 2.50000000e+00  9.00999784e-01  8.00000000e+00 -6.89276810e-08
+  9.65925826e-01 -2.58819045e-01 -2.57241608e-07]
+Processed
+
+Processing img 3
+[ 4.5         0.90099978  7.75       -0.09904586  0.89239895 -0.23911758
+ -0.36964417]
+Processed
+
+Processing img 4
+[ 4.5         0.90099978  6.25       -0.1830128   0.68301234 -0.1830126
+ -0.68301307]
+Processing img 5
+[ 4.5         0.90099978  3.75       -0.23911764  0.36964357 -0.0990457
+ -0.8923992 ]
+Processed
+
+Processing img 6
+[2.5        0.90099978 3.75       0.25881905 0.         0.
+ 0.96592583]
+Processed
+
+Processing img 7
+[ 0.5         0.90099978  3.75        0.23911757  0.36964426 -0.09904588
+  0.89239892]
+Processed
+
+Objects stored in memory:
+
+['lamp', 'lamp shade', 'pole', 'pillar', 'chair']
+ID: 0 | Names: [lamp lamp shade pole pillar chair] |  Num embs: 17 | Pcd size: (3, 140872)
+['lamp']
+ID: 1 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 3934)
+['lamp', 'stool', 'easel', 'pole', 'chair', 'lamp shade', 'pillar']
+ID: 2 | Names: [lamp stool easel pole chair lamp shade pillar] |  Num embs: 16 | Pcd size: (3, 74514)
+['lamp', 'lamp shade', 'easel', 'stool']
+ID: 3 | Names: [lamp lamp shade easel stool] |  Num embs: 6 | Pcd size: (3, 101630)
+['lamp']
+ID: 4 | Names: [lamp] |  Num embs: 2 | Pcd size: (3, 41347)
+['lamp']
+ID: 5 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 2791)
+['lamp']
+ID: 6 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 3386)
+['lamp']
+ID: 7 | Names: [lamp] |  Num embs: 2 | Pcd size: (3, 1454)
+['lamp']
+ID: 8 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 13343)
+['lamp', 'chair']
+ID: 9 | Names: [lamp chair] |  Num embs: 3 | Pcd size: (3, 49064)
+[1;33m[Open3D WARNING] Too few correspondences (13209) after mutual filter, fall back to original correspondences.[0;m
+Target pose:  [ 4.5         0.90099978  6.25       -0.1830128   0.68301234 -0.1830126
+ -0.68301307]
+Estimated pose:  [ 1.84174314  0.87974201  4.57464079  0.2397396  -0.09031287  0.00859027
+  0.96658922]
+Processing img 0
+[ 0.5         0.90099978  6.          0.18301265  0.68301288 -0.18301275
+  0.68301252]
+Processed
+
+Processing img 1
+[ 0.5         0.90099978  8.          0.0990457   0.8923992  -0.23911764
+  0.36964357]
+Processed
+
+Processing img 2
+[ 2.50000000e+00  9.00999784e-01  8.00000000e+00 -6.89276810e-08
+  9.65925826e-01 -2.58819045e-01 -2.57241608e-07]
+Processed
+
+Processing img 3
+[ 4.5         0.90099978  7.75       -0.09904586  0.89239895 -0.23911758
+ -0.36964417]
+Processed
+
+Processing img 4
+[ 4.5         0.90099978  6.25       -0.1830128   0.68301234 -0.1830126
+ -0.68301307]
+Processed
+
+Processing img 5
+[ 4.5         0.90099978  3.75       -0.23911764  0.36964357 -0.0990457
+ -0.8923992 ]
+Processing img 6
+[2.5        0.90099978 3.75       0.25881905 0.         0.
+ 0.96592583]
+Processed
+
+Processing img 7
+[ 0.5         0.90099978  3.75        0.23911757  0.36964426 -0.09904588
+  0.89239892]
+Processed
+
+Objects stored in memory:
+
+['lamp', 'lamp shade', 'pole', 'pillar', 'chair']
+ID: 0 | Names: [lamp lamp shade pole pillar chair] |  Num embs: 16 | Pcd size: (3, 137003)
+['lamp']
+ID: 1 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 3934)
+['lamp', 'stool', 'easel', 'pole', 'chair', 'lamp shade', 'footstall']
+ID: 2 | Names: [lamp stool easel pole chair lamp shade footstall] |  Num embs: 18 | Pcd size: (3, 281994)
+['lamp', 'lamp shade', 'easel', 'stool']
+ID: 3 | Names: [lamp lamp shade easel stool] |  Num embs: 6 | Pcd size: (3, 101630)
+['lamp']
+ID: 4 | Names: [lamp] |  Num embs: 2 | Pcd size: (3, 41347)
+['lamp']
+ID: 5 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 2791)
+['lamp']
+ID: 6 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 3386)
+['lamp']
+ID: 7 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 1868)
+['lamp']
+ID: 8 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 815)
+['lamp']
+ID: 9 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 36518)
+Target pose:  [ 4.5         0.90099978  3.75       -0.23911764  0.36964357 -0.0990457
+ -0.8923992 ]
+Estimated pose:  [ 4.4964659   0.89953499  3.74825148  0.23893812 -0.36919425  0.09852204
+  0.89269121]
+Processing img 0
+[ 0.5         0.90099978  6.          0.18301265  0.68301288 -0.18301275
+  0.68301252]
+Processed
+
+Processing img 1
+[ 0.5         0.90099978  8.          0.0990457   0.8923992  -0.23911764
+  0.36964357]
+Processed
+
+Processing img 2
+[ 2.50000000e+00  9.00999784e-01  8.00000000e+00 -6.89276810e-08
+  9.65925826e-01 -2.58819045e-01 -2.57241608e-07]
+Processed
+
+Processing img 3
+[ 4.5         0.90099978  7.75       -0.09904586  0.89239895 -0.23911758
+ -0.36964417]
+Processed
+
+Processing img 4
+[ 4.5         0.90099978  6.25       -0.1830128   0.68301234 -0.1830126
+ -0.68301307]
+Processed
+
+Processing img 5
+[ 4.5         0.90099978  3.75       -0.23911764  0.36964357 -0.0990457
+ -0.8923992 ]
+Processed
+
+Processing img 6
+[2.5        0.90099978 3.75       0.25881905 0.         0.
+ 0.96592583]
+Processing img 7
+[ 0.5         0.90099978  3.75        0.23911757  0.36964426 -0.09904588
+  0.89239892]
+Processed
+
+Objects stored in memory:
+
+['lamp', 'lamp shade', 'pole', 'chair']
+ID: 0 | Names: [lamp lamp shade pole chair] |  Num embs: 14 | Pcd size: (3, 122838)
+['lamp']
+ID: 1 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 3934)
+['lamp', 'stool', 'easel', 'pole', 'chair', 'lamp shade', 'footstall', 'pillar']
+ID: 2 | Names: [lamp stool easel pole chair lamp shade footstall pillar] |  Num embs: 17 | Pcd size: (3, 272166)
+['lamp', 'lamp shade', 'easel', 'stool']
+ID: 3 | Names: [lamp lamp shade easel stool] |  Num embs: 5 | Pcd size: (3, 81453)
+['lamp']
+ID: 4 | Names: [lamp] |  Num embs: 2 | Pcd size: (3, 41347)
+['lamp']
+ID: 5 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 2791)
+['lamp']
+ID: 6 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 3386)
+['lamp']
+ID: 7 | Names: [lamp] |  Num embs: 2 | Pcd size: (3, 2513)
+['lamp']
+ID: 8 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 13343)
+['lamp', 'chair']
+ID: 9 | Names: [lamp chair] |  Num embs: 2 | Pcd size: (3, 12546)
+Target pose:  [2.5        0.90099978 3.75       0.25881905 0.         0.
+ 0.96592583]
+Estimated pose:  [ 2.49880021e+00  9.03055174e-01  3.75010334e+00  2.58776220e-01
+  1.23821852e-04 -7.83937410e-04  9.65936974e-01]
+Processing img 0
+[ 0.5         0.90099978  6.          0.18301265  0.68301288 -0.18301275
+  0.68301252]
+Processed
+
+Processing img 1
+[ 0.5         0.90099978  8.          0.0990457   0.8923992  -0.23911764
+  0.36964357]
+Processed
+
+Processing img 2
+[ 2.50000000e+00  9.00999784e-01  8.00000000e+00 -6.89276810e-08
+  9.65925826e-01 -2.58819045e-01 -2.57241608e-07]
+Processed
+
+Processing img 3
+[ 4.5         0.90099978  7.75       -0.09904586  0.89239895 -0.23911758
+ -0.36964417]
+Processed
+
+Processing img 4
+[ 4.5         0.90099978  6.25       -0.1830128   0.68301234 -0.1830126
+ -0.68301307]
+Processed
+
+Processing img 5
+[ 4.5         0.90099978  3.75       -0.23911764  0.36964357 -0.0990457
+ -0.8923992 ]
+Processed
+
+Processing img 6
+[2.5        0.90099978 3.75       0.25881905 0.         0.
+ 0.96592583]
+Processed
+
+Processing img 7
+[ 0.5         0.90099978  3.75        0.23911757  0.36964426 -0.09904588
+  0.89239892]
+Objects stored in memory:
+
+['lamp', 'lamp shade', 'pole', 'pillar']
+ID: 0 | Names: [lamp lamp shade pole pillar] |  Num embs: 13 | Pcd size: (3, 100176)
+['lamp']
+ID: 1 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 3934)
+['lamp', 'stool', 'easel', 'pole', 'chair', 'lamp shade', 'footstall', 'pillar']
+ID: 2 | Names: [lamp stool easel pole chair lamp shade footstall pillar] |  Num embs: 16 | Pcd size: (3, 279852)
+['lamp', 'lamp shade', 'easel', 'stool']
+ID: 3 | Names: [lamp lamp shade easel stool] |  Num embs: 6 | Pcd size: (3, 101629)
+['lamp']
+ID: 4 | Names: [lamp] |  Num embs: 2 | Pcd size: (3, 41347)
+['lamp']
+ID: 5 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 2791)
+['lamp']
+ID: 6 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 3386)
+['lamp']
+ID: 7 | Names: [lamp] |  Num embs: 3 | Pcd size: (3, 3320)
+['lamp']
+ID: 8 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 13343)
+['lamp', 'chair']
+ID: 9 | Names: [lamp chair] |  Num embs: 3 | Pcd size: (3, 49064)
+Target pose:  [ 0.5         0.90099978  3.75        0.23911757  0.36964426 -0.09904588
+  0.89239892]
+Estimated pose:  [ 0.49257098  0.89307402  3.75802709  0.23704711  0.3703814  -0.10273011
+  0.89222912]
+Object:  floor_lamps
+Pose:  0
+Target pose: [ 0.5         0.90099978  6.          0.18301265  0.68301288 -0.18301275
+  0.68301252]
+Estimated pose: [ 0.50011869  0.90243088  6.00427545  0.18362734  0.68424195 -0.18258531
+  0.68173056]
+
+Pose:  1
+Target pose: [ 0.5         0.90099978  8.          0.0990457   0.8923992  -0.23911764
+  0.36964357]
+Estimated pose: [ 0.49995384  0.90201685  7.99864078  0.09813831  0.89195686 -0.24043589
+  0.37009784]
+
+Pose:  2
+Target pose: [ 2.50000000e+00  9.00999784e-01  8.00000000e+00 -6.89276810e-08
+  9.65925826e-01 -2.58819045e-01 -2.57241608e-07]
+Estimated pose: [ 2.49989129e+00  9.02037460e-01  8.00022631e+00 -6.12173338e-05
+  9.65885502e-01 -2.58969464e-01 -1.01002278e-04]
+
+Pose:  3
+Target pose: [ 4.5         0.90099978  7.75       -0.09904586  0.89239895 -0.23911758
+ -0.36964417]
+Estimated pose: [ 4.49769303  0.88739135  7.7533098  -0.09718497  0.89279039 -0.23844883
+ -0.36962489]
+
+Pose:  4
+Target pose: [ 4.5         0.90099978  6.25       -0.1830128   0.68301234 -0.1830126
+ -0.68301307]
+Estimated pose: [ 1.84174314  0.87974201  4.57464079  0.2397396  -0.09031287  0.00859027
+  0.96658922]
+
+Pose:  5
+Target pose: [ 4.5         0.90099978  3.75       -0.23911764  0.36964357 -0.0990457
+ -0.8923992 ]
+Estimated pose: [ 4.4964659   0.89953499  3.74825148  0.23893812 -0.36919425  0.09852204
+  0.89269121]
+
+Pose:  6
+Target pose: [2.5        0.90099978 3.75       0.25881905 0.         0.
+ 0.96592583]
+Estimated pose: [ 2.49880021e+00  9.03055174e-01  3.75010334e+00  2.58776220e-01
+  1.23821852e-04 -7.83937410e-04  9.65936974e-01]
+
+Pose:  7
+Target pose: [ 0.5         0.90099978  3.75        0.23911757  0.36964426 -0.09904588
+  0.89239892]
+Estimated pose: [ 0.49257098  0.89307402  3.75802709  0.23704711  0.3703814  -0.10273011
+  0.89222912]
+
+garbage_cans  begin processed
+Processing img 0
+[ 0.5         0.90099978  6.          0.18301265  0.68301288 -0.18301275
+  0.68301252]
+Processing img 1
+[ 0.5         0.90099978  8.          0.0990457   0.8923992  -0.23911764
+  0.36964357]
+Processed
+
+Processing img 2
+[ 2.50000000e+00  9.00999784e-01  8.00000000e+00 -6.89276810e-08
+  9.65925826e-01 -2.58819045e-01 -2.57241608e-07]
+Processed
+
+Processing img 3
+[ 4.5         0.90099978  7.75       -0.09904586  0.89239895 -0.23911758
+ -0.36964417]
+Processed
+
+Processing img 4
+[ 4.5         0.90099978  6.25       -0.1830128   0.68301234 -0.1830126
+ -0.68301307]
+Processed
+
+Processing img 5
+[ 4.5         0.90099978  3.75       -0.23911764  0.36964357 -0.0990457
+ -0.8923992 ]
+Processed
+
+Processing img 6
+[2.5        0.90099978 3.75       0.25881905 0.         0.
+ 0.96592583]
+Processed
+
+Processing img 7
+[ 0.5         0.90099978  3.75        0.23911757  0.36964426 -0.09904588
+  0.89239892]
+Processed
+
+Objects stored in memory:
+
+['stool', 'garbage', 'container']
+ID: 0 | Names: [stool garbage container] |  Num embs: 7 | Pcd size: (3, 21146)
+['stool', 'garbage', 'black', 'crate', 'container']
+ID: 1 | Names: [stool garbage black crate container] |  Num embs: 7 | Pcd size: (3, 23222)
+['stool', 'garbage', 'black', 'crate']
+ID: 2 | Names: [stool garbage black crate] |  Num embs: 7 | Pcd size: (3, 36127)
+['stool', 'garbage', 'container']
+ID: 3 | Names: [stool garbage container] |  Num embs: 7 | Pcd size: (3, 9782)
+Target pose:  [ 0.5         0.90099978  6.          0.18301265  0.68301288 -0.18301275
+  0.68301252]
+Estimated pose:  [ 0.52536281  0.92945103  5.96775655  0.1809104   0.67907697 -0.1966727
+  0.68370004]
+Processing img 0
+[ 0.5         0.90099978  6.          0.18301265  0.68301288 -0.18301275
+  0.68301252]
+Processed
+
+Processing img 1
+[ 0.5         0.90099978  8.          0.0990457   0.8923992  -0.23911764
+  0.36964357]
+Processing img 2
+[ 2.50000000e+00  9.00999784e-01  8.00000000e+00 -6.89276810e-08
+  9.65925826e-01 -2.58819045e-01 -2.57241608e-07]
+Processed
+
+Processing img 3
+[ 4.5         0.90099978  7.75       -0.09904586  0.89239895 -0.23911758
+ -0.36964417]
+Processed
+
+Processing img 4
+[ 4.5         0.90099978  6.25       -0.1830128   0.68301234 -0.1830126
+ -0.68301307]
+Processed
+
+Processing img 5
+[ 4.5         0.90099978  3.75       -0.23911764  0.36964357 -0.0990457
+ -0.8923992 ]
+Processed
+
+Processing img 6
+[2.5        0.90099978 3.75       0.25881905 0.         0.
+ 0.96592583]
+Processed
+
+Processing img 7
+[ 0.5         0.90099978  3.75        0.23911757  0.36964426 -0.09904588
+  0.89239892]
+Processed
+
+Objects stored in memory:
+
+['container', 'garbage', 'stool']
+ID: 0 | Names: [container garbage stool] |  Num embs: 7 | Pcd size: (3, 24377)
+['container', 'garbage', 'black', 'crate']
+ID: 1 | Names: [container garbage black crate] |  Num embs: 7 | Pcd size: (3, 23850)
+['container', 'garbage', 'black', 'crate']
+ID: 2 | Names: [container garbage black crate] |  Num embs: 7 | Pcd size: (3, 38297)
+['container', 'garbage', 'stool']
+ID: 3 | Names: [container garbage stool] |  Num embs: 7 | Pcd size: (3, 11508)
+Target pose:  [ 0.5         0.90099978  8.          0.0990457   0.8923992  -0.23911764
+  0.36964357]
+Estimated pose:  [ 0.49093409  0.91256472  7.97122791  0.09234821  0.88999886 -0.24724909
+  0.37180872]
+Processing img 0
+[ 0.5         0.90099978  6.          0.18301265  0.68301288 -0.18301275
+  0.68301252]
+Processed
+
+Processing img 1
+[ 0.5         0.90099978  8.          0.0990457   0.8923992  -0.23911764
+  0.36964357]
+Processed
+
+Processing img 2
+[ 2.50000000e+00  9.00999784e-01  8.00000000e+00 -6.89276810e-08
+  9.65925826e-01 -2.58819045e-01 -2.57241608e-07]
+Processing img 3
+[ 4.5         0.90099978  7.75       -0.09904586  0.89239895 -0.23911758
+ -0.36964417]
+Processed
+
+Processing img 4
+[ 4.5         0.90099978  6.25       -0.1830128   0.68301234 -0.1830126
+ -0.68301307]
+Processed
+
+Processing img 5
+[ 4.5         0.90099978  3.75       -0.23911764  0.36964357 -0.0990457
+ -0.8923992 ]
+Processed
+
+Processing img 6
+[2.5        0.90099978 3.75       0.25881905 0.         0.
+ 0.96592583]
+Processed
+
+Processing img 7
+[ 0.5         0.90099978  3.75        0.23911757  0.36964426 -0.09904588
+  0.89239892]
+Processed
+
+Objects stored in memory:
+
+['container', 'stool', 'garbage']
+ID: 0 | Names: [container stool garbage] |  Num embs: 7 | Pcd size: (3, 21779)
+['container', 'stool', 'garbage', 'black', 'crate']
+ID: 1 | Names: [container stool garbage black crate] |  Num embs: 7 | Pcd size: (3, 19788)
+['container', 'stool', 'garbage', 'black', 'crate']
+ID: 2 | Names: [container stool garbage black crate] |  Num embs: 7 | Pcd size: (3, 36719)
+['container', 'stool', 'garbage']
+ID: 3 | Names: [container stool garbage] |  Num embs: 7 | Pcd size: (3, 10692)
+Target pose:  [ 2.50000000e+00  9.00999784e-01  8.00000000e+00 -6.89276810e-08
+  9.65925826e-01 -2.58819045e-01 -2.57241608e-07]
+Estimated pose:  [ 2.44448011e+00  8.89513228e-01  7.98046501e+00 -1.87592756e-02
+  9.64284499e-01 -2.64123778e-01  6.49039703e-03]
+Processing img 0
+[ 0.5         0.90099978  6.          0.18301265  0.68301288 -0.18301275
+  0.68301252]
+Processed
+
+Processing img 1
+[ 0.5         0.90099978  8.          0.0990457   0.8923992  -0.23911764
+  0.36964357]
+Processed
+
+Processing img 2
+[ 2.50000000e+00  9.00999784e-01  8.00000000e+00 -6.89276810e-08
+  9.65925826e-01 -2.58819045e-01 -2.57241608e-07]
+Processed
+
+Processing img 3
+[ 4.5         0.90099978  7.75       -0.09904586  0.89239895 -0.23911758
+ -0.36964417]
+Processing img 4
+[ 4.5         0.90099978  6.25       -0.1830128   0.68301234 -0.1830126
+ -0.68301307]
+Processed
+
+Processing img 5
+[ 4.5         0.90099978  3.75       -0.23911764  0.36964357 -0.0990457
+ -0.8923992 ]
+Processed
+
+Processing img 6
+[2.5        0.90099978 3.75       0.25881905 0.         0.
+ 0.96592583]
+Processed
+
+Processing img 7
+[ 0.5         0.90099978  3.75        0.23911757  0.36964426 -0.09904588
+  0.89239892]
+Processed
+
+Objects stored in memory:
+
+['container', 'stool', 'garbage']
+ID: 0 | Names: [container stool garbage] |  Num embs: 7 | Pcd size: (3, 24061)
+['container', 'stool', 'garbage', 'black', 'crate']
+ID: 1 | Names: [container stool garbage black crate] |  Num embs: 7 | Pcd size: (3, 21136)
+['container', 'stool', 'garbage', 'black', 'crate']
+ID: 2 | Names: [container stool garbage black crate] |  Num embs: 7 | Pcd size: (3, 36439)
+['container', 'stool', 'garbage']
+ID: 3 | Names: [container stool garbage] |  Num embs: 7 | Pcd size: (3, 10623)
+Target pose:  [ 4.5         0.90099978  7.75       -0.09904586  0.89239895 -0.23911758
+ -0.36964417]
+Estimated pose:  [ 4.52190694  0.90000928  7.72197387 -0.08863246  0.89045306 -0.24515704
+ -0.37300894]
+Processing img 0
+[ 0.5         0.90099978  6.          0.18301265  0.68301288 -0.18301275
+  0.68301252]
+Processed
+
+Processing img 1
+[ 0.5         0.90099978  8.          0.0990457   0.8923992  -0.23911764
+  0.36964357]
+Processed
+
+Processing img 2
+[ 2.50000000e+00  9.00999784e-01  8.00000000e+00 -6.89276810e-08
+  9.65925826e-01 -2.58819045e-01 -2.57241608e-07]
+Processed
+
+Processing img 3
+[ 4.5         0.90099978  7.75       -0.09904586  0.89239895 -0.23911758
+ -0.36964417]
+Processed
+
+Processing img 4
+[ 4.5         0.90099978  6.25       -0.1830128   0.68301234 -0.1830126
+ -0.68301307]
+Processing img 5
+[ 4.5         0.90099978  3.75       -0.23911764  0.36964357 -0.0990457
+ -0.8923992 ]
+Processed
+
+Processing img 6
+[2.5        0.90099978 3.75       0.25881905 0.         0.
+ 0.96592583]
+Processed
+
+Processing img 7
+[ 0.5         0.90099978  3.75        0.23911757  0.36964426 -0.09904588
+  0.89239892]
+Processed
+
+Objects stored in memory:
+
+['container', 'stool', 'garbage']
+ID: 0 | Names: [container stool garbage] |  Num embs: 7 | Pcd size: (3, 22917)
+['container', 'stool', 'garbage', 'crate']
+ID: 1 | Names: [container stool garbage crate] |  Num embs: 7 | Pcd size: (3, 19763)
+['container', 'stool', 'garbage', 'crate', 'black']
+ID: 2 | Names: [container stool garbage crate black] |  Num embs: 7 | Pcd size: (3, 28446)
+['container', 'stool', 'garbage']
+ID: 3 | Names: [container stool garbage] |  Num embs: 7 | Pcd size: (3, 9771)
+Target pose:  [ 4.5         0.90099978  6.25       -0.1830128   0.68301234 -0.1830126
+ -0.68301307]
+Estimated pose:  [ 4.45653126  0.93238599  6.21440707  0.18431274 -0.67770507  0.20170823
+  0.68268473]
+Processing img 0
+[ 0.5         0.90099978  6.          0.18301265  0.68301288 -0.18301275
+  0.68301252]
+Processed
+
+Processing img 1
+[ 0.5         0.90099978  8.          0.0990457   0.8923992  -0.23911764
+  0.36964357]
+Processed
+
+Processing img 2
+[ 2.50000000e+00  9.00999784e-01  8.00000000e+00 -6.89276810e-08
+  9.65925826e-01 -2.58819045e-01 -2.57241608e-07]
+Processed
+
+Processing img 3
+[ 4.5         0.90099978  7.75       -0.09904586  0.89239895 -0.23911758
+ -0.36964417]
+Processed
+
+Processing img 4
+[ 4.5         0.90099978  6.25       -0.1830128   0.68301234 -0.1830126
+ -0.68301307]
+Processed
+
+Processing img 5
+[ 4.5         0.90099978  3.75       -0.23911764  0.36964357 -0.0990457
+ -0.8923992 ]
+Processing img 6
+[2.5        0.90099978 3.75       0.25881905 0.         0.
+ 0.96592583]
+Processed
+
+Processing img 7
+[ 0.5         0.90099978  3.75        0.23911757  0.36964426 -0.09904588
+  0.89239892]
+Processed
+
+Objects stored in memory:
+
+['container', 'stool', 'garbage']
+ID: 0 | Names: [container stool garbage] |  Num embs: 7 | Pcd size: (3, 25236)
+['container', 'stool', 'garbage', 'black']
+ID: 1 | Names: [container stool garbage black] |  Num embs: 7 | Pcd size: (3, 23647)
+['container', 'stool', 'garbage', 'black']
+ID: 2 | Names: [container stool garbage black] |  Num embs: 7 | Pcd size: (3, 33338)
+['container', 'stool', 'garbage']
+ID: 3 | Names: [container stool garbage] |  Num embs: 7 | Pcd size: (3, 11174)
+Target pose:  [ 4.5         0.90099978  3.75       -0.23911764  0.36964357 -0.0990457
+ -0.8923992 ]
+Estimated pose:  [ 4.46772225  0.96704373  3.79657974  0.25589894 -0.36931068  0.10744417
+  0.88689408]
+Processing img 0
+[ 0.5         0.90099978  6.          0.18301265  0.68301288 -0.18301275
+  0.68301252]
+Processed
+
+Processing img 1
+[ 0.5         0.90099978  8.          0.0990457   0.8923992  -0.23911764
+  0.36964357]
+Processed
+
+Processing img 2
+[ 2.50000000e+00  9.00999784e-01  8.00000000e+00 -6.89276810e-08
+  9.65925826e-01 -2.58819045e-01 -2.57241608e-07]
+Processed
+
+Processing img 3
+[ 4.5         0.90099978  7.75       -0.09904586  0.89239895 -0.23911758
+ -0.36964417]
+Processed
+
+Processing img 4
+[ 4.5         0.90099978  6.25       -0.1830128   0.68301234 -0.1830126
+ -0.68301307]
+Processed
+
+Processing img 5
+[ 4.5         0.90099978  3.75       -0.23911764  0.36964357 -0.0990457
+ -0.8923992 ]
+Processed
+
+Processing img 6
+[2.5        0.90099978 3.75       0.25881905 0.         0.
+ 0.96592583]
+Processing img 7
+[ 0.5         0.90099978  3.75        0.23911757  0.36964426 -0.09904588
+  0.89239892]
+Processed
+
+Objects stored in memory:
+
+['container', 'stool', 'garbage']
+ID: 0 | Names: [container stool garbage] |  Num embs: 7 | Pcd size: (3, 23097)
+['container', 'stool', 'garbage', 'black', 'crate']
+ID: 1 | Names: [container stool garbage black crate] |  Num embs: 7 | Pcd size: (3, 23242)
+['container', 'stool', 'garbage', 'black', 'crate']
+ID: 2 | Names: [container stool garbage black crate] |  Num embs: 7 | Pcd size: (3, 29084)
+['container', 'stool', 'garbage']
+ID: 3 | Names: [container stool garbage] |  Num embs: 7 | Pcd size: (3, 8994)
+Target pose:  [2.5        0.90099978 3.75       0.25881905 0.         0.
+ 0.96592583]
+Estimated pose:  [ 2.50213068e+00  9.04212332e-01  3.75164861e+00  2.59073677e-01
+ -4.32212667e-04  6.72599094e-05  9.65857463e-01]
+Processing img 0
+[ 0.5         0.90099978  6.          0.18301265  0.68301288 -0.18301275
+  0.68301252]
+Processed
+
+Processing img 1
+[ 0.5         0.90099978  8.          0.0990457   0.8923992  -0.23911764
+  0.36964357]
+Processed
+
+Processing img 2
+[ 2.50000000e+00  9.00999784e-01  8.00000000e+00 -6.89276810e-08
+  9.65925826e-01 -2.58819045e-01 -2.57241608e-07]
+Processed
+
+Processing img 3
+[ 4.5         0.90099978  7.75       -0.09904586  0.89239895 -0.23911758
+ -0.36964417]
+Processed
+
+Processing img 4
+[ 4.5         0.90099978  6.25       -0.1830128   0.68301234 -0.1830126
+ -0.68301307]
+Processed
+
+Processing img 5
+[ 4.5         0.90099978  3.75       -0.23911764  0.36964357 -0.0990457
+ -0.8923992 ]
+Processed
+
+Processing img 6
+[2.5        0.90099978 3.75       0.25881905 0.         0.
+ 0.96592583]
+Processed
+
+Processing img 7
+[ 0.5         0.90099978  3.75        0.23911757  0.36964426 -0.09904588
+  0.89239892]
+Objects stored in memory:
+
+['container', 'stool', 'garbage']
+ID: 0 | Names: [container stool garbage] |  Num embs: 7 | Pcd size: (3, 24111)
+['container', 'stool', 'garbage', 'black', 'crate']
+ID: 1 | Names: [container stool garbage black crate] |  Num embs: 7 | Pcd size: (3, 24423)
+['container', 'stool', 'garbage', 'black', 'crate']
+ID: 2 | Names: [container stool garbage black crate] |  Num embs: 7 | Pcd size: (3, 36968)
+['container', 'stool', 'garbage']
+ID: 3 | Names: [container stool garbage] |  Num embs: 7 | Pcd size: (3, 10430)
+Target pose:  [ 0.5         0.90099978  3.75        0.23911757  0.36964426 -0.09904588
+  0.89239892]
+Estimated pose:  [ 0.49676408  0.93564504  3.79442682  0.25010842  0.37263791 -0.09616837
+  0.88844719]
+Object:  garbage_cans
+Pose:  0
+Target pose: [ 0.5         0.90099978  6.          0.18301265  0.68301288 -0.18301275
+  0.68301252]
+Estimated pose: [ 0.50011869  0.90243088  6.00427545  0.18362734  0.68424195 -0.18258531
+  0.68173056]
+
+Pose:  1
+Target pose: [ 0.5         0.90099978  8.          0.0990457   0.8923992  -0.23911764
+  0.36964357]
+Estimated pose: [ 0.49995384  0.90201685  7.99864078  0.09813831  0.89195686 -0.24043589
+  0.37009784]
+
+Pose:  2
+Target pose: [ 2.50000000e+00  9.00999784e-01  8.00000000e+00 -6.89276810e-08
+  9.65925826e-01 -2.58819045e-01 -2.57241608e-07]
+Estimated pose: [ 2.49989129e+00  9.02037460e-01  8.00022631e+00 -6.12173338e-05
+  9.65885502e-01 -2.58969464e-01 -1.01002278e-04]
+
+Pose:  3
+Target pose: [ 4.5         0.90099978  7.75       -0.09904586  0.89239895 -0.23911758
+ -0.36964417]
+Estimated pose: [ 4.49769303  0.88739135  7.7533098  -0.09718497  0.89279039 -0.23844883
+ -0.36962489]
+
+Pose:  4
+Target pose: [ 4.5         0.90099978  6.25       -0.1830128   0.68301234 -0.1830126
+ -0.68301307]
+Estimated pose: [ 1.84174314  0.87974201  4.57464079  0.2397396  -0.09031287  0.00859027
+  0.96658922]
+
+Pose:  5
+Target pose: [ 4.5         0.90099978  3.75       -0.23911764  0.36964357 -0.0990457
+ -0.8923992 ]
+Estimated pose: [ 4.4964659   0.89953499  3.74825148  0.23893812 -0.36919425  0.09852204
+  0.89269121]
+
+Pose:  6
+Target pose: [2.5        0.90099978 3.75       0.25881905 0.         0.
+ 0.96592583]
+Estimated pose: [ 2.49880021e+00  9.03055174e-01  3.75010334e+00  2.58776220e-01
+  1.23821852e-04 -7.83937410e-04  9.65936974e-01]
+
+Pose:  7
+Target pose: [ 0.5         0.90099978  3.75        0.23911757  0.36964426 -0.09904588
+  0.89239892]
+Estimated pose: [ 0.49257098  0.89307402  3.75802709  0.23704711  0.3703814  -0.10273011
+  0.89222912]
+
+Pose:  8
+Target pose: [ 0.5         0.90099978  6.          0.18301265  0.68301288 -0.18301275
+  0.68301252]
+Estimated pose: [ 0.52536281  0.92945103  5.96775655  0.1809104   0.67907697 -0.1966727
+  0.68370004]
+
+Pose:  9
+Target pose: [ 0.5         0.90099978  8.          0.0990457   0.8923992  -0.23911764
+  0.36964357]
+Estimated pose: [ 0.49093409  0.91256472  7.97122791  0.09234821  0.88999886 -0.24724909
+  0.37180872]
+
+Pose:  10
+Target pose: [ 2.50000000e+00  9.00999784e-01  8.00000000e+00 -6.89276810e-08
+  9.65925826e-01 -2.58819045e-01 -2.57241608e-07]
+Estimated pose: [ 2.44448011e+00  8.89513228e-01  7.98046501e+00 -1.87592756e-02
+  9.64284499e-01 -2.64123778e-01  6.49039703e-03]
+
+Pose:  11
+Target pose: [ 4.5         0.90099978  7.75       -0.09904586  0.89239895 -0.23911758
+ -0.36964417]
+Estimated pose: [ 4.52190694  0.90000928  7.72197387 -0.08863246  0.89045306 -0.24515704
+ -0.37300894]
+
+Pose:  12
+Target pose: [ 4.5         0.90099978  6.25       -0.1830128   0.68301234 -0.1830126
+ -0.68301307]
+Estimated pose: [ 4.45653126  0.93238599  6.21440707  0.18431274 -0.67770507  0.20170823
+  0.68268473]
+
+Pose:  13
+Target pose: [ 4.5         0.90099978  3.75       -0.23911764  0.36964357 -0.0990457
+ -0.8923992 ]
+Estimated pose: [ 4.46772225  0.96704373  3.79657974  0.25589894 -0.36931068  0.10744417
+  0.88689408]
+
+Pose:  14
+Target pose: [2.5        0.90099978 3.75       0.25881905 0.         0.
+ 0.96592583]
+Estimated pose: [ 2.50213068e+00  9.04212332e-01  3.75164861e+00  2.59073677e-01
+ -4.32212667e-04  6.72599094e-05  9.65857463e-01]
+
+Pose:  15
+Target pose: [ 0.5         0.90099978  3.75        0.23911757  0.36964426 -0.09904588
+  0.89239892]
+Estimated pose: [ 0.49676408  0.93564504  3.79442682  0.25010842  0.37263791 -0.09616837
+  0.88844719]
+
+side_tables  begin processed
+Processing img 0
+[ 0.5         0.90099978  6.          0.18301265  0.68301288 -0.18301275
+  0.68301252]
+Processing img 1
+[ 0.5         0.90099978  8.          0.0990457   0.8923992  -0.23911764
+  0.36964357]
+Processed
+
+Processing img 2
+[ 2.50000000e+00  9.00999784e-01  8.00000000e+00 -6.89276810e-08
+  9.65925826e-01 -2.58819045e-01 -2.57241608e-07]
+Processed
+
+Processing img 3
+[ 4.5         0.90099978  7.75       -0.09904586  0.89239895 -0.23911758
+ -0.36964417]
+Processed
+
+Processing img 4
+[ 4.5         0.90099978  6.25       -0.1830128   0.68301234 -0.1830126
+ -0.68301307]
+Processed
+
+Processing img 5
+[ 4.5         0.90099978  3.75       -0.23911764  0.36964357 -0.0990457
+ -0.8923992 ]
+Processed
+
+Processing img 6
+[2.5        0.90099978 3.75       0.25881905 0.         0.
+ 0.96592583]
+Processed
+
+Processing img 7
+[ 0.5         0.90099978  3.75        0.23911757  0.36964426 -0.09904588
+  0.89239892]
+Processed
+
+Objects stored in memory:
+
+['chair']
+ID: 0 | Names: [chair] |  Num embs: 4 | Pcd size: (3, 4594)
+['table', 'chair']
+ID: 1 | Names: [table chair] |  Num embs: 6 | Pcd size: (3, 18953)
+['table', 'furniture', 'chair', 'cube', 'mat', 'yoga mat', 'stool']
+ID: 2 | Names: [table furniture chair cube mat yoga mat stool] |  Num embs: 11 | Pcd size: (3, 67958)
+['chair']
+ID: 3 | Names: [chair] |  Num embs: 2 | Pcd size: (3, 28282)
+['table']
+ID: 4 | Names: [table] |  Num embs: 1 | Pcd size: (3, 971)
+['table']
+ID: 5 | Names: [table] |  Num embs: 1 | Pcd size: (3, 8262)
+Target pose:  [ 0.5         0.90099978  6.          0.18301265  0.68301288 -0.18301275
+  0.68301252]
+Estimated pose:  [ 0.44295819  0.76752809  5.9879124   0.18715806  0.68892693 -0.15248958
+  0.68344603]
+Processing img 0
+[ 0.5         0.90099978  6.          0.18301265  0.68301288 -0.18301275
+  0.68301252]
+Processed
+
+Processing img 1
+[ 0.5         0.90099978  8.          0.0990457   0.8923992  -0.23911764
+  0.36964357]
+Processing img 2
+[ 2.50000000e+00  9.00999784e-01  8.00000000e+00 -6.89276810e-08
+  9.65925826e-01 -2.58819045e-01 -2.57241608e-07]
+Processed
+
+Processing img 3
+[ 4.5         0.90099978  7.75       -0.09904586  0.89239895 -0.23911758
+ -0.36964417]
+Processed
+
+Processing img 4
+[ 4.5         0.90099978  6.25       -0.1830128   0.68301234 -0.1830126
+ -0.68301307]
+Processed
+
+Processing img 5
+[ 4.5         0.90099978  3.75       -0.23911764  0.36964357 -0.0990457
+ -0.8923992 ]
+Processed
+
+Processing img 6
+[2.5        0.90099978 3.75       0.25881905 0.         0.
+ 0.96592583]
+Processed
+
+Processing img 7
+[ 0.5         0.90099978  3.75        0.23911757  0.36964426 -0.09904588
+  0.89239892]
+Processed
+
+Objects stored in memory:
+
+['chair']
+ID: 0 | Names: [chair] |  Num embs: 1 | Pcd size: (3, 6777)
+['table', 'chair']
+ID: 1 | Names: [table chair] |  Num embs: 6 | Pcd size: (3, 19055)
+['furniture', 'chair', 'cube', 'mat', 'yoga mat', 'table', 'stool']
+ID: 2 | Names: [furniture chair cube mat yoga mat table stool] |  Num embs: 11 | Pcd size: (3, 68754)
+['chair']
+ID: 3 | Names: [chair] |  Num embs: 3 | Pcd size: (3, 3466)
+['chair']
+ID: 4 | Names: [chair] |  Num embs: 2 | Pcd size: (3, 28282)
+['table']
+ID: 5 | Names: [table] |  Num embs: 1 | Pcd size: (3, 971)
+['table']
+ID: 6 | Names: [table] |  Num embs: 1 | Pcd size: (3, 8262)
+Target pose:  [ 0.5         0.90099978  8.          0.0990457   0.8923992  -0.23911764
+  0.36964357]
+Estimated pose:  [ 0.57089834  1.05437447  7.99385579  0.10556999  0.88840385 -0.25869088
+  0.3642425 ]
+Processing img 0
+[ 0.5         0.90099978  6.          0.18301265  0.68301288 -0.18301275
+  0.68301252]
+Processed
+
+Processing img 1
+[ 0.5         0.90099978  8.          0.0990457   0.8923992  -0.23911764
+  0.36964357]
+Processed
+
+Processing img 2
+[ 2.50000000e+00  9.00999784e-01  8.00000000e+00 -6.89276810e-08
+  9.65925826e-01 -2.58819045e-01 -2.57241608e-07]
+Processing img 3
+[ 4.5         0.90099978  7.75       -0.09904586  0.89239895 -0.23911758
+ -0.36964417]
+Processed
+
+Processing img 4
+[ 4.5         0.90099978  6.25       -0.1830128   0.68301234 -0.1830126
+ -0.68301307]
+Processed
+
+Processing img 5
+[ 4.5         0.90099978  3.75       -0.23911764  0.36964357 -0.0990457
+ -0.8923992 ]
+Processed
+
+Processing img 6
+[2.5        0.90099978 3.75       0.25881905 0.         0.
+ 0.96592583]
+Processed
+
+Processing img 7
+[ 0.5         0.90099978  3.75        0.23911757  0.36964426 -0.09904588
+  0.89239892]
+Processed
+
+Objects stored in memory:
+
+['chair']
+ID: 0 | Names: [chair] |  Num embs: 2 | Pcd size: (3, 7903)
+['table', 'chair']
+ID: 1 | Names: [table chair] |  Num embs: 6 | Pcd size: (3, 17077)
+['furniture', 'table', 'chair', 'cube', 'mat', 'yoga mat', 'stool']
+ID: 2 | Names: [furniture table chair cube mat yoga mat stool] |  Num embs: 11 | Pcd size: (3, 66812)
+['chair']
+ID: 3 | Names: [chair] |  Num embs: 2 | Pcd size: (3, 2406)
+['chair']
+ID: 4 | Names: [chair] |  Num embs: 2 | Pcd size: (3, 28282)
+['table']
+ID: 5 | Names: [table] |  Num embs: 1 | Pcd size: (3, 970)
+['table']
+ID: 6 | Names: [table] |  Num embs: 1 | Pcd size: (3, 8262)
+Target pose:  [ 2.50000000e+00  9.00999784e-01  8.00000000e+00 -6.89276810e-08
+  9.65925826e-01 -2.58819045e-01 -2.57241608e-07]
+Estimated pose:  [ 2.43040274e+00  8.45430068e-01  8.00075131e+00 -5.83437138e-03
+  9.67939902e-01 -2.50622642e-01  1.57034184e-02]
+Processing img 0
+[ 0.5         0.90099978  6.          0.18301265  0.68301288 -0.18301275
+  0.68301252]
+Processed
+
+Processing img 1
+[ 0.5         0.90099978  8.          0.0990457   0.8923992  -0.23911764
+  0.36964357]
+Processed
+
+Processing img 2
+[ 2.50000000e+00  9.00999784e-01  8.00000000e+00 -6.89276810e-08
+  9.65925826e-01 -2.58819045e-01 -2.57241608e-07]
+Processed
+
+Processing img 3
+[ 4.5         0.90099978  7.75       -0.09904586  0.89239895 -0.23911758
+ -0.36964417]
+Processing img 4
+[ 4.5         0.90099978  6.25       -0.1830128   0.68301234 -0.1830126
+ -0.68301307]
+Processed
+
+Processing img 5
+[ 4.5         0.90099978  3.75       -0.23911764  0.36964357 -0.0990457
+ -0.8923992 ]
+Processed
+
+Processing img 6
+[2.5        0.90099978 3.75       0.25881905 0.         0.
+ 0.96592583]
+Processed
+
+Processing img 7
+[ 0.5         0.90099978  3.75        0.23911757  0.36964426 -0.09904588
+  0.89239892]
+Processed
+
+Objects stored in memory:
+
+['chair']
+ID: 0 | Names: [chair] |  Num embs: 2 | Pcd size: (3, 7903)
+['table', 'chair']
+ID: 1 | Names: [table chair] |  Num embs: 6 | Pcd size: (3, 16615)
+['furniture', 'table', 'cube', 'stool']
+ID: 2 | Names: [furniture table cube stool] |  Num embs: 8 | Pcd size: (3, 46897)
+['chair']
+ID: 3 | Names: [chair] |  Num embs: 2 | Pcd size: (3, 3097)
+['mat', 'yoga mat']
+ID: 4 | Names: [mat yoga mat] |  Num embs: 2 | Pcd size: (3, 15804)
+['chair']
+ID: 5 | Names: [chair] |  Num embs: 2 | Pcd size: (3, 28282)
+['table']
+ID: 6 | Names: [table] |  Num embs: 1 | Pcd size: (3, 972)
+['table']
+ID: 7 | Names: [table] |  Num embs: 1 | Pcd size: (3, 8262)
+Target pose:  [ 4.5         0.90099978  7.75       -0.09904586  0.89239895 -0.23911758
+ -0.36964417]
+Estimated pose:  [ 4.49612433  0.91267343  7.74421366 -0.10190562  0.89127313 -0.24165853
+ -0.36993055]
+Processing img 0
+[ 0.5         0.90099978  6.          0.18301265  0.68301288 -0.18301275
+  0.68301252]
+Processed
+
+Processing img 1
+[ 0.5         0.90099978  8.          0.0990457   0.8923992  -0.23911764
+  0.36964357]
+Processed
+
+Processing img 2
+[ 2.50000000e+00  9.00999784e-01  8.00000000e+00 -6.89276810e-08
+  9.65925826e-01 -2.58819045e-01 -2.57241608e-07]
+Processed
+
+Processing img 3
+[ 4.5         0.90099978  7.75       -0.09904586  0.89239895 -0.23911758
+ -0.36964417]
+Processed
+
+Processing img 4
+[ 4.5         0.90099978  6.25       -0.1830128   0.68301234 -0.1830126
+ -0.68301307]
+Processing img 5
+[ 4.5         0.90099978  3.75       -0.23911764  0.36964357 -0.0990457
+ -0.8923992 ]
+Processed
+
+Processing img 6
+[2.5        0.90099978 3.75       0.25881905 0.         0.
+ 0.96592583]
+Processed
+
+Processing img 7
+[ 0.5         0.90099978  3.75        0.23911757  0.36964426 -0.09904588
+  0.89239892]
+Processed
+
+Objects stored in memory:
+
+['chair']
+ID: 0 | Names: [chair] |  Num embs: 2 | Pcd size: (3, 7902)
+['table']
+ID: 1 | Names: [table] |  Num embs: 6 | Pcd size: (3, 8295)
+['furniture', 'table', 'chair', 'yoga mat', 'stool']
+ID: 2 | Names: [furniture table chair yoga mat stool] |  Num embs: 10 | Pcd size: (3, 44589)
+['chair']
+ID: 3 | Names: [chair] |  Num embs: 2 | Pcd size: (3, 1430)
+['chair']
+ID: 4 | Names: [chair] |  Num embs: 2 | Pcd size: (3, 28282)
+['table']
+ID: 5 | Names: [table] |  Num embs: 1 | Pcd size: (3, 972)
+['table']
+ID: 6 | Names: [table] |  Num embs: 1 | Pcd size: (3, 8262)
+[1;33m[Open3D WARNING] Too few correspondences (3711) after mutual filter, fall back to original correspondences.[0;m
+Target pose:  [ 4.5         0.90099978  6.25       -0.1830128   0.68301234 -0.1830126
+ -0.68301307]
+Estimated pose:  [ 4.49033679  0.89711837  6.28172943 -0.1808731   0.69153007 -0.18249303
+ -0.67510546]
+Processing img 0
+[ 0.5         0.90099978  6.          0.18301265  0.68301288 -0.18301275
+  0.68301252]
+Processed
+
+Processing img 1
+[ 0.5         0.90099978  8.          0.0990457   0.8923992  -0.23911764
+  0.36964357]
+Processed
+
+Processing img 2
+[ 2.50000000e+00  9.00999784e-01  8.00000000e+00 -6.89276810e-08
+  9.65925826e-01 -2.58819045e-01 -2.57241608e-07]
+Processed
+
+Processing img 3
+[ 4.5         0.90099978  7.75       -0.09904586  0.89239895 -0.23911758
+ -0.36964417]
+Processed
+
+Processing img 4
+[ 4.5         0.90099978  6.25       -0.1830128   0.68301234 -0.1830126
+ -0.68301307]
+Processed
+
+Processing img 5
+[ 4.5         0.90099978  3.75       -0.23911764  0.36964357 -0.0990457
+ -0.8923992 ]
+Processing img 6
+[2.5        0.90099978 3.75       0.25881905 0.         0.
+ 0.96592583]
+Processed
+
+Processing img 7
+[ 0.5         0.90099978  3.75        0.23911757  0.36964426 -0.09904588
+  0.89239892]
+Processed
+
+Objects stored in memory:
+
+['chair']
+ID: 0 | Names: [chair] |  Num embs: 2 | Pcd size: (3, 7903)
+['table', 'chair']
+ID: 1 | Names: [table chair] |  Num embs: 6 | Pcd size: (3, 18116)
+['furniture', 'table', 'chair', 'cube', 'mat', 'stool']
+ID: 2 | Names: [furniture table chair cube mat stool] |  Num embs: 10 | Pcd size: (3, 62470)
+['chair']
+ID: 3 | Names: [chair] |  Num embs: 3 | Pcd size: (3, 3466)
+['chair']
+ID: 4 | Names: [chair] |  Num embs: 1 | Pcd size: (3, 25654)
+['table']
+ID: 5 | Names: [table] |  Num embs: 1 | Pcd size: (3, 967)
+['table']
+ID: 6 | Names: [table] |  Num embs: 1 | Pcd size: (3, 8262)
+Target pose:  [ 4.5         0.90099978  3.75       -0.23911764  0.36964357 -0.0990457
+ -0.8923992 ]
+Estimated pose:  [ 4.52641473  0.93305175  3.79438786  0.24565489 -0.38004374  0.1020925
+  0.885888  ]
+Processing img 0
+[ 0.5         0.90099978  6.          0.18301265  0.68301288 -0.18301275
+  0.68301252]
+Processed
+
+Processing img 1
+[ 0.5         0.90099978  8.          0.0990457   0.8923992  -0.23911764
+  0.36964357]
+Processed
+
+Processing img 2
+[ 2.50000000e+00  9.00999784e-01  8.00000000e+00 -6.89276810e-08
+  9.65925826e-01 -2.58819045e-01 -2.57241608e-07]
+Processed
+
+Processing img 3
+[ 4.5         0.90099978  7.75       -0.09904586  0.89239895 -0.23911758
+ -0.36964417]
+Processed
+
+Processing img 4
+[ 4.5         0.90099978  6.25       -0.1830128   0.68301234 -0.1830126
+ -0.68301307]
+Processed
+
+Processing img 5
+[ 4.5         0.90099978  3.75       -0.23911764  0.36964357 -0.0990457
+ -0.8923992 ]
+Processed
+
+Processing img 6
+[2.5        0.90099978 3.75       0.25881905 0.         0.
+ 0.96592583]
+Processing img 7
+[ 0.5         0.90099978  3.75        0.23911757  0.36964426 -0.09904588
+  0.89239892]
+Processed
+
+Objects stored in memory:
+
+['chair']
+ID: 0 | Names: [chair] |  Num embs: 2 | Pcd size: (3, 7903)
+['table', 'chair']
+ID: 1 | Names: [table chair] |  Num embs: 7 | Pcd size: (3, 19586)
+['furniture', 'table', 'chair', 'cube', 'mat', 'yoga mat', 'stool']
+ID: 2 | Names: [furniture table chair cube mat yoga mat stool] |  Num embs: 10 | Pcd size: (3, 53663)
+['chair']
+ID: 3 | Names: [chair] |  Num embs: 3 | Pcd size: (3, 3467)
+['chair']
+ID: 4 | Names: [chair] |  Num embs: 1 | Pcd size: (3, 2628)
+['table']
+ID: 5 | Names: [table] |  Num embs: 1 | Pcd size: (3, 8262)
+Target pose:  [2.5        0.90099978 3.75       0.25881905 0.         0.
+ 0.96592583]
+Estimated pose:  [ 2.96120428  0.91208125  3.59604055  0.26068173 -0.12450064  0.0348564
+  0.95672862]
+Processing img 0
+[ 0.5         0.90099978  6.          0.18301265  0.68301288 -0.18301275
+  0.68301252]
+Processed
+
+Processing img 1
+[ 0.5         0.90099978  8.          0.0990457   0.8923992  -0.23911764
+  0.36964357]
+Processed
+
+Processing img 2
+[ 2.50000000e+00  9.00999784e-01  8.00000000e+00 -6.89276810e-08
+  9.65925826e-01 -2.58819045e-01 -2.57241608e-07]
+Processed
+
+Processing img 3
+[ 4.5         0.90099978  7.75       -0.09904586  0.89239895 -0.23911758
+ -0.36964417]
+Processed
+
+Processing img 4
+[ 4.5         0.90099978  6.25       -0.1830128   0.68301234 -0.1830126
+ -0.68301307]
+Processed
+
+Processing img 5
+[ 4.5         0.90099978  3.75       -0.23911764  0.36964357 -0.0990457
+ -0.8923992 ]
+Processed
+
+Processing img 6
+[2.5        0.90099978 3.75       0.25881905 0.         0.
+ 0.96592583]
+Processed
+
+Processing img 7
+[ 0.5         0.90099978  3.75        0.23911757  0.36964426 -0.09904588
+  0.89239892]
+Objects stored in memory:
+
+['chair']
+ID: 0 | Names: [chair] |  Num embs: 2 | Pcd size: (3, 7903)
+['table', 'chair']
+ID: 1 | Names: [table chair] |  Num embs: 6 | Pcd size: (3, 19408)
+['furniture', 'table', 'chair', 'cube', 'mat', 'yoga mat']
+ID: 2 | Names: [furniture table chair cube mat yoga mat] |  Num embs: 11 | Pcd size: (3, 68149)
+['chair']
+ID: 3 | Names: [chair] |  Num embs: 3 | Pcd size: (3, 3462)
+['chair']
+ID: 4 | Names: [chair] |  Num embs: 2 | Pcd size: (3, 28282)
+['table']
+ID: 5 | Names: [table] |  Num embs: 1 | Pcd size: (3, 969)
+Target pose:  [ 0.5         0.90099978  3.75        0.23911757  0.36964426 -0.09904588
+  0.89239892]
+Estimated pose:  [ 1.05584326  0.98478029  5.65905848  0.09502361  0.88210595 -0.26286972
+  0.3791558 ]
+Object:  side_tables
+Pose:  0
+Target pose: [ 0.5         0.90099978  6.          0.18301265  0.68301288 -0.18301275
+  0.68301252]
+Estimated pose: [ 0.50011869  0.90243088  6.00427545  0.18362734  0.68424195 -0.18258531
+  0.68173056]
+
+Pose:  1
+Target pose: [ 0.5         0.90099978  8.          0.0990457   0.8923992  -0.23911764
+  0.36964357]
+Estimated pose: [ 0.49995384  0.90201685  7.99864078  0.09813831  0.89195686 -0.24043589
+  0.37009784]
+
+Pose:  2
+Target pose: [ 2.50000000e+00  9.00999784e-01  8.00000000e+00 -6.89276810e-08
+  9.65925826e-01 -2.58819045e-01 -2.57241608e-07]
+Estimated pose: [ 2.49989129e+00  9.02037460e-01  8.00022631e+00 -6.12173338e-05
+  9.65885502e-01 -2.58969464e-01 -1.01002278e-04]
+
+Pose:  3
+Target pose: [ 4.5         0.90099978  7.75       -0.09904586  0.89239895 -0.23911758
+ -0.36964417]
+Estimated pose: [ 4.49769303  0.88739135  7.7533098  -0.09718497  0.89279039 -0.23844883
+ -0.36962489]
+
+Pose:  4
+Target pose: [ 4.5         0.90099978  6.25       -0.1830128   0.68301234 -0.1830126
+ -0.68301307]
+Estimated pose: [ 1.84174314  0.87974201  4.57464079  0.2397396  -0.09031287  0.00859027
+  0.96658922]
+
+Pose:  5
+Target pose: [ 4.5         0.90099978  3.75       -0.23911764  0.36964357 -0.0990457
+ -0.8923992 ]
+Estimated pose: [ 4.4964659   0.89953499  3.74825148  0.23893812 -0.36919425  0.09852204
+  0.89269121]
+
+Pose:  6
+Target pose: [2.5        0.90099978 3.75       0.25881905 0.         0.
+ 0.96592583]
+Estimated pose: [ 2.49880021e+00  9.03055174e-01  3.75010334e+00  2.58776220e-01
+  1.23821852e-04 -7.83937410e-04  9.65936974e-01]
+
+Pose:  7
+Target pose: [ 0.5         0.90099978  3.75        0.23911757  0.36964426 -0.09904588
+  0.89239892]
+Estimated pose: [ 0.49257098  0.89307402  3.75802709  0.23704711  0.3703814  -0.10273011
+  0.89222912]
+
+Pose:  8
+Target pose: [ 0.5         0.90099978  6.          0.18301265  0.68301288 -0.18301275
+  0.68301252]
+Estimated pose: [ 0.52536281  0.92945103  5.96775655  0.1809104   0.67907697 -0.1966727
+  0.68370004]
+
+Pose:  9
+Target pose: [ 0.5         0.90099978  8.          0.0990457   0.8923992  -0.23911764
+  0.36964357]
+Estimated pose: [ 0.49093409  0.91256472  7.97122791  0.09234821  0.88999886 -0.24724909
+  0.37180872]
+
+Pose:  10
+Target pose: [ 2.50000000e+00  9.00999784e-01  8.00000000e+00 -6.89276810e-08
+  9.65925826e-01 -2.58819045e-01 -2.57241608e-07]
+Estimated pose: [ 2.44448011e+00  8.89513228e-01  7.98046501e+00 -1.87592756e-02
+  9.64284499e-01 -2.64123778e-01  6.49039703e-03]
+
+Pose:  11
+Target pose: [ 4.5         0.90099978  7.75       -0.09904586  0.89239895 -0.23911758
+ -0.36964417]
+Estimated pose: [ 4.52190694  0.90000928  7.72197387 -0.08863246  0.89045306 -0.24515704
+ -0.37300894]
+
+Pose:  12
+Target pose: [ 4.5         0.90099978  6.25       -0.1830128   0.68301234 -0.1830126
+ -0.68301307]
+Estimated pose: [ 4.45653126  0.93238599  6.21440707  0.18431274 -0.67770507  0.20170823
+  0.68268473]
+
+Pose:  13
+Target pose: [ 4.5         0.90099978  3.75       -0.23911764  0.36964357 -0.0990457
+ -0.8923992 ]
+Estimated pose: [ 4.46772225  0.96704373  3.79657974  0.25589894 -0.36931068  0.10744417
+  0.88689408]
+
+Pose:  14
+Target pose: [2.5        0.90099978 3.75       0.25881905 0.         0.
+ 0.96592583]
+Estimated pose: [ 2.50213068e+00  9.04212332e-01  3.75164861e+00  2.59073677e-01
+ -4.32212667e-04  6.72599094e-05  9.65857463e-01]
+
+Pose:  15
+Target pose: [ 0.5         0.90099978  3.75        0.23911757  0.36964426 -0.09904588
+  0.89239892]
+Estimated pose: [ 0.49676408  0.93564504  3.79442682  0.25010842  0.37263791 -0.09616837
+  0.88844719]
+
+Pose:  16
+Target pose: [ 0.5         0.90099978  6.          0.18301265  0.68301288 -0.18301275
+  0.68301252]
+Estimated pose: [ 0.44295819  0.76752809  5.9879124   0.18715806  0.68892693 -0.15248958
+  0.68344603]
+
+Pose:  17
+Target pose: [ 0.5         0.90099978  8.          0.0990457   0.8923992  -0.23911764
+  0.36964357]
+Estimated pose: [ 0.57089834  1.05437447  7.99385579  0.10556999  0.88840385 -0.25869088
+  0.3642425 ]
+
+Pose:  18
+Target pose: [ 2.50000000e+00  9.00999784e-01  8.00000000e+00 -6.89276810e-08
+  9.65925826e-01 -2.58819045e-01 -2.57241608e-07]
+Estimated pose: [ 2.43040274e+00  8.45430068e-01  8.00075131e+00 -5.83437138e-03
+  9.67939902e-01 -2.50622642e-01  1.57034184e-02]
+
+Pose:  19
+Target pose: [ 4.5         0.90099978  7.75       -0.09904586  0.89239895 -0.23911758
+ -0.36964417]
+Estimated pose: [ 4.49612433  0.91267343  7.74421366 -0.10190562  0.89127313 -0.24165853
+ -0.36993055]
+
+Pose:  20
+Target pose: [ 4.5         0.90099978  6.25       -0.1830128   0.68301234 -0.1830126
+ -0.68301307]
+Estimated pose: [ 4.49033679  0.89711837  6.28172943 -0.1808731   0.69153007 -0.18249303
+ -0.67510546]
+
+Pose:  21
+Target pose: [ 4.5         0.90099978  3.75       -0.23911764  0.36964357 -0.0990457
+ -0.8923992 ]
+Estimated pose: [ 4.52641473  0.93305175  3.79438786  0.24565489 -0.38004374  0.1020925
+  0.885888  ]
+
+Pose:  22
+Target pose: [2.5        0.90099978 3.75       0.25881905 0.         0.
+ 0.96592583]
+Estimated pose: [ 2.96120428  0.91208125  3.59604055  0.26068173 -0.12450064  0.0348564
+  0.95672862]
+
+Pose:  23
+Target pose: [ 0.5         0.90099978  3.75        0.23911757  0.36964426 -0.09904588
+  0.89239892]
+Estimated pose: [ 1.05584326  0.98478029  5.65905848  0.09502361  0.88210595 -0.26286972
+  0.3791558 ]
+
+sofas  begin processed
+Processing img 0
+[ 0.5         0.90099978  6.          0.18301265  0.68301288 -0.18301275
+  0.68301252]
+Processing img 1
+[ 0.5         0.90099978  8.          0.0990457   0.8923992  -0.23911764
+  0.36964357]
+Processed
+
+Processing img 2
+[ 2.50000000e+00  9.00999784e-01  8.00000000e+00 -6.89276810e-08
+  9.65925826e-01 -2.58819045e-01 -2.57241608e-07]
+Processed
+
+Processing img 3
+[ 4.5         0.90099978  7.75       -0.09904586  0.89239895 -0.23911758
+ -0.36964417]
+Processed
+
+Processing img 4
+[ 4.5         0.90099978  6.25       -0.1830128   0.68301234 -0.1830126
+ -0.68301307]
+Processed
+
+Processing img 5
+[ 4.5         0.90099978  3.75       -0.23911764  0.36964357 -0.0990457
+ -0.8923992 ]
+Processed
+
+Processing img 6
+[2.5        0.90099978 3.75       0.25881905 0.         0.
+ 0.96592583]
+Processed
+
+Processing img 7
+[ 0.5         0.90099978  3.75        0.23911757  0.36964426 -0.09904588
+  0.89239892]
+Processed
+
+Objects stored in memory:
+
+['armchair']
+ID: 0 | Names: [armchair] |  Num embs: 7 | Pcd size: (3, 140713)
+['armchair', 'pillow']
+ID: 1 | Names: [armchair pillow] |  Num embs: 8 | Pcd size: (3, 192869)
+['couch', 'armchair', 'pillow']
+ID: 2 | Names: [couch armchair pillow] |  Num embs: 11 | Pcd size: (3, 155966)
+['furniture']
+ID: 3 | Names: [furniture] |  Num embs: 1 | Pcd size: (3, 5415)
+Target pose:  [ 0.5         0.90099978  6.          0.18301265  0.68301288 -0.18301275
+  0.68301252]
+Estimated pose:  [ 0.50000804  0.90100702  3.75000192  0.23911966  0.36964323 -0.09904802
+  0.89239854]
+Processing img 0
+[ 0.5         0.90099978  6.          0.18301265  0.68301288 -0.18301275
+  0.68301252]
+Processed
+
+Processing img 1
+[ 0.5         0.90099978  8.          0.0990457   0.8923992  -0.23911764
+  0.36964357]
+Processing img 2
+[ 2.50000000e+00  9.00999784e-01  8.00000000e+00 -6.89276810e-08
+  9.65925826e-01 -2.58819045e-01 -2.57241608e-07]
+Processed
+
+Processing img 3
+[ 4.5         0.90099978  7.75       -0.09904586  0.89239895 -0.23911758
+ -0.36964417]
+Processed
+
+Processing img 4
+[ 4.5         0.90099978  6.25       -0.1830128   0.68301234 -0.1830126
+ -0.68301307]
+Processed
+
+Processing img 5
+[ 4.5         0.90099978  3.75       -0.23911764  0.36964357 -0.0990457
+ -0.8923992 ]
+Processed
+
+Processing img 6
+[2.5        0.90099978 3.75       0.25881905 0.         0.
+ 0.96592583]
+Processed
+
+Processing img 7
+[ 0.5         0.90099978  3.75        0.23911757  0.36964426 -0.09904588
+  0.89239892]
+Processed
+
+Objects stored in memory:
+
+['armchair', 'pillow']
+ID: 0 | Names: [armchair pillow] |  Num embs: 8 | Pcd size: (3, 195040)
+['armchair', 'pillow']
+ID: 1 | Names: [armchair pillow] |  Num embs: 4 | Pcd size: (3, 38474)
+['armchair']
+ID: 2 | Names: [armchair] |  Num embs: 1 | Pcd size: (3, 25119)
+['armchair']
+ID: 3 | Names: [armchair] |  Num embs: 6 | Pcd size: (3, 95534)
+['couch', 'armchair', 'pillow']
+ID: 4 | Names: [couch armchair pillow] |  Num embs: 10 | Pcd size: (3, 145275)
+['furniture']
+ID: 5 | Names: [furniture] |  Num embs: 1 | Pcd size: (3, 5415)
+Target pose:  [ 0.5         0.90099978  8.          0.0990457   0.8923992  -0.23911764
+  0.36964357]
+Estimated pose:  [ 0.34560241  0.73635692  6.05241499  0.19362623  0.52429912 -0.12789775
+  0.81930548]
+Processing img 0
+[ 0.5         0.90099978  6.          0.18301265  0.68301288 -0.18301275
+  0.68301252]
+Processed
+
+Processing img 1
+[ 0.5         0.90099978  8.          0.0990457   0.8923992  -0.23911764
+  0.36964357]
+Processed
+
+Processing img 2
+[ 2.50000000e+00  9.00999784e-01  8.00000000e+00 -6.89276810e-08
+  9.65925826e-01 -2.58819045e-01 -2.57241608e-07]
+Processing img 3
+[ 4.5         0.90099978  7.75       -0.09904586  0.89239895 -0.23911758
+ -0.36964417]
+Processed
+
+Processing img 4
+[ 4.5         0.90099978  6.25       -0.1830128   0.68301234 -0.1830126
+ -0.68301307]
+Processed
+
+Processing img 5
+[ 4.5         0.90099978  3.75       -0.23911764  0.36964357 -0.0990457
+ -0.8923992 ]
+Processed
+
+Processing img 6
+[2.5        0.90099978 3.75       0.25881905 0.         0.
+ 0.96592583]
+Processed
+
+Processing img 7
+[ 0.5         0.90099978  3.75        0.23911757  0.36964426 -0.09904588
+  0.89239892]
+Processed
+
+Objects stored in memory:
+
+['armchair', 'pillow']
+ID: 0 | Names: [armchair pillow] |  Num embs: 8 | Pcd size: (3, 182912)
+['armchair', 'pillow']
+ID: 1 | Names: [armchair pillow] |  Num embs: 4 | Pcd size: (3, 38473)
+['armchair']
+ID: 2 | Names: [armchair] |  Num embs: 1 | Pcd size: (3, 25119)
+['armchair']
+ID: 3 | Names: [armchair] |  Num embs: 6 | Pcd size: (3, 110643)
+['couch', 'armchair', 'pillow']
+ID: 4 | Names: [couch armchair pillow] |  Num embs: 10 | Pcd size: (3, 144439)
+['furniture']
+ID: 5 | Names: [furniture] |  Num embs: 1 | Pcd size: (3, 5415)
+Target pose:  [ 2.50000000e+00  9.00999784e-01  8.00000000e+00 -6.89276810e-08
+  9.65925826e-01 -2.58819045e-01 -2.57241608e-07]
+Estimated pose:  [ 4.75624538  1.03158322  7.49877938 -0.11966145  0.88369578 -0.24295467
+ -0.38175377]
+Processing img 0
+[ 0.5         0.90099978  6.          0.18301265  0.68301288 -0.18301275
+  0.68301252]
+Processed
+
+Processing img 1
+[ 0.5         0.90099978  8.          0.0990457   0.8923992  -0.23911764
+  0.36964357]
+Processed
+
+Processing img 2
+[ 2.50000000e+00  9.00999784e-01  8.00000000e+00 -6.89276810e-08
+  9.65925826e-01 -2.58819045e-01 -2.57241608e-07]
+Processed
+
+Processing img 3
+[ 4.5         0.90099978  7.75       -0.09904586  0.89239895 -0.23911758
+ -0.36964417]
+Processing img 4
+[ 4.5         0.90099978  6.25       -0.1830128   0.68301234 -0.1830126
+ -0.68301307]
+Processed
+
+Processing img 5
+[ 4.5         0.90099978  3.75       -0.23911764  0.36964357 -0.0990457
+ -0.8923992 ]
+Processed
+
+Processing img 6
+[2.5        0.90099978 3.75       0.25881905 0.         0.
+ 0.96592583]
+Processed
+
+Processing img 7
+[ 0.5         0.90099978  3.75        0.23911757  0.36964426 -0.09904588
+  0.89239892]
+Processed
+
+Objects stored in memory:
+
+['armchair', 'pillow']
+ID: 0 | Names: [armchair pillow] |  Num embs: 8 | Pcd size: (3, 182316)
+['armchair', 'pillow']
+ID: 1 | Names: [armchair pillow] |  Num embs: 4 | Pcd size: (3, 38472)
+['armchair']
+ID: 2 | Names: [armchair] |  Num embs: 1 | Pcd size: (3, 25119)
+['armchair']
+ID: 3 | Names: [armchair] |  Num embs: 6 | Pcd size: (3, 132688)
+['couch', 'armchair', 'pillow']
+ID: 4 | Names: [couch armchair pillow] |  Num embs: 10 | Pcd size: (3, 150619)
+Target pose:  [ 4.5         0.90099978  7.75       -0.09904586  0.89239895 -0.23911758
+ -0.36964417]
+Estimated pose:  [ 1.09858938 -1.38709024  5.68147339  0.56320152  0.23195846  0.77243509
+ -0.17984257]
+Processing img 0
+[ 0.5         0.90099978  6.          0.18301265  0.68301288 -0.18301275
+  0.68301252]
+Processed
+
+Processing img 1
+[ 0.5         0.90099978  8.          0.0990457   0.8923992  -0.23911764
+  0.36964357]
+Processed
+
+Processing img 2
+[ 2.50000000e+00  9.00999784e-01  8.00000000e+00 -6.89276810e-08
+  9.65925826e-01 -2.58819045e-01 -2.57241608e-07]
+Processed
+
+Processing img 3
+[ 4.5         0.90099978  7.75       -0.09904586  0.89239895 -0.23911758
+ -0.36964417]
+Processed
+
+Processing img 4
+[ 4.5         0.90099978  6.25       -0.1830128   0.68301234 -0.1830126
+ -0.68301307]
+Processing img 5
+[ 4.5         0.90099978  3.75       -0.23911764  0.36964357 -0.0990457
+ -0.8923992 ]
+Processed
+
+Processing img 6
+[2.5        0.90099978 3.75       0.25881905 0.         0.
+ 0.96592583]
+Processed
+
+Processing img 7
+[ 0.5         0.90099978  3.75        0.23911757  0.36964426 -0.09904588
+  0.89239892]
+Processed
+
+Objects stored in memory:
+
+['armchair']
+ID: 0 | Names: [armchair] |  Num embs: 7 | Pcd size: (3, 131928)
+['armchair', 'pillow']
+ID: 1 | Names: [armchair pillow] |  Num embs: 4 | Pcd size: (3, 38473)
+['armchair']
+ID: 2 | Names: [armchair] |  Num embs: 1 | Pcd size: (3, 25119)
+['armchair']
+ID: 3 | Names: [armchair] |  Num embs: 6 | Pcd size: (3, 131589)
+['couch', 'armchair', 'pillow']
+ID: 4 | Names: [couch armchair pillow] |  Num embs: 10 | Pcd size: (3, 144460)
+['furniture']
+ID: 5 | Names: [furniture] |  Num embs: 1 | Pcd size: (3, 5415)
+Target pose:  [ 4.5         0.90099978  6.25       -0.1830128   0.68301234 -0.1830126
+ -0.68301307]
+Estimated pose:  [ 4.72429914  0.65890836  5.12365405  0.20213501 -0.37831553  0.06471449
+  0.90101656]
+Processing img 0
+[ 0.5         0.90099978  6.          0.18301265  0.68301288 -0.18301275
+  0.68301252]
+Processed
+
+Processing img 1
+[ 0.5         0.90099978  8.          0.0990457   0.8923992  -0.23911764
+  0.36964357]
+Processed
+
+Processing img 2
+[ 2.50000000e+00  9.00999784e-01  8.00000000e+00 -6.89276810e-08
+  9.65925826e-01 -2.58819045e-01 -2.57241608e-07]
+Processed
+
+Processing img 3
+[ 4.5         0.90099978  7.75       -0.09904586  0.89239895 -0.23911758
+ -0.36964417]
+Processed
+
+Processing img 4
+[ 4.5         0.90099978  6.25       -0.1830128   0.68301234 -0.1830126
+ -0.68301307]
+Processed
+
+Processing img 5
+[ 4.5         0.90099978  3.75       -0.23911764  0.36964357 -0.0990457
+ -0.8923992 ]
+Processing img 6
+[2.5        0.90099978 3.75       0.25881905 0.         0.
+ 0.96592583]
+Processed
+
+Processing img 7
+[ 0.5         0.90099978  3.75        0.23911757  0.36964426 -0.09904588
+  0.89239892]
+Processed
+
+Objects stored in memory:
+
+['armchair', 'pillow']
+ID: 0 | Names: [armchair pillow] |  Num embs: 8 | Pcd size: (3, 175803)
+['armchair', 'pillow']
+ID: 1 | Names: [armchair pillow] |  Num embs: 4 | Pcd size: (3, 38472)
+['armchair']
+ID: 2 | Names: [armchair] |  Num embs: 1 | Pcd size: (3, 25119)
+['armchair']
+ID: 3 | Names: [armchair] |  Num embs: 6 | Pcd size: (3, 135403)
+['couch', 'armchair', 'pillow']
+ID: 4 | Names: [couch armchair pillow] |  Num embs: 10 | Pcd size: (3, 142327)
+['furniture']
+ID: 5 | Names: [furniture] |  Num embs: 1 | Pcd size: (3, 5415)
+Target pose:  [ 4.5         0.90099978  3.75       -0.23911764  0.36964357 -0.0990457
+ -0.8923992 ]
+Estimated pose:  [ 3.26932921e+00  9.25695693e-01  3.23891218e+00  2.59815595e-01
+ -2.93737560e-03 -1.54323729e-02  9.65530461e-01]
+Processing img 0
+[ 0.5         0.90099978  6.          0.18301265  0.68301288 -0.18301275
+  0.68301252]
+Processed
+
+Processing img 1
+[ 0.5         0.90099978  8.          0.0990457   0.8923992  -0.23911764
+  0.36964357]
+Processed
+
+Processing img 2
+[ 2.50000000e+00  9.00999784e-01  8.00000000e+00 -6.89276810e-08
+  9.65925826e-01 -2.58819045e-01 -2.57241608e-07]
+Processed
+
+Processing img 3
+[ 4.5         0.90099978  7.75       -0.09904586  0.89239895 -0.23911758
+ -0.36964417]
+Processed
+
+Processing img 4
+[ 4.5         0.90099978  6.25       -0.1830128   0.68301234 -0.1830126
+ -0.68301307]
+Processed
+
+Processing img 5
+[ 4.5         0.90099978  3.75       -0.23911764  0.36964357 -0.0990457
+ -0.8923992 ]
+Processed
+
+Processing img 6
+[2.5        0.90099978 3.75       0.25881905 0.         0.
+ 0.96592583]
+Processing img 7
+[ 0.5         0.90099978  3.75        0.23911757  0.36964426 -0.09904588
+  0.89239892]
+Processed
+
+Objects stored in memory:
+
+['armchair', 'pillow']
+ID: 0 | Names: [armchair pillow] |  Num embs: 8 | Pcd size: (3, 168705)
+['armchair', 'pillow']
+ID: 1 | Names: [armchair pillow] |  Num embs: 4 | Pcd size: (3, 38475)
+['armchair']
+ID: 2 | Names: [armchair] |  Num embs: 1 | Pcd size: (3, 25119)
+['armchair']
+ID: 3 | Names: [armchair] |  Num embs: 6 | Pcd size: (3, 122827)
+['couch', 'armchair', 'pillow']
+ID: 4 | Names: [couch armchair pillow] |  Num embs: 9 | Pcd size: (3, 91178)
+['furniture']
+ID: 5 | Names: [furniture] |  Num embs: 1 | Pcd size: (3, 5415)
+Target pose:  [2.5        0.90099978 3.75       0.25881905 0.         0.
+ 0.96592583]
+Estimated pose:  [ 1.8648067   0.92902309  4.63563469  0.24229149  0.37107166 -0.10821405
+  0.88988223]
+Processing img 0
+[ 0.5         0.90099978  6.          0.18301265  0.68301288 -0.18301275
+  0.68301252]
+Processed
+
+Processing img 1
+[ 0.5         0.90099978  8.          0.0990457   0.8923992  -0.23911764
+  0.36964357]
+Processed
+
+Processing img 2
+[ 2.50000000e+00  9.00999784e-01  8.00000000e+00 -6.89276810e-08
+  9.65925826e-01 -2.58819045e-01 -2.57241608e-07]
+Processed
+
+Processing img 3
+[ 4.5         0.90099978  7.75       -0.09904586  0.89239895 -0.23911758
+ -0.36964417]
+Processed
+
+Processing img 4
+[ 4.5         0.90099978  6.25       -0.1830128   0.68301234 -0.1830126
+ -0.68301307]
+Processed
+
+Processing img 5
+[ 4.5         0.90099978  3.75       -0.23911764  0.36964357 -0.0990457
+ -0.8923992 ]
+Processed
+
+Processing img 6
+[2.5        0.90099978 3.75       0.25881905 0.         0.
+ 0.96592583]
+Processed
+
+Processing img 7
+[ 0.5         0.90099978  3.75        0.23911757  0.36964426 -0.09904588
+  0.89239892]
+Objects stored in memory:
+
+['armchair', 'pillow']
+ID: 0 | Names: [armchair pillow] |  Num embs: 8 | Pcd size: (3, 192869)
+['armchair', 'pillow']
+ID: 1 | Names: [armchair pillow] |  Num embs: 4 | Pcd size: (3, 38472)
+['armchair']
+ID: 2 | Names: [armchair] |  Num embs: 1 | Pcd size: (3, 25119)
+['armchair']
+ID: 3 | Names: [armchair] |  Num embs: 6 | Pcd size: (3, 115594)
+['couch', 'armchair', 'pillow']
+ID: 4 | Names: [couch armchair pillow] |  Num embs: 7 | Pcd size: (3, 117492)
+['furniture']
+ID: 5 | Names: [furniture] |  Num embs: 1 | Pcd size: (3, 5415)
+Target pose:  [ 0.5         0.90099978  3.75        0.23911757  0.36964426 -0.09904588
+  0.89239892]
+Estimated pose:  [ 0.49995858  0.90098066  6.00003879  0.18300722  0.6830217  -0.1830084
+  0.68300632]
+Object:  sofas
+Pose:  0
+Target pose: [ 0.5         0.90099978  6.          0.18301265  0.68301288 -0.18301275
+  0.68301252]
+Estimated pose: [ 0.50011869  0.90243088  6.00427545  0.18362734  0.68424195 -0.18258531
+  0.68173056]
+
+Pose:  1
+Target pose: [ 0.5         0.90099978  8.          0.0990457   0.8923992  -0.23911764
+  0.36964357]
+Estimated pose: [ 0.49995384  0.90201685  7.99864078  0.09813831  0.89195686 -0.24043589
+  0.37009784]
+
+Pose:  2
+Target pose: [ 2.50000000e+00  9.00999784e-01  8.00000000e+00 -6.89276810e-08
+  9.65925826e-01 -2.58819045e-01 -2.57241608e-07]
+Estimated pose: [ 2.49989129e+00  9.02037460e-01  8.00022631e+00 -6.12173338e-05
+  9.65885502e-01 -2.58969464e-01 -1.01002278e-04]
+
+Pose:  3
+Target pose: [ 4.5         0.90099978  7.75       -0.09904586  0.89239895 -0.23911758
+ -0.36964417]
+Estimated pose: [ 4.49769303  0.88739135  7.7533098  -0.09718497  0.89279039 -0.23844883
+ -0.36962489]
+
+Pose:  4
+Target pose: [ 4.5         0.90099978  6.25       -0.1830128   0.68301234 -0.1830126
+ -0.68301307]
+Estimated pose: [ 1.84174314  0.87974201  4.57464079  0.2397396  -0.09031287  0.00859027
+  0.96658922]
+
+Pose:  5
+Target pose: [ 4.5         0.90099978  3.75       -0.23911764  0.36964357 -0.0990457
+ -0.8923992 ]
+Estimated pose: [ 4.4964659   0.89953499  3.74825148  0.23893812 -0.36919425  0.09852204
+  0.89269121]
+
+Pose:  6
+Target pose: [2.5        0.90099978 3.75       0.25881905 0.         0.
+ 0.96592583]
+Estimated pose: [ 2.49880021e+00  9.03055174e-01  3.75010334e+00  2.58776220e-01
+  1.23821852e-04 -7.83937410e-04  9.65936974e-01]
+
+Pose:  7
+Target pose: [ 0.5         0.90099978  3.75        0.23911757  0.36964426 -0.09904588
+  0.89239892]
+Estimated pose: [ 0.49257098  0.89307402  3.75802709  0.23704711  0.3703814  -0.10273011
+  0.89222912]
+
+Pose:  8
+Target pose: [ 0.5         0.90099978  6.          0.18301265  0.68301288 -0.18301275
+  0.68301252]
+Estimated pose: [ 0.52536281  0.92945103  5.96775655  0.1809104   0.67907697 -0.1966727
+  0.68370004]
+
+Pose:  9
+Target pose: [ 0.5         0.90099978  8.          0.0990457   0.8923992  -0.23911764
+  0.36964357]
+Estimated pose: [ 0.49093409  0.91256472  7.97122791  0.09234821  0.88999886 -0.24724909
+  0.37180872]
+
+Pose:  10
+Target pose: [ 2.50000000e+00  9.00999784e-01  8.00000000e+00 -6.89276810e-08
+  9.65925826e-01 -2.58819045e-01 -2.57241608e-07]
+Estimated pose: [ 2.44448011e+00  8.89513228e-01  7.98046501e+00 -1.87592756e-02
+  9.64284499e-01 -2.64123778e-01  6.49039703e-03]
+
+Pose:  11
+Target pose: [ 4.5         0.90099978  7.75       -0.09904586  0.89239895 -0.23911758
+ -0.36964417]
+Estimated pose: [ 4.52190694  0.90000928  7.72197387 -0.08863246  0.89045306 -0.24515704
+ -0.37300894]
+
+Pose:  12
+Target pose: [ 4.5         0.90099978  6.25       -0.1830128   0.68301234 -0.1830126
+ -0.68301307]
+Estimated pose: [ 4.45653126  0.93238599  6.21440707  0.18431274 -0.67770507  0.20170823
+  0.68268473]
+
+Pose:  13
+Target pose: [ 4.5         0.90099978  3.75       -0.23911764  0.36964357 -0.0990457
+ -0.8923992 ]
+Estimated pose: [ 4.46772225  0.96704373  3.79657974  0.25589894 -0.36931068  0.10744417
+  0.88689408]
+
+Pose:  14
+Target pose: [2.5        0.90099978 3.75       0.25881905 0.         0.
+ 0.96592583]
+Estimated pose: [ 2.50213068e+00  9.04212332e-01  3.75164861e+00  2.59073677e-01
+ -4.32212667e-04  6.72599094e-05  9.65857463e-01]
+
+Pose:  15
+Target pose: [ 0.5         0.90099978  3.75        0.23911757  0.36964426 -0.09904588
+  0.89239892]
+Estimated pose: [ 0.49676408  0.93564504  3.79442682  0.25010842  0.37263791 -0.09616837
+  0.88844719]
+
+Pose:  16
+Target pose: [ 0.5         0.90099978  6.          0.18301265  0.68301288 -0.18301275
+  0.68301252]
+Estimated pose: [ 0.44295819  0.76752809  5.9879124   0.18715806  0.68892693 -0.15248958
+  0.68344603]
+
+Pose:  17
+Target pose: [ 0.5         0.90099978  8.          0.0990457   0.8923992  -0.23911764
+  0.36964357]
+Estimated pose: [ 0.57089834  1.05437447  7.99385579  0.10556999  0.88840385 -0.25869088
+  0.3642425 ]
+
+Pose:  18
+Target pose: [ 2.50000000e+00  9.00999784e-01  8.00000000e+00 -6.89276810e-08
+  9.65925826e-01 -2.58819045e-01 -2.57241608e-07]
+Estimated pose: [ 2.43040274e+00  8.45430068e-01  8.00075131e+00 -5.83437138e-03
+  9.67939902e-01 -2.50622642e-01  1.57034184e-02]
+
+Pose:  19
+Target pose: [ 4.5         0.90099978  7.75       -0.09904586  0.89239895 -0.23911758
+ -0.36964417]
+Estimated pose: [ 4.49612433  0.91267343  7.74421366 -0.10190562  0.89127313 -0.24165853
+ -0.36993055]
+
+Pose:  20
+Target pose: [ 4.5         0.90099978  6.25       -0.1830128   0.68301234 -0.1830126
+ -0.68301307]
+Estimated pose: [ 4.49033679  0.89711837  6.28172943 -0.1808731   0.69153007 -0.18249303
+ -0.67510546]
+
+Pose:  21
+Target pose: [ 4.5         0.90099978  3.75       -0.23911764  0.36964357 -0.0990457
+ -0.8923992 ]
+Estimated pose: [ 4.52641473  0.93305175  3.79438786  0.24565489 -0.38004374  0.1020925
+  0.885888  ]
+
+Pose:  22
+Target pose: [2.5        0.90099978 3.75       0.25881905 0.         0.
+ 0.96592583]
+Estimated pose: [ 2.96120428  0.91208125  3.59604055  0.26068173 -0.12450064  0.0348564
+  0.95672862]
+
+Pose:  23
+Target pose: [ 0.5         0.90099978  3.75        0.23911757  0.36964426 -0.09904588
+  0.89239892]
+Estimated pose: [ 1.05584326  0.98478029  5.65905848  0.09502361  0.88210595 -0.26286972
+  0.3791558 ]
+
+Pose:  24
+Target pose: [ 0.5         0.90099978  6.          0.18301265  0.68301288 -0.18301275
+  0.68301252]
+Estimated pose: [ 0.50000804  0.90100702  3.75000192  0.23911966  0.36964323 -0.09904802
+  0.89239854]
+
+Pose:  25
+Target pose: [ 0.5         0.90099978  8.          0.0990457   0.8923992  -0.23911764
+  0.36964357]
+Estimated pose: [ 0.34560241  0.73635692  6.05241499  0.19362623  0.52429912 -0.12789775
+  0.81930548]
+
+Pose:  26
+Target pose: [ 2.50000000e+00  9.00999784e-01  8.00000000e+00 -6.89276810e-08
+  9.65925826e-01 -2.58819045e-01 -2.57241608e-07]
+Estimated pose: [ 4.75624538  1.03158322  7.49877938 -0.11966145  0.88369578 -0.24295467
+ -0.38175377]
+
+Pose:  27
+Target pose: [ 4.5         0.90099978  7.75       -0.09904586  0.89239895 -0.23911758
+ -0.36964417]
+Estimated pose: [ 1.09858938 -1.38709024  5.68147339  0.56320152  0.23195846  0.77243509
+ -0.17984257]
+
+Pose:  28
+Target pose: [ 4.5         0.90099978  6.25       -0.1830128   0.68301234 -0.1830126
+ -0.68301307]
+Estimated pose: [ 4.72429914  0.65890836  5.12365405  0.20213501 -0.37831553  0.06471449
+  0.90101656]
+
+Pose:  29
+Target pose: [ 4.5         0.90099978  3.75       -0.23911764  0.36964357 -0.0990457
+ -0.8923992 ]
+Estimated pose: [ 3.26932921e+00  9.25695693e-01  3.23891218e+00  2.59815595e-01
+ -2.93737560e-03 -1.54323729e-02  9.65530461e-01]
+
+Pose:  30
+Target pose: [2.5        0.90099978 3.75       0.25881905 0.         0.
+ 0.96592583]
+Estimated pose: [ 1.8648067   0.92902309  4.63563469  0.24229149  0.37107166 -0.10821405
+  0.88988223]
+
+Pose:  31
+Target pose: [ 0.5         0.90099978  3.75        0.23911757  0.36964426 -0.09904588
+  0.89239892]
+Estimated pose: [ 0.49995858  0.90098066  6.00003879  0.18300722  0.6830217  -0.1830084
+  0.68300632]
+
+tv_stands  begin processed
+Processing img 0
+[ 0.5         0.90099978  6.          0.18301265  0.68301288 -0.18301275
+  0.68301252]
+Processing img 1
+[ 0.5         0.90099978  8.          0.0990457   0.8923992  -0.23911764
+  0.36964357]
+Processed
+
+Processing img 2
+[ 2.50000000e+00  9.00999784e-01  8.00000000e+00 -6.89276810e-08
+  9.65925826e-01 -2.58819045e-01 -2.57241608e-07]
+Processed
+
+Processing img 3
+[ 4.5         0.90099978  7.75       -0.09904586  0.89239895 -0.23911758
+ -0.36964417]
+Processed
+
+Processing img 4
+[ 4.5         0.90099978  6.25       -0.1830128   0.68301234 -0.1830126
+ -0.68301307]
+Processed
+
+Processing img 5
+[ 4.5         0.90099978  3.75       -0.23911764  0.36964357 -0.0990457
+ -0.8923992 ]
+Processed
+
+Processing img 6
+[2.5        0.90099978 3.75       0.25881905 0.         0.
+ 0.96592583]
+Processed
+
+Processing img 7
+[ 0.5         0.90099978  3.75        0.23911757  0.36964426 -0.09904588
+  0.89239892]
+Processed
+
+Objects stored in memory:
+
+['chair', 'table']
+ID: 0 | Names: [chair table] |  Num embs: 4 | Pcd size: (3, 20865)
+['table', 'bench', 'furniture']
+ID: 1 | Names: [table bench furniture] |  Num embs: 7 | Pcd size: (3, 204054)
+['furniture', 'bench']
+ID: 2 | Names: [furniture bench] |  Num embs: 3 | Pcd size: (3, 42877)
+['furniture', 'bench', 'table']
+ID: 3 | Names: [furniture bench table] |  Num embs: 4 | Pcd size: (3, 71270)
+['table', 'furniture']
+ID: 4 | Names: [table furniture] |  Num embs: 4 | Pcd size: (3, 46820)
+['table']
+ID: 5 | Names: [table] |  Num embs: 1 | Pcd size: (3, 5836)
+['chair', 'table']
+ID: 6 | Names: [chair table] |  Num embs: 4 | Pcd size: (3, 32084)
+Target pose:  [ 0.5         0.90099978  6.          0.18301265  0.68301288 -0.18301275
+  0.68301252]
+Estimated pose:  [ 0.50748848  0.9087435   5.94764281  0.18840692  0.67991557 -0.17889006
+  0.68572298]
+Processing img 0
+[ 0.5         0.90099978  6.          0.18301265  0.68301288 -0.18301275
+  0.68301252]
+Processed
+
+Processing img 1
+[ 0.5         0.90099978  8.          0.0990457   0.8923992  -0.23911764
+  0.36964357]
+Processing img 2
+[ 2.50000000e+00  9.00999784e-01  8.00000000e+00 -6.89276810e-08
+  9.65925826e-01 -2.58819045e-01 -2.57241608e-07]
+Processed
+
+Processing img 3
+[ 4.5         0.90099978  7.75       -0.09904586  0.89239895 -0.23911758
+ -0.36964417]
+Processed
+
+Processing img 4
+[ 4.5         0.90099978  6.25       -0.1830128   0.68301234 -0.1830126
+ -0.68301307]
+Processed
+
+Processing img 5
+[ 4.5         0.90099978  3.75       -0.23911764  0.36964357 -0.0990457
+ -0.8923992 ]
+Processed
+
+Processing img 6
+[2.5        0.90099978 3.75       0.25881905 0.         0.
+ 0.96592583]
+Processed
+
+Processing img 7
+[ 0.5         0.90099978  3.75        0.23911757  0.36964426 -0.09904588
+  0.89239892]
+Processed
+
+Objects stored in memory:
+
+['table', 'chair']
+ID: 0 | Names: [table chair] |  Num embs: 4 | Pcd size: (3, 23962)
+['table', 'bench', 'furniture']
+ID: 1 | Names: [table bench furniture] |  Num embs: 7 | Pcd size: (3, 199060)
+['table', 'furniture']
+ID: 2 | Names: [table furniture] |  Num embs: 6 | Pcd size: (3, 137029)
+['furniture', 'chair', 'table']
+ID: 3 | Names: [furniture chair table] |  Num embs: 4 | Pcd size: (3, 29307)
+['bench', 'furniture']
+ID: 4 | Names: [bench furniture] |  Num embs: 2 | Pcd size: (3, 24473)
+['bench', 'table']
+ID: 5 | Names: [bench table] |  Num embs: 2 | Pcd size: (3, 47116)
+['table']
+ID: 6 | Names: [table] |  Num embs: 1 | Pcd size: (3, 5836)
+['chair']
+ID: 7 | Names: [chair] |  Num embs: 1 | Pcd size: (3, 19133)
+Target pose:  [ 0.5         0.90099978  8.          0.0990457   0.8923992  -0.23911764
+  0.36964357]
+Estimated pose:  [ 0.41536001  0.87408205  7.65291011  0.10694562  0.87528542 -0.22747187
+  0.41315204]
+Processing img 0
+[ 0.5         0.90099978  6.          0.18301265  0.68301288 -0.18301275
+  0.68301252]
+Processed
+
+Processing img 1
+[ 0.5         0.90099978  8.          0.0990457   0.8923992  -0.23911764
+  0.36964357]
+Processed
+
+Processing img 2
+[ 2.50000000e+00  9.00999784e-01  8.00000000e+00 -6.89276810e-08
+  9.65925826e-01 -2.58819045e-01 -2.57241608e-07]
+Processing img 3
+[ 4.5         0.90099978  7.75       -0.09904586  0.89239895 -0.23911758
+ -0.36964417]
+Processed
+
+Processing img 4
+[ 4.5         0.90099978  6.25       -0.1830128   0.68301234 -0.1830126
+ -0.68301307]
+Processed
+
+Processing img 5
+[ 4.5         0.90099978  3.75       -0.23911764  0.36964357 -0.0990457
+ -0.8923992 ]
+Processed
+
+Processing img 6
+[2.5        0.90099978 3.75       0.25881905 0.         0.
+ 0.96592583]
+Processed
+
+Processing img 7
+[ 0.5         0.90099978  3.75        0.23911757  0.36964426 -0.09904588
+  0.89239892]
+Processed
+
+Objects stored in memory:
+
+['table', 'chair']
+ID: 0 | Names: [table chair] |  Num embs: 5 | Pcd size: (3, 25580)
+['table', 'furniture']
+ID: 1 | Names: [table furniture] |  Num embs: 7 | Pcd size: (3, 177398)
+['table', 'furniture']
+ID: 2 | Names: [table furniture] |  Num embs: 3 | Pcd size: (3, 114341)
+['furniture', 'table']
+ID: 3 | Names: [furniture table] |  Num embs: 3 | Pcd size: (3, 40510)
+['table']
+ID: 4 | Names: [table] |  Num embs: 1 | Pcd size: (3, 12782)
+['furniture', 'table']
+ID: 5 | Names: [furniture table] |  Num embs: 3 | Pcd size: (3, 16339)
+['table']
+ID: 6 | Names: [table] |  Num embs: 1 | Pcd size: (3, 18454)
+['chair', 'table']
+ID: 7 | Names: [chair table] |  Num embs: 4 | Pcd size: (3, 32084)
+Target pose:  [ 2.50000000e+00  9.00999784e-01  8.00000000e+00 -6.89276810e-08
+  9.65925826e-01 -2.58819045e-01 -2.57241608e-07]
+Estimated pose:  [1.31167468 0.95270386 5.26628679 0.40589937 0.10883992 0.25609515
+ 0.87052562]
+Processing img 0
+[ 0.5         0.90099978  6.          0.18301265  0.68301288 -0.18301275
+  0.68301252]
+Processed
+
+Processing img 1
+[ 0.5         0.90099978  8.          0.0990457   0.8923992  -0.23911764
+  0.36964357]
+Processed
+
+Processing img 2
+[ 2.50000000e+00  9.00999784e-01  8.00000000e+00 -6.89276810e-08
+  9.65925826e-01 -2.58819045e-01 -2.57241608e-07]
+Processed
+
+Processing img 3
+[ 4.5         0.90099978  7.75       -0.09904586  0.89239895 -0.23911758
+ -0.36964417]
+Processing img 4
+[ 4.5         0.90099978  6.25       -0.1830128   0.68301234 -0.1830126
+ -0.68301307]
+Processed
+
+Processing img 5
+[ 4.5         0.90099978  3.75       -0.23911764  0.36964357 -0.0990457
+ -0.8923992 ]
+Processed
+
+Processing img 6
+[2.5        0.90099978 3.75       0.25881905 0.         0.
+ 0.96592583]
+Processed
+
+Processing img 7
+[ 0.5         0.90099978  3.75        0.23911757  0.36964426 -0.09904588
+  0.89239892]
+Processed
+
+Objects stored in memory:
+
+['table', 'chair']
+ID: 0 | Names: [table chair] |  Num embs: 4 | Pcd size: (3, 24419)
+['table', 'bench', 'furniture']
+ID: 1 | Names: [table bench furniture] |  Num embs: 7 | Pcd size: (3, 120101)
+['table', 'furniture', 'bench']
+ID: 2 | Names: [table furniture bench] |  Num embs: 6 | Pcd size: (3, 151732)
+['furniture', 'bench']
+ID: 3 | Names: [furniture bench] |  Num embs: 3 | Pcd size: (3, 66001)
+['table']
+ID: 4 | Names: [table] |  Num embs: 1 | Pcd size: (3, 5836)
+['chair', 'table']
+ID: 5 | Names: [chair table] |  Num embs: 4 | Pcd size: (3, 32084)
+['furniture', 'table']
+ID: 6 | Names: [furniture table] |  Num embs: 2 | Pcd size: (3, 25630)
+Target pose:  [ 4.5         0.90099978  7.75       -0.09904586  0.89239895 -0.23911758
+ -0.36964417]
+Estimated pose:  [ 0.64955283 -1.56525583  6.43608258  0.76272122  0.16204212  0.58478897
+ -0.22365274]
+Processing img 0
+[ 0.5         0.90099978  6.          0.18301265  0.68301288 -0.18301275
+  0.68301252]
+Processed
+
+Processing img 1
+[ 0.5         0.90099978  8.          0.0990457   0.8923992  -0.23911764
+  0.36964357]
+Processed
+
+Processing img 2
+[ 2.50000000e+00  9.00999784e-01  8.00000000e+00 -6.89276810e-08
+  9.65925826e-01 -2.58819045e-01 -2.57241608e-07]
+Processed
+
+Processing img 3
+[ 4.5         0.90099978  7.75       -0.09904586  0.89239895 -0.23911758
+ -0.36964417]
+Processed
+
+Processing img 4
+[ 4.5         0.90099978  6.25       -0.1830128   0.68301234 -0.1830126
+ -0.68301307]
+Processing img 5
+[ 4.5         0.90099978  3.75       -0.23911764  0.36964357 -0.0990457
+ -0.8923992 ]
+Processed
+
+Processing img 6
+[2.5        0.90099978 3.75       0.25881905 0.         0.
+ 0.96592583]
+Processed
+
+Processing img 7
+[ 0.5         0.90099978  3.75        0.23911757  0.36964426 -0.09904588
+  0.89239892]
+Processed
+
+Objects stored in memory:
+
+['table', 'chair']
+ID: 0 | Names: [table chair] |  Num embs: 5 | Pcd size: (3, 28752)
+['table', 'bench', 'furniture']
+ID: 1 | Names: [table bench furniture] |  Num embs: 7 | Pcd size: (3, 166835)
+['table', 'furniture', 'bench']
+ID: 2 | Names: [table furniture bench] |  Num embs: 5 | Pcd size: (3, 126979)
+['furniture', 'bench', 'table']
+ID: 3 | Names: [furniture bench table] |  Num embs: 5 | Pcd size: (3, 87626)
+['chair', 'table']
+ID: 4 | Names: [chair table] |  Num embs: 4 | Pcd size: (3, 32084)
+['furniture', 'table']
+ID: 5 | Names: [furniture table] |  Num embs: 2 | Pcd size: (3, 25630)
+Target pose:  [ 4.5         0.90099978  6.25       -0.1830128   0.68301234 -0.1830126
+ -0.68301307]
+Estimated pose:  [ 1.91518553  0.21098989  7.66426982 -0.17858491  0.97859419 -0.10112476
+ -0.01531736]
+Processing img 0
+[ 0.5         0.90099978  6.          0.18301265  0.68301288 -0.18301275
+  0.68301252]
+Processed
+
+Processing img 1
+[ 0.5         0.90099978  8.          0.0990457   0.8923992  -0.23911764
+  0.36964357]
+Processed
+
+Processing img 2
+[ 2.50000000e+00  9.00999784e-01  8.00000000e+00 -6.89276810e-08
+  9.65925826e-01 -2.58819045e-01 -2.57241608e-07]
+Processed
+
+Processing img 3
+[ 4.5         0.90099978  7.75       -0.09904586  0.89239895 -0.23911758
+ -0.36964417]
+Processed
+
+Processing img 4
+[ 4.5         0.90099978  6.25       -0.1830128   0.68301234 -0.1830126
+ -0.68301307]
+Processed
+
+Processing img 5
+[ 4.5         0.90099978  3.75       -0.23911764  0.36964357 -0.0990457
+ -0.8923992 ]
+Processing img 6
+[2.5        0.90099978 3.75       0.25881905 0.         0.
+ 0.96592583]
+Processed
+
+Processing img 7
+[ 0.5         0.90099978  3.75        0.23911757  0.36964426 -0.09904588
+  0.89239892]
+Processed
+
+Objects stored in memory:
+
+['table', 'chair']
+ID: 0 | Names: [table chair] |  Num embs: 4 | Pcd size: (3, 26018)
+['table', 'bench', 'furniture']
+ID: 1 | Names: [table bench furniture] |  Num embs: 7 | Pcd size: (3, 197488)
+['table', 'furniture', 'bench']
+ID: 2 | Names: [table furniture bench] |  Num embs: 5 | Pcd size: (3, 142697)
+['furniture', 'bench', 'table']
+ID: 3 | Names: [furniture bench table] |  Num embs: 4 | Pcd size: (3, 78783)
+['table']
+ID: 4 | Names: [table] |  Num embs: 1 | Pcd size: (3, 5836)
+['chair', 'table']
+ID: 5 | Names: [chair table] |  Num embs: 4 | Pcd size: (3, 32084)
+['furniture', 'table']
+ID: 6 | Names: [furniture table] |  Num embs: 2 | Pcd size: (3, 25630)
+Target pose:  [ 4.5         0.90099978  3.75       -0.23911764  0.36964357 -0.0990457
+ -0.8923992 ]
+Estimated pose:  [ 0.94605662  1.39372662  9.11647091  0.9601534  -0.13619875  0.19335481
+  0.14889349]
+Processing img 0
+[ 0.5         0.90099978  6.          0.18301265  0.68301288 -0.18301275
+  0.68301252]
+Processed
+
+Processing img 1
+[ 0.5         0.90099978  8.          0.0990457   0.8923992  -0.23911764
+  0.36964357]
+Processed
+
+Processing img 2
+[ 2.50000000e+00  9.00999784e-01  8.00000000e+00 -6.89276810e-08
+  9.65925826e-01 -2.58819045e-01 -2.57241608e-07]
+Processed
+
+Processing img 3
+[ 4.5         0.90099978  7.75       -0.09904586  0.89239895 -0.23911758
+ -0.36964417]
+Processed
+
+Processing img 4
+[ 4.5         0.90099978  6.25       -0.1830128   0.68301234 -0.1830126
+ -0.68301307]
+Processed
+
+Processing img 5
+[ 4.5         0.90099978  3.75       -0.23911764  0.36964357 -0.0990457
+ -0.8923992 ]
+Processed
+
+Processing img 6
+[2.5        0.90099978 3.75       0.25881905 0.         0.
+ 0.96592583]
+Processing img 7
+[ 0.5         0.90099978  3.75        0.23911757  0.36964426 -0.09904588
+  0.89239892]
+Processed
+
+Objects stored in memory:
+
+['table', 'chair']
+ID: 0 | Names: [table chair] |  Num embs: 5 | Pcd size: (3, 28752)
+['table', 'bench', 'furniture']
+ID: 1 | Names: [table bench furniture] |  Num embs: 7 | Pcd size: (3, 203956)
+['table', 'furniture', 'bench']
+ID: 2 | Names: [table furniture bench] |  Num embs: 7 | Pcd size: (3, 154276)
+['furniture', 'bench', 'table']
+ID: 3 | Names: [furniture bench table] |  Num embs: 4 | Pcd size: (3, 78783)
+['table']
+ID: 4 | Names: [table] |  Num embs: 1 | Pcd size: (3, 5836)
+['chair', 'table']
+ID: 5 | Names: [chair table] |  Num embs: 3 | Pcd size: (3, 12951)
+['table']
+ID: 6 | Names: [table] |  Num embs: 1 | Pcd size: (3, 14571)
+Target pose:  [2.5        0.90099978 3.75       0.25881905 0.         0.
+ 0.96592583]
+Estimated pose:  [ 2.52092389e+00  9.11602502e-01  3.75213296e+00  2.60601927e-01
+ -3.32463940e-03  1.09115661e-03  9.65439999e-01]
+Processing img 0
+[ 0.5         0.90099978  6.          0.18301265  0.68301288 -0.18301275
+  0.68301252]
+Processed
+
+Processing img 1
+[ 0.5         0.90099978  8.          0.0990457   0.8923992  -0.23911764
+  0.36964357]
+Processed
+
+Processing img 2
+[ 2.50000000e+00  9.00999784e-01  8.00000000e+00 -6.89276810e-08
+  9.65925826e-01 -2.58819045e-01 -2.57241608e-07]
+Processed
+
+Processing img 3
+[ 4.5         0.90099978  7.75       -0.09904586  0.89239895 -0.23911758
+ -0.36964417]
+Processed
+
+Processing img 4
+[ 4.5         0.90099978  6.25       -0.1830128   0.68301234 -0.1830126
+ -0.68301307]
+Processed
+
+Processing img 5
+[ 4.5         0.90099978  3.75       -0.23911764  0.36964357 -0.0990457
+ -0.8923992 ]
+Processed
+
+Processing img 6
+[2.5        0.90099978 3.75       0.25881905 0.         0.
+ 0.96592583]
+Processed
+
+Processing img 7
+[ 0.5         0.90099978  3.75        0.23911757  0.36964426 -0.09904588
+  0.89239892]
+Objects stored in memory:
+
+['table', 'chair']
+ID: 0 | Names: [table chair] |  Num embs: 5 | Pcd size: (3, 28752)
+['table', 'bench', 'furniture']
+ID: 1 | Names: [table bench furniture] |  Num embs: 7 | Pcd size: (3, 210411)
+['table', 'furniture', 'bench']
+ID: 2 | Names: [table furniture bench] |  Num embs: 7 | Pcd size: (3, 154276)
+['furniture', 'bench', 'table']
+ID: 3 | Names: [furniture bench table] |  Num embs: 4 | Pcd size: (3, 78783)
+['table']
+ID: 4 | Names: [table] |  Num embs: 1 | Pcd size: (3, 5836)
+['chair']
+ID: 5 | Names: [chair] |  Num embs: 1 | Pcd size: (3, 19133)
+['furniture']
+ID: 6 | Names: [furniture] |  Num embs: 1 | Pcd size: (3, 11059)
+Target pose:  [ 0.5         0.90099978  3.75        0.23911757  0.36964426 -0.09904588
+  0.89239892]
+Estimated pose:  [ 2.47707646  0.88004132  3.22532682  0.25243259  0.05993468 -0.00719322
+  0.96572971]
+Object:  tv_stands
+Pose:  0
+Target pose: [ 0.5         0.90099978  6.          0.18301265  0.68301288 -0.18301275
+  0.68301252]
+Estimated pose: [ 0.50011869  0.90243088  6.00427545  0.18362734  0.68424195 -0.18258531
+  0.68173056]
+
+Pose:  1
+Target pose: [ 0.5         0.90099978  8.          0.0990457   0.8923992  -0.23911764
+  0.36964357]
+Estimated pose: [ 0.49995384  0.90201685  7.99864078  0.09813831  0.89195686 -0.24043589
+  0.37009784]
+
+Pose:  2
+Target pose: [ 2.50000000e+00  9.00999784e-01  8.00000000e+00 -6.89276810e-08
+  9.65925826e-01 -2.58819045e-01 -2.57241608e-07]
+Estimated pose: [ 2.49989129e+00  9.02037460e-01  8.00022631e+00 -6.12173338e-05
+  9.65885502e-01 -2.58969464e-01 -1.01002278e-04]
+
+Pose:  3
+Target pose: [ 4.5         0.90099978  7.75       -0.09904586  0.89239895 -0.23911758
+ -0.36964417]
+Estimated pose: [ 4.49769303  0.88739135  7.7533098  -0.09718497  0.89279039 -0.23844883
+ -0.36962489]
+
+Pose:  4
+Target pose: [ 4.5         0.90099978  6.25       -0.1830128   0.68301234 -0.1830126
+ -0.68301307]
+Estimated pose: [ 1.84174314  0.87974201  4.57464079  0.2397396  -0.09031287  0.00859027
+  0.96658922]
+
+Pose:  5
+Target pose: [ 4.5         0.90099978  3.75       -0.23911764  0.36964357 -0.0990457
+ -0.8923992 ]
+Estimated pose: [ 4.4964659   0.89953499  3.74825148  0.23893812 -0.36919425  0.09852204
+  0.89269121]
+
+Pose:  6
+Target pose: [2.5        0.90099978 3.75       0.25881905 0.         0.
+ 0.96592583]
+Estimated pose: [ 2.49880021e+00  9.03055174e-01  3.75010334e+00  2.58776220e-01
+  1.23821852e-04 -7.83937410e-04  9.65936974e-01]
+
+Pose:  7
+Target pose: [ 0.5         0.90099978  3.75        0.23911757  0.36964426 -0.09904588
+  0.89239892]
+Estimated pose: [ 0.49257098  0.89307402  3.75802709  0.23704711  0.3703814  -0.10273011
+  0.89222912]
+
+Pose:  8
+Target pose: [ 0.5         0.90099978  6.          0.18301265  0.68301288 -0.18301275
+  0.68301252]
+Estimated pose: [ 0.52536281  0.92945103  5.96775655  0.1809104   0.67907697 -0.1966727
+  0.68370004]
+
+Pose:  9
+Target pose: [ 0.5         0.90099978  8.          0.0990457   0.8923992  -0.23911764
+  0.36964357]
+Estimated pose: [ 0.49093409  0.91256472  7.97122791  0.09234821  0.88999886 -0.24724909
+  0.37180872]
+
+Pose:  10
+Target pose: [ 2.50000000e+00  9.00999784e-01  8.00000000e+00 -6.89276810e-08
+  9.65925826e-01 -2.58819045e-01 -2.57241608e-07]
+Estimated pose: [ 2.44448011e+00  8.89513228e-01  7.98046501e+00 -1.87592756e-02
+  9.64284499e-01 -2.64123778e-01  6.49039703e-03]
+
+Pose:  11
+Target pose: [ 4.5         0.90099978  7.75       -0.09904586  0.89239895 -0.23911758
+ -0.36964417]
+Estimated pose: [ 4.52190694  0.90000928  7.72197387 -0.08863246  0.89045306 -0.24515704
+ -0.37300894]
+
+Pose:  12
+Target pose: [ 4.5         0.90099978  6.25       -0.1830128   0.68301234 -0.1830126
+ -0.68301307]
+Estimated pose: [ 4.45653126  0.93238599  6.21440707  0.18431274 -0.67770507  0.20170823
+  0.68268473]
+
+Pose:  13
+Target pose: [ 4.5         0.90099978  3.75       -0.23911764  0.36964357 -0.0990457
+ -0.8923992 ]
+Estimated pose: [ 4.46772225  0.96704373  3.79657974  0.25589894 -0.36931068  0.10744417
+  0.88689408]
+
+Pose:  14
+Target pose: [2.5        0.90099978 3.75       0.25881905 0.         0.
+ 0.96592583]
+Estimated pose: [ 2.50213068e+00  9.04212332e-01  3.75164861e+00  2.59073677e-01
+ -4.32212667e-04  6.72599094e-05  9.65857463e-01]
+
+Pose:  15
+Target pose: [ 0.5         0.90099978  3.75        0.23911757  0.36964426 -0.09904588
+  0.89239892]
+Estimated pose: [ 0.49676408  0.93564504  3.79442682  0.25010842  0.37263791 -0.09616837
+  0.88844719]
+
+Pose:  16
+Target pose: [ 0.5         0.90099978  6.          0.18301265  0.68301288 -0.18301275
+  0.68301252]
+Estimated pose: [ 0.44295819  0.76752809  5.9879124   0.18715806  0.68892693 -0.15248958
+  0.68344603]
+
+Pose:  17
+Target pose: [ 0.5         0.90099978  8.          0.0990457   0.8923992  -0.23911764
+  0.36964357]
+Estimated pose: [ 0.57089834  1.05437447  7.99385579  0.10556999  0.88840385 -0.25869088
+  0.3642425 ]
+
+Pose:  18
+Target pose: [ 2.50000000e+00  9.00999784e-01  8.00000000e+00 -6.89276810e-08
+  9.65925826e-01 -2.58819045e-01 -2.57241608e-07]
+Estimated pose: [ 2.43040274e+00  8.45430068e-01  8.00075131e+00 -5.83437138e-03
+  9.67939902e-01 -2.50622642e-01  1.57034184e-02]
+
+Pose:  19
+Target pose: [ 4.5         0.90099978  7.75       -0.09904586  0.89239895 -0.23911758
+ -0.36964417]
+Estimated pose: [ 4.49612433  0.91267343  7.74421366 -0.10190562  0.89127313 -0.24165853
+ -0.36993055]
+
+Pose:  20
+Target pose: [ 4.5         0.90099978  6.25       -0.1830128   0.68301234 -0.1830126
+ -0.68301307]
+Estimated pose: [ 4.49033679  0.89711837  6.28172943 -0.1808731   0.69153007 -0.18249303
+ -0.67510546]
+
+Pose:  21
+Target pose: [ 4.5         0.90099978  3.75       -0.23911764  0.36964357 -0.0990457
+ -0.8923992 ]
+Estimated pose: [ 4.52641473  0.93305175  3.79438786  0.24565489 -0.38004374  0.1020925
+  0.885888  ]
+
+Pose:  22
+Target pose: [2.5        0.90099978 3.75       0.25881905 0.         0.
+ 0.96592583]
+Estimated pose: [ 2.96120428  0.91208125  3.59604055  0.26068173 -0.12450064  0.0348564
+  0.95672862]
+
+Pose:  23
+Target pose: [ 0.5         0.90099978  3.75        0.23911757  0.36964426 -0.09904588
+  0.89239892]
+Estimated pose: [ 1.05584326  0.98478029  5.65905848  0.09502361  0.88210595 -0.26286972
+  0.3791558 ]
+
+Pose:  24
+Target pose: [ 0.5         0.90099978  6.          0.18301265  0.68301288 -0.18301275
+  0.68301252]
+Estimated pose: [ 0.50000804  0.90100702  3.75000192  0.23911966  0.36964323 -0.09904802
+  0.89239854]
+
+Pose:  25
+Target pose: [ 0.5         0.90099978  8.          0.0990457   0.8923992  -0.23911764
+  0.36964357]
+Estimated pose: [ 0.34560241  0.73635692  6.05241499  0.19362623  0.52429912 -0.12789775
+  0.81930548]
+
+Pose:  26
+Target pose: [ 2.50000000e+00  9.00999784e-01  8.00000000e+00 -6.89276810e-08
+  9.65925826e-01 -2.58819045e-01 -2.57241608e-07]
+Estimated pose: [ 4.75624538  1.03158322  7.49877938 -0.11966145  0.88369578 -0.24295467
+ -0.38175377]
+
+Pose:  27
+Target pose: [ 4.5         0.90099978  7.75       -0.09904586  0.89239895 -0.23911758
+ -0.36964417]
+Estimated pose: [ 1.09858938 -1.38709024  5.68147339  0.56320152  0.23195846  0.77243509
+ -0.17984257]
+
+Pose:  28
+Target pose: [ 4.5         0.90099978  6.25       -0.1830128   0.68301234 -0.1830126
+ -0.68301307]
+Estimated pose: [ 4.72429914  0.65890836  5.12365405  0.20213501 -0.37831553  0.06471449
+  0.90101656]
+
+Pose:  29
+Target pose: [ 4.5         0.90099978  3.75       -0.23911764  0.36964357 -0.0990457
+ -0.8923992 ]
+Estimated pose: [ 3.26932921e+00  9.25695693e-01  3.23891218e+00  2.59815595e-01
+ -2.93737560e-03 -1.54323729e-02  9.65530461e-01]
+
+Pose:  30
+Target pose: [2.5        0.90099978 3.75       0.25881905 0.         0.
+ 0.96592583]
+Estimated pose: [ 1.8648067   0.92902309  4.63563469  0.24229149  0.37107166 -0.10821405
+  0.88988223]
+
+Pose:  31
+Target pose: [ 0.5         0.90099978  3.75        0.23911757  0.36964426 -0.09904588
+  0.89239892]
+Estimated pose: [ 0.49995858  0.90098066  6.00003879  0.18300722  0.6830217  -0.1830084
+  0.68300632]
+
+Pose:  32
+Target pose: [ 0.5         0.90099978  6.          0.18301265  0.68301288 -0.18301275
+  0.68301252]
+Estimated pose: [ 0.50748848  0.9087435   5.94764281  0.18840692  0.67991557 -0.17889006
+  0.68572298]
+
+Pose:  33
+Target pose: [ 0.5         0.90099978  8.          0.0990457   0.8923992  -0.23911764
+  0.36964357]
+Estimated pose: [ 0.41536001  0.87408205  7.65291011  0.10694562  0.87528542 -0.22747187
+  0.41315204]
+
+Pose:  34
+Target pose: [ 2.50000000e+00  9.00999784e-01  8.00000000e+00 -6.89276810e-08
+  9.65925826e-01 -2.58819045e-01 -2.57241608e-07]
+Estimated pose: [1.31167468 0.95270386 5.26628679 0.40589937 0.10883992 0.25609515
+ 0.87052562]
+
+Pose:  35
+Target pose: [ 4.5         0.90099978  7.75       -0.09904586  0.89239895 -0.23911758
+ -0.36964417]
+Estimated pose: [ 0.64955283 -1.56525583  6.43608258  0.76272122  0.16204212  0.58478897
+ -0.22365274]
+
+Pose:  36
+Target pose: [ 4.5         0.90099978  6.25       -0.1830128   0.68301234 -0.1830126
+ -0.68301307]
+Estimated pose: [ 1.91518553  0.21098989  7.66426982 -0.17858491  0.97859419 -0.10112476
+ -0.01531736]
+
+Pose:  37
+Target pose: [ 4.5         0.90099978  3.75       -0.23911764  0.36964357 -0.0990457
+ -0.8923992 ]
+Estimated pose: [ 0.94605662  1.39372662  9.11647091  0.9601534  -0.13619875  0.19335481
+  0.14889349]
+
+Pose:  38
+Target pose: [2.5        0.90099978 3.75       0.25881905 0.         0.
+ 0.96592583]
+Estimated pose: [ 2.52092389e+00  9.11602502e-01  3.75213296e+00  2.60601927e-01
+ -3.32463940e-03  1.09115661e-03  9.65439999e-01]
+
+Pose:  39
+Target pose: [ 0.5         0.90099978  3.75        0.23911757  0.36964426 -0.09904588
+  0.89239892]
+Estimated pose: [ 2.47707646  0.88004132  3.22532682  0.25243259  0.05993468 -0.00719322
+  0.96572971]
+
