@@ -806,7 +806,8 @@ class ObjectMemory:
 
     def process_image(self, image_path=None, depth_image_path=None, pose=None, verbose=True,
                       bounding_box_threshold=0.3,  occlusion_overlap_threshold=0.9, testname="", 
-                      outlier_removal_config=None, min_points = 1000):
+                      outlier_removal_config=None, min_points = 500, pose_noise = {'trans': 0.0005, 'rot': 0.0005},
+                      depth_noise = 0.003):
         """
         Processes an RGB-D image, detects objects within and updates the object memory.
 
@@ -850,8 +851,27 @@ class ObjectMemory:
 
         if pose is None:
             raise NotImplementedError # TODO: mapping without pose :)
+        
+        def add_noise(array, noise_level):
+            noise = np.random.normal(0, noise_level, array.shape)
+            noisy_array = array + noise
+            return noisy_array
+        
+        # adding noise to pose
+        pose[:3] = add_noise(pose[:3], pose_noise['trans'])
+        pose[3:] = add_noise(pose[3:], pose_noise['rot'])
+        # normalizing quaternion
+        def normalize_quaternion(quaternion):
+            norm = np.linalg.norm(quaternion)
+            if norm == 0:
+                return quaternion
+            return quaternion / norm
+        pose[3:] = normalize_quaternion(pose[3:])
 
         transformed_pointclouds = [transform_pcd_to_global_frame(pcd, pose) for pcd in filtered_pointclouds]
+        
+        # Adding noise to depth (pointclouds)
+        transformed_pointclouds = [add_noise(pcd, depth_noise) for pcd in transformed_pointclouds]
 
         # for each tuple, consult already stored memory, match tuples to stored memory (based on 3d IoU)
             # TODO optimise and batch, fetch all memory bounding boxes once
@@ -1012,6 +1032,7 @@ class LocalArgs:
     device: str='cuda'
     sam_checkpoint_path: str = '/scratch/aneesh/sam_vit_h_4b8939.pth'
     ram_pretrained_path: str = '/scratch/aneesh/ram_swin_large_14m.pth'
+    mem_save_dir: str = ''
 
 if __name__ == "__main__":
     largs = tyro.cli(LocalArgs, description=__doc__)
@@ -1067,6 +1088,27 @@ if __name__ == "__main__":
         print("Target pose: ", target_pose)
         print("Estimated pose: ", estimated_pose)
         print("----\n")
+
+        # saving memory to scratch
+        if largs.mem_save_dir != "":
+            pcd_list = []
+            for obj_id, info in mem.memory.items():
+                object_pcd = info.pcd
+                pcd_list.append(object_pcd)
+
+            combined_pcd = o3d.geometry.PointCloud()
+
+            for pcd_np in pcd_list:
+                pcd_vec = o3d.utility.Vector3dVector(pcd_np.T)
+                pcd = o3d.geometry.PointCloud()
+                pcd.points = pcd_vec
+                combined_pcd += pcd
+
+            os.makedirs(largs.mem_save_dir, exist_ok=True)
+
+            save_path = f"{largs.mem_save_dir}/mem_{target}.pcd"
+            o3d.io.write_point_cloud(save_path, combined_pcd)
+            print("Pointcloud saved to", save_path)
 
         mem.clear_memory()
 
