@@ -737,19 +737,47 @@ class ObjectInfo:
         temp_pc = temp_pc.voxel_down_sample(voxel_size=voxel_size)
         self.pcd = np.asarray(temp_pc.points).T 
 
-    def addInfo(self, name, embedding, pcd):
+    def __add__(self, info):
+        self.names += info.names
+        self.embeddings += info.embeddings
+        self.pcd = np.concatenate([self.pcd, info.pcd], axis=-1)
+
+    def addInfo(self, name, embedding, pcd, align=True, max_iteration=30, max_correspondence_distance=0.01):
         """
         Adds information for the object, including name, embedding, and point cloud data.
+        Added point cloud data is aligned with a fine-grained point-to-point ICP if the align flag is true
+        Added point cloud data is aligned with a fine-grained point-to-point ICP if the align flag is true
 
         Parameters:
         - name (str): Object name to be added.
         - embedding (numpy.ndarray): Object embedding to be added.
-        - pcd (numpy.ndarray): Object point cloud data to be added.
+        - pcd (numpy.ndarray): Object point cloud data to be added
+        - align (bool): Should the new point information be ailgned to the existing points.
+        - pcd (numpy.ndarray): Object point cloud data to be added
+        - align (bool): Should the new point information be ailgned to the existing points.
         """
         if name not in self.names:
             self.names.append(name)
         self.embeddings.append(embedding)
-        self.pcd = np.concatenate([self.pcd, pcd], axis=-1)
+
+        if not align:
+            self.pcd = np.concatenate([self.pcd, pcd], axis=-1)
+        else:
+            memPcd = o3d.geometry.PointCloud()
+            newPcd = o3d.geometry.PointCloud()
+
+            memPcd.points = o3d.utility.Vector3dVector(self.pcd.T)
+            newPcd.points = o3d.utility.Vector3dVector(pcd.T)
+
+            # Perform ICP registration
+            reg_p2p = o3d.pipelines.registration.registration_icp(
+                source=newPcd,
+                target=memPcd,
+                max_correspondence_distance=max_correspondence_distance,  # Adjust as needed based on your data
+                estimation_method=o3d.pipelines.registration.TransformationEstimationPointToPoint(),
+                criteria=o3d.pipelines.registration.ICPConvergenceCriteria(max_iteration=30)
+            )
+
 
     def computeMeans(self):
         """
@@ -845,6 +873,44 @@ class ObjectMemory:
         # can return (obj_grounded_imgs, obj_bounding_boxes) if needed
 
         return obj_phrases, embs, obj_pointclouds
+
+    """
+    Runs through all objects stored in memory, consolidates objects that have a sufficient overlap
+    Performs uniform downsampling on all pointclouds as well
+
+    Consolidates memory in place
+    """
+    def consolidate_memory(self, bounding_box_threshold=0.3,  occlusion_overlap_threshold=0.9, downsample_voxel_size=0.01):
+        new_memory = dict()
+        for obj_id, obj_info in self.memory.items():
+            obj_pcd = obj_info.pcd
+
+            # check all objects in new_memory to try and match them
+            match_found = False
+            for new_id, new_obj_info in new_memory.items():
+                IoU3d = calculate_3d_IoU(new_obj_info.pcd, obj_pcd)
+                overlap3d = calculate_strict_overlap(new_obj_info.pcd, obj_pcd)
+
+                # object overlaps enough to be consolidated with the object in new memory
+                if IoU3d > bounding_box_threshold and overlap3d > occlusion_overlap_threshold:
+                    match_found = True
+                    break
+            
+            if match_found:
+                new_memory[new_id] += obj_info
+            else:
+                new_memory[len(new_memory)] = self.memory[obj_id]
+
+        del self.memory
+        self.memory = new_memory
+
+        # downsample all pcds
+        tempPcd = o3d.geometry.PointCloud()
+        for obj_id in self.memory:
+            tempPcd.points = o3d.utility.Vector3dVector(self.memory[obj_id].pcd.T)
+            tempPcd = tempPcd.voxel_down_sample(downsample_voxel_size)
+            self.memory[obj_id].pcd = np.array(tempPcd.points).T
+
 
 
     def process_image(self, image_path=None, depth_image_path=None, pose=None, verbose=True,
@@ -944,7 +1010,7 @@ class ObjectMemory:
 
                 # if the iou is above the threshold, consider it to be the same object/instance
                 if IoU3d > bounding_box_threshold or overlap3d > occlusion_overlap_threshold:
-                    info.addInfo(obj_phrase ,emb, q_pcd)
+                    info.addInfo(obj_phrase ,emb, q_pcd, align=False)
                     obj_exists = True
                     break
 
@@ -969,6 +1035,44 @@ class ObjectMemory:
     def downsample_all_objects(self, voxel_size = 0.001, use_external_mesh = False):
         for _, info in self.memory.items():
             info.downsample(voxel_size, use_external_mesh)
+
+    """
+    Runs through all objects stored in memory, consolidates objects that have a sufficient overlap
+    Performs uniform downsampling on all pointclouds as well
+
+    Consolidates memory in place
+    """
+    def consolidate_memory(self, bounding_box_threshold=0.3,  occlusion_overlap_threshold=0.9, downsample_voxel_size=0.01):
+        new_memory = dict()
+        for obj_id, obj_info in self.memory.items():
+            obj_pcd = obj_info.pcd
+
+            # check all objects in new_memory to try and match them
+            match_found = False
+            for new_id, new_obj_info in new_memory.items():
+                IoU3d = calculate_3d_IoU(new_obj_info.pcd, obj_pcd)
+                overlap3d = calculate_strict_overlap(new_obj_info.pcd, obj_pcd)
+
+                # object overlaps enough to be consolidated with the object in new memory
+                if IoU3d > bounding_box_threshold or overlap3d > occlusion_overlap_threshold:
+                    match_found = True
+                    break
+            
+            if match_found:
+                new_memory[new_id] += obj_info
+            else:
+                new_memory[len(new_memory)] = self.memory[obj_id]
+
+        del self.memory
+        self.memory = new_memory
+
+        # downsample all pcds
+        tempPcd = o3d.geometry.PointCloud()
+        for obj_id in self.memory:
+            tempPcd.points = o3d.utility.Vector3dVector(self.memory[obj_id].pcd.T)
+            tempPcd = tempPcd.voxel_down_sample(downsample_voxel_size)
+            self.memory[obj_id].pcd = np.array(tempPcd.points).T
+
 
     def localise(self, image_path, depth_image_path, testname="", save_point_clouds=False,
                  outlier_removal_config=None):
@@ -1143,6 +1247,10 @@ if __name__ == "__main__":
                               pose=pose)
             print("Processed\n")
 
+        mem.view_memory()
+
+        print("Consolidating memory")
+        mem.consolidate_memory()
         mem.view_memory()
 
         estimated_pose = mem.localise(image_path=os.path.join(largs.test_folder_path,f"view%d/view%d.png" % 
