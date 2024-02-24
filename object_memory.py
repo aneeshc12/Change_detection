@@ -435,13 +435,17 @@ class ObjectFinder:
                                 "hardwood",
                                 "plywood",
                                 "waiting room",
+                                "lead to"
             ]
             sub_phrases_to_ignore = [
                                 "room",
                                 "floor",
                                 "wall",
                                 "frame",
-                                "image"
+                                "image",
+                                "building",
+                                "ceiling"
+                                "lead"
             ]
 
 
