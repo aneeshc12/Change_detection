@@ -699,7 +699,7 @@ class ObjectInfo:
         self.embeddings += info.embeddings
         self.pcd = np.concatenate([self.pcd, info.pcd], axis=-1)
 
-    def addInfo(self, name, embedding, pcd, align=True, max_iteration=30, max_correspondence_distance=0.05):
+    def addInfo(self, name, embedding, pcd, align=True, max_iteration=30, max_correspondence_distance=0.01):
         """
         Adds information for the object, including name, embedding, and point cloud data.
         Added point cloud data is aligned with a fine-grained point-to-point ICP if the align flag is true
@@ -720,7 +720,7 @@ class ObjectInfo:
             memPcd = o3d.geometry.PointCloud()
             newPcd = o3d.geometry.PointCloud()
 
-            memPcd.points = o3d.utility.Vector3dVector(self.points.T)
+            memPcd.points = o3d.utility.Vector3dVector(self.pcd.T)
             newPcd.points = o3d.utility.Vector3dVector(pcd.T)
 
             # Perform ICP registration
@@ -964,7 +964,7 @@ class ObjectMemory:
 
                 # if the iou is above the threshold, consider it to be the same object/instance
                 if IoU3d > bounding_box_threshold or overlap3d > occlusion_overlap_threshold:
-                    info.addInfo(obj_phrase ,emb, q_pcd)
+                    info.addInfo(obj_phrase ,emb, q_pcd, align=False)
                     obj_exists = True
                     break
 
@@ -1131,8 +1131,8 @@ class LocalArgs:
     lora_path: str='models/vit_finegrained_5x40_procthor.pt'
     test_folder_path: str='/home2/aneesh.chavan/Change_detection/360_zip/'
     device: str='cuda'
-    sam_checkpoint_path: str = '/scratch/aneesh/sam_vit_h_4b8939.pth'
-    ram_pretrained_path: str = '/scratch/aneesh/ram_swin_large_14m.pth'
+    sam_checkpoint_path: str = '/scratch/aneesh.chavan/sam_vit_h_4b8939.pth'
+    ram_pretrained_path: str = '/scratch/aneesh.chavan/ram_swin_large_14m.pth'
     mem_save_dir: str = ''
 
 if __name__ == "__main__":
