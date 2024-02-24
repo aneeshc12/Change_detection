@@ -1,0 +1,1619 @@
+INFO:root:Objects stored in memory:
+
+INFO:root:['lamp', 'lamp shade', 'pole', 'pillar', 'chair', 'image', 'stool']
+INFO:root:ID: 0 | Names: [lamp lamp shade pole pillar chair image stool] |  Num embs: 18 | Pcd size: (3, 432880)
+INFO:root:['lamp', 'easel', 'pole', 'chair', 'lamp shade', 'footstall', 'pillar']
+INFO:root:ID: 1 | Names: [lamp easel pole chair lamp shade footstall pillar] |  Num embs: 15 | Pcd size: (3, 277261)
+INFO:root:['lamp', 'easel', 'stool', 'lamp shade']
+INFO:root:ID: 2 | Names: [lamp easel stool lamp shade] |  Num embs: 4 | Pcd size: (3, 41505)
+INFO:root:['hardwood floor', 'hardwood']
+INFO:root:ID: 3 | Names: [hardwood floor hardwood] |  Num embs: 2 | Pcd size: (3, 382644)
+INFO:root:['lamp']
+INFO:root:ID: 4 | Names: [lamp] |  Num embs: 2 | Pcd size: (3, 41347)
+INFO:root:['lamp']
+INFO:root:ID: 5 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 2791)
+INFO:root:['lamp']
+INFO:root:ID: 6 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 3386)
+INFO:root:['lamp']
+INFO:root:ID: 7 | Names: [lamp] |  Num embs: 3 | Pcd size: (3, 3331)
+INFO:root:['lamp']
+INFO:root:ID: 8 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 13343)
+INFO:root:['lamp', 'chair']
+INFO:root:ID: 9 | Names: [lamp chair] |  Num embs: 3 | Pcd size: (3, 49064)
+INFO:root:Objects stored in memory:
+
+INFO:root:['lamp', 'lamp shade', 'pole', 'pillar', 'chair', 'image', 'stool']
+INFO:root:ID: 0 | Names: [lamp lamp shade pole pillar chair image stool] |  Num embs: 19 | Pcd size: (3, 453871)
+INFO:root:['lamp']
+INFO:root:ID: 1 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 3934)
+INFO:root:['lamp', 'stool', 'chair', 'lamp shade', 'footstall', 'pillar']
+INFO:root:ID: 2 | Names: [lamp stool chair lamp shade footstall pillar] |  Num embs: 11 | Pcd size: (3, 259267)
+INFO:root:['lamp', 'lamp shade', 'stool']
+INFO:root:ID: 3 | Names: [lamp lamp shade stool] |  Num embs: 4 | Pcd size: (3, 82199)
+INFO:root:['lamp']
+INFO:root:ID: 4 | Names: [lamp] |  Num embs: 2 | Pcd size: (3, 41347)
+INFO:root:['lamp']
+INFO:root:ID: 5 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 2791)
+INFO:root:['lamp']
+INFO:root:ID: 6 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 3386)
+INFO:root:['lamp']
+INFO:root:ID: 7 | Names: [lamp] |  Num embs: 3 | Pcd size: (3, 3331)
+INFO:root:['lamp']
+INFO:root:ID: 8 | Names: [lamp] |  Num embs: 3 | Pcd size: (3, 27539)
+INFO:root:['lamp', 'chair']
+INFO:root:ID: 9 | Names: [lamp chair] |  Num embs: 3 | Pcd size: (3, 49064)
+INFO:root:['hardwood']
+INFO:root:ID: 10 | Names: [hardwood] |  Num embs: 1 | Pcd size: (3, 187440)
+INFO:root:Objects stored in memory:
+
+INFO:root:['lamp', 'lamp shade', 'pillar', 'image', 'stool']
+INFO:root:ID: 0 | Names: [lamp lamp shade pillar image stool] |  Num embs: 12 | Pcd size: (3, 388389)
+INFO:root:['lamp']
+INFO:root:ID: 1 | Names: [lamp] |  Num embs: 2 | Pcd size: (3, 4748)
+INFO:root:['lamp', 'stool', 'easel', 'pole', 'chair', 'footstall', 'lamp shade', 'pillar']
+INFO:root:ID: 2 | Names: [lamp stool easel pole chair footstall lamp shade pillar] |  Num embs: 14 | Pcd size: (3, 261566)
+INFO:root:['lamp', 'lamp shade', 'easel', 'stool']
+INFO:root:ID: 3 | Names: [lamp lamp shade easel stool] |  Num embs: 6 | Pcd size: (3, 101628)
+INFO:root:['hardwood floor', 'hardwood']
+INFO:root:ID: 4 | Names: [hardwood floor hardwood] |  Num embs: 2 | Pcd size: (3, 382644)
+INFO:root:['lamp']
+INFO:root:ID: 5 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 2791)
+INFO:root:['lamp']
+INFO:root:ID: 6 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 23238)
+INFO:root:['lamp', 'chair']
+INFO:root:ID: 7 | Names: [lamp chair] |  Num embs: 3 | Pcd size: (3, 31960)
+INFO:root:['lamp']
+INFO:root:ID: 8 | Names: [lamp] |  Num embs: 3 | Pcd size: (3, 3331)
+INFO:root:['lamp']
+INFO:root:ID: 9 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 13343)
+INFO:root:['lamp', 'chair']
+INFO:root:ID: 10 | Names: [lamp chair] |  Num embs: 3 | Pcd size: (3, 49062)
+INFO:root:Objects stored in memory:
+
+INFO:root:['lamp', 'lamp shade', 'pole', 'pillar', 'chair', 'image', 'stool']
+INFO:root:ID: 0 | Names: [lamp lamp shade pole pillar chair image stool] |  Num embs: 18 | Pcd size: (3, 432878)
+INFO:root:['lamp', 'easel', 'pole', 'chair', 'lamp shade', 'footstall', 'pillar']
+INFO:root:ID: 1 | Names: [lamp easel pole chair lamp shade footstall pillar] |  Num embs: 15 | Pcd size: (3, 277262)
+INFO:root:['lamp', 'easel', 'stool', 'lamp shade']
+INFO:root:ID: 2 | Names: [lamp easel stool lamp shade] |  Num embs: 4 | Pcd size: (3, 41503)
+INFO:root:['lamp']
+INFO:root:ID: 3 | Names: [lamp] |  Num embs: 2 | Pcd size: (3, 41347)
+INFO:root:['lamp']
+INFO:root:ID: 4 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 2791)
+INFO:root:['lamp']
+INFO:root:ID: 5 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 3386)
+INFO:root:['lamp']
+INFO:root:ID: 6 | Names: [lamp] |  Num embs: 3 | Pcd size: (3, 3330)
+INFO:root:['lamp']
+INFO:root:ID: 7 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 13343)
+INFO:root:['lamp', 'chair']
+INFO:root:ID: 8 | Names: [lamp chair] |  Num embs: 3 | Pcd size: (3, 49064)
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): huggingface.co:443
+DEBUG:urllib3.connectionpool:https://huggingface.co:443 "HEAD /google/vit-base-patch16-224-in21k/resolve/main/config.json HTTP/1.1" 200 0
+DEBUG:urllib3.connectionpool:https://huggingface.co:443 "HEAD /google/vit-base-patch16-224-in21k/resolve/main/preprocessor_config.json HTTP/1.1" 200 0
+DEBUG:urllib3.connectionpool:https://huggingface.co:443 "HEAD /google/vit-base-patch16-224-in21k/resolve/main/config.json HTTP/1.1" 200 0
+DEBUG:urllib3.connectionpool:https://huggingface.co:443 "HEAD /bert-base-uncased/resolve/main/vocab.txt HTTP/1.1" 200 0
+DEBUG:urllib3.connectionpool:https://huggingface.co:443 "HEAD /ShilongLiu/GroundingDINO/resolve/main/GroundingDINO_SwinB.cfg.py HTTP/1.1" 200 0
+DEBUG:urllib3.connectionpool:https://huggingface.co:443 "HEAD /bert-base-uncased/resolve/main/tokenizer_config.json HTTP/1.1" 200 0
+DEBUG:urllib3.connectionpool:https://huggingface.co:443 "HEAD /bert-base-uncased/resolve/main/config.json HTTP/1.1" 200 0
+DEBUG:urllib3.connectionpool:https://huggingface.co:443 "HEAD /ShilongLiu/GroundingDINO/resolve/main/groundingdino_swinb_cogcoor.pth HTTP/1.1" 302 0
+DEBUG:PIL.PngImagePlugin:STREAM b'IHDR' 16 13
+DEBUG:PIL.PngImagePlugin:STREAM b'IDAT' 41 8192
+DEBUG:root:['lamp', 'lamp', 'lamp', 'lamp', 'easel', 'easel', 'pole']
+DEBUG:PIL.PngImagePlugin:STREAM b'IHDR' 16 13
+DEBUG:PIL.PngImagePlugin:STREAM b'IDAT' 41 8192
+DEBUG:root:['lamp', 'lamp', 'lamp', 'lamp', 'chair', 'lamp shade', 'lamp shade', 'lamp shade', 'pole']
+DEBUG:PIL.PngImagePlugin:STREAM b'IHDR' 16 13
+DEBUG:PIL.PngImagePlugin:STREAM b'IDAT' 41 8192
+DEBUG:root:['lamp', 'lamp', 'lamp', 'lamp', 'chair', 'stool']
+DEBUG:PIL.PngImagePlugin:STREAM b'IHDR' 16 13
+DEBUG:PIL.PngImagePlugin:STREAM b'IDAT' 41 8192
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): huggingface.co:443
+DEBUG:urllib3.connectionpool:https://huggingface.co:443 "HEAD /google/vit-base-patch16-224-in21k/resolve/main/config.json HTTP/1.1" 200 0
+DEBUG:urllib3.connectionpool:https://huggingface.co:443 "HEAD /google/vit-base-patch16-224-in21k/resolve/main/preprocessor_config.json HTTP/1.1" 200 0
+DEBUG:urllib3.connectionpool:https://huggingface.co:443 "HEAD /google/vit-base-patch16-224-in21k/resolve/main/config.json HTTP/1.1" 200 0
+DEBUG:urllib3.connectionpool:https://huggingface.co:443 "HEAD /bert-base-uncased/resolve/main/vocab.txt HTTP/1.1" 200 0
+DEBUG:urllib3.connectionpool:https://huggingface.co:443 "HEAD /ShilongLiu/GroundingDINO/resolve/main/GroundingDINO_SwinB.cfg.py HTTP/1.1" 200 0
+DEBUG:urllib3.connectionpool:https://huggingface.co:443 "HEAD /bert-base-uncased/resolve/main/tokenizer_config.json HTTP/1.1" 200 0
+DEBUG:urllib3.connectionpool:https://huggingface.co:443 "HEAD /bert-base-uncased/resolve/main/config.json HTTP/1.1" 200 0
+DEBUG:urllib3.connectionpool:https://huggingface.co:443 "HEAD /ShilongLiu/GroundingDINO/resolve/main/groundingdino_swinb_cogcoor.pth HTTP/1.1" 302 0
+DEBUG:PIL.PngImagePlugin:STREAM b'IHDR' 16 13
+DEBUG:PIL.PngImagePlugin:STREAM b'IDAT' 41 8192
+DEBUG:root:caption post ram: lamp  .  easel  .  ladder  .  pole  .  stool  
+DEBUG:root:['lamp', 'lamp', 'lamp', 'lamp', 'easel', 'easel', 'pole']
+DEBUG:root:Detected: lamp
+DEBUG:root:Object added
+lamp
+ID: 0 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 5734)
+DEBUG:root:Detected: lamp
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 0 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 5734) 0.009149 0.196980
+DEBUG:root:Object added
+lamp
+ID: 1 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 3327)
+DEBUG:root:Detected: lamp
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 0 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 5734) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 1 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 3327) 0.000000 0.000000
+DEBUG:root:Object added
+lamp
+ID: 2 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 7906)
+DEBUG:root:Detected: lamp
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 0 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 5734) 0.009012 0.139139
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 1 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 3327) 0.642329 0.947184
+DEBUG:root:Object exists, aggregated to
+ID: 1 | Names: [lamp] |  Num embs: 2 | Pcd size: (3, 6520)
+
+DEBUG:root:Detected: easel
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 0 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 5734) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 1 | Names: [lamp] |  Num embs: 2 | Pcd size: (3, 6520) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 2 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 7906) 0.036659 1.000000
+DEBUG:root:Object exists, aggregated to
+ID: 2 | Names: [lamp easel] |  Num embs: 2 | Pcd size: (3, 19430)
+
+DEBUG:root:Detected: easel
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 0 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 5734) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 1 | Names: [lamp] |  Num embs: 2 | Pcd size: (3, 6520) 0.090041 1.000000
+DEBUG:root:Object exists, aggregated to
+ID: 1 | Names: [lamp easel] |  Num embs: 3 | Pcd size: (3, 8535)
+
+DEBUG:root:Detected: pole
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 0 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 5734) 0.008536 0.171413
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 1 | Names: [lamp easel] |  Num embs: 3 | Pcd size: (3, 8535) 0.882506 1.000000
+DEBUG:root:Object exists, aggregated to
+ID: 1 | Names: [lamp easel pole] |  Num embs: 4 | Pcd size: (3, 10268)
+
+DEBUG:PIL.PngImagePlugin:STREAM b'IHDR' 16 13
+DEBUG:PIL.PngImagePlugin:STREAM b'IDAT' 41 8192
+DEBUG:root:caption post ram: lamp  .  chair  .  table lamp  .  footstall  .  lamp shade  .  pole  .  stool  
+DEBUG:root:['lamp', 'lamp', 'lamp', 'lamp', 'chair', 'lamp shade', 'lamp shade', 'lamp shade', 'pole']
+DEBUG:root:Detected: lamp
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 0 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 5734) 0.302088 0.993900
+DEBUG:root:Object exists, aggregated to
+ID: 0 | Names: [lamp] |  Num embs: 2 | Pcd size: (3, 13667)
+
+DEBUG:root:Detected: lamp
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 0 | Names: [lamp] |  Num embs: 2 | Pcd size: (3, 13667) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 1 | Names: [lamp easel pole] |  Num embs: 4 | Pcd size: (3, 10268) 0.046120 0.232792
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 2 | Names: [lamp easel] |  Num embs: 2 | Pcd size: (3, 19430) 0.000000 0.000000
+DEBUG:root:Object added
+lamp
+ID: 3 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 18109)
+DEBUG:root:Detected: lamp
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 0 | Names: [lamp] |  Num embs: 2 | Pcd size: (3, 13667) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 1 | Names: [lamp easel pole] |  Num embs: 4 | Pcd size: (3, 10268) 0.031601 1.000000
+DEBUG:root:Object exists, aggregated to
+ID: 1 | Names: [lamp easel pole] |  Num embs: 5 | Pcd size: (3, 18055)
+
+DEBUG:root:Detected: lamp
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 0 | Names: [lamp] |  Num embs: 2 | Pcd size: (3, 13667) 0.330702 0.913021
+DEBUG:root:Object exists, aggregated to
+ID: 0 | Names: [lamp] |  Num embs: 3 | Pcd size: (3, 27819)
+
+DEBUG:root:Detected: chair
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 0 | Names: [lamp] |  Num embs: 3 | Pcd size: (3, 27819) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 1 | Names: [lamp easel pole] |  Num embs: 5 | Pcd size: (3, 18055) 0.021531 1.000000
+DEBUG:root:Object exists, aggregated to
+ID: 1 | Names: [lamp easel pole chair] |  Num embs: 6 | Pcd size: (3, 25717)
+
+DEBUG:root:Detected: lamp shade
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 0 | Names: [lamp] |  Num embs: 3 | Pcd size: (3, 27819) 0.090301 0.993188
+DEBUG:root:Object exists, aggregated to
+ID: 0 | Names: [lamp lamp shade] |  Num embs: 4 | Pcd size: (3, 33013)
+
+DEBUG:root:Detected: lamp shade
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 0 | Names: [lamp lamp shade] |  Num embs: 4 | Pcd size: (3, 33013) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 1 | Names: [lamp easel pole chair] |  Num embs: 6 | Pcd size: (3, 25717) 0.007127 1.000000
+DEBUG:root:Object exists, aggregated to
+ID: 1 | Names: [lamp easel pole chair lamp shade] |  Num embs: 7 | Pcd size: (3, 32437)
+
+DEBUG:root:Detected: lamp shade
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 0 | Names: [lamp lamp shade] |  Num embs: 4 | Pcd size: (3, 33013) 0.001433 1.000000
+DEBUG:root:Object exists, aggregated to
+ID: 0 | Names: [lamp lamp shade] |  Num embs: 5 | Pcd size: (3, 41866)
+
+DEBUG:root:Detected: pole
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 0 | Names: [lamp lamp shade] |  Num embs: 5 | Pcd size: (3, 41866) 0.829362 0.988341
+DEBUG:root:Object exists, aggregated to
+ID: 0 | Names: [lamp lamp shade pole] |  Num embs: 6 | Pcd size: (3, 47557)
+
+DEBUG:PIL.PngImagePlugin:STREAM b'IHDR' 16 13
+DEBUG:PIL.PngImagePlugin:STREAM b'IDAT' 41 8192
+DEBUG:root:caption post ram: lamp  .  chair  .  pole  .  stool  
+DEBUG:root:['lamp', 'lamp', 'lamp', 'lamp', 'chair', 'stool']
+DEBUG:root:Detected: lamp
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 0 | Names: [lamp lamp shade pole] |  Num embs: 6 | Pcd size: (3, 47557) 0.222803 0.375980
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 1 | Names: [lamp easel pole chair lamp shade] |  Num embs: 7 | Pcd size: (3, 32437) 0.037134 0.121149
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 2 | Names: [lamp easel] |  Num embs: 2 | Pcd size: (3, 19430) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 3 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 18109) 0.000000 0.000000
+DEBUG:root:Object added
+lamp
+ID: 4 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 2791)
+DEBUG:root:Detected: lamp
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 0 | Names: [lamp lamp shade pole] |  Num embs: 6 | Pcd size: (3, 47557) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 1 | Names: [lamp easel pole chair lamp shade] |  Num embs: 7 | Pcd size: (3, 32437) 0.118023 0.451023
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 2 | Names: [lamp easel] |  Num embs: 2 | Pcd size: (3, 19430) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 3 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 18109) 0.069625 0.976872
+DEBUG:root:Object exists, aggregated to
+ID: 3 | Names: [lamp] |  Num embs: 2 | Pcd size: (3, 41347)
+
+DEBUG:root:Detected: lamp
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 0 | Names: [lamp lamp shade pole] |  Num embs: 6 | Pcd size: (3, 47557) 0.183595 0.443390
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 1 | Names: [lamp easel pole chair lamp shade] |  Num embs: 7 | Pcd size: (3, 32437) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 2 | Names: [lamp easel] |  Num embs: 2 | Pcd size: (3, 19430) 0.139437 0.759539
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 3 | Names: [lamp] |  Num embs: 2 | Pcd size: (3, 41347) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 4 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 2791) 0.000000 0.000000
+DEBUG:root:Object added
+lamp
+ID: 5 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 3386)
+DEBUG:root:Detected: lamp
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 0 | Names: [lamp lamp shade pole] |  Num embs: 6 | Pcd size: (3, 47557) 0.094345 1.000000
+DEBUG:root:Object exists, aggregated to
+ID: 0 | Names: [lamp lamp shade pole] |  Num embs: 7 | Pcd size: (3, 51546)
+
+DEBUG:root:Detected: chair
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 0 | Names: [lamp lamp shade pole] |  Num embs: 7 | Pcd size: (3, 51546) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 1 | Names: [lamp easel pole chair lamp shade] |  Num embs: 7 | Pcd size: (3, 32437) 0.023013 1.000000
+DEBUG:root:Object exists, aggregated to
+ID: 1 | Names: [lamp easel pole chair lamp shade] |  Num embs: 8 | Pcd size: (3, 41186)
+
+DEBUG:root:Detected: stool
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 0 | Names: [lamp lamp shade pole] |  Num embs: 7 | Pcd size: (3, 51546) 0.036406 0.233439
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 1 | Names: [lamp easel pole chair lamp shade] |  Num embs: 8 | Pcd size: (3, 41186) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 2 | Names: [lamp easel] |  Num embs: 2 | Pcd size: (3, 19430) 0.063222 1.000000
+DEBUG:root:Object exists, aggregated to
+ID: 2 | Names: [lamp easel stool] |  Num embs: 3 | Pcd size: (3, 21328)
+
+DEBUG:PIL.PngImagePlugin:STREAM b'IHDR' 16 13
+DEBUG:PIL.PngImagePlugin:STREAM b'IDAT' 41 8192
+DEBUG:root:caption post ram: lamp  .  table lamp  .  footstall  .  lamp shade  .  martini glass  .  stool  .  wine glass  
+DEBUG:root:['lamp', 'lamp', 'footstall', 'lamp shade']
+DEBUG:root:Detected: lamp
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 0 | Names: [lamp lamp shade pole] |  Num embs: 7 | Pcd size: (3, 51546) 0.060636 0.128316
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 1 | Names: [lamp easel pole chair lamp shade] |  Num embs: 8 | Pcd size: (3, 41186) 0.012051 0.033354
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 2 | Names: [lamp easel stool] |  Num embs: 3 | Pcd size: (3, 21328) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 3 | Names: [lamp] |  Num embs: 2 | Pcd size: (3, 41347) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 4 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 2791) 0.184575 0.362033
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 5 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 3386) 0.000000 0.000000
+DEBUG:root:Object added
+lamp
+ID: 6 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 1868)
+DEBUG:root:Detected: lamp
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 0 | Names: [lamp lamp shade pole] |  Num embs: 7 | Pcd size: (3, 51546) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 1 | Names: [lamp easel pole chair lamp shade] |  Num embs: 8 | Pcd size: (3, 41186) 0.112791 0.960128
+DEBUG:root:Object exists, aggregated to
+ID: 1 | Names: [lamp easel pole chair lamp shade] |  Num embs: 9 | Pcd size: (3, 153136)
+
+DEBUG:root:Detected: footstall
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 0 | Names: [lamp lamp shade pole] |  Num embs: 7 | Pcd size: (3, 51546) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 1 | Names: [lamp easel pole chair lamp shade] |  Num embs: 9 | Pcd size: (3, 153136) 0.020949 1.000000
+DEBUG:root:Object exists, aggregated to
+ID: 1 | Names: [lamp easel pole chair lamp shade footstall] |  Num embs: 10 | Pcd size: (3, 180729)
+
+DEBUG:root:Detected: lamp shade
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 0 | Names: [lamp lamp shade pole] |  Num embs: 7 | Pcd size: (3, 51546) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 1 | Names: [lamp easel pole chair lamp shade footstall] |  Num embs: 10 | Pcd size: (3, 180729) 0.006669 1.000000
+DEBUG:root:Object exists, aggregated to
+ID: 1 | Names: [lamp easel pole chair lamp shade footstall] |  Num embs: 11 | Pcd size: (3, 253626)
+
+DEBUG:PIL.PngImagePlugin:STREAM b'IHDR' 16 13
+DEBUG:PIL.PngImagePlugin:STREAM b'IDAT' 41 8192
+DEBUG:root:caption post ram: lamp  .  chair  .  pillar  .  footstall  .  pole  .  stool  
+DEBUG:root:['lamp', 'lamp', 'lamp', 'lamp', 'chair', 'pillar']
+DEBUG:root:Detected: lamp
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 0 | Names: [lamp lamp shade pole] |  Num embs: 7 | Pcd size: (3, 51546) 0.102045 0.999903
+DEBUG:root:Object exists, aggregated to
+ID: 0 | Names: [lamp lamp shade pole] |  Num embs: 8 | Pcd size: (3, 55416)
+
+DEBUG:root:Detected: lamp
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 0 | Names: [lamp lamp shade pole] |  Num embs: 8 | Pcd size: (3, 55416) 0.036141 0.128473
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 1 | Names: [lamp easel pole chair lamp shade footstall] |  Num embs: 11 | Pcd size: (3, 253626) 0.008425 0.018157
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 2 | Names: [lamp easel stool] |  Num embs: 3 | Pcd size: (3, 21328) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 3 | Names: [lamp] |  Num embs: 2 | Pcd size: (3, 41347) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 4 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 2791) 0.084951 0.301757
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 5 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 3386) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 6 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 1868) 0.356461 0.829453
+DEBUG:root:Object exists, aggregated to
+ID: 6 | Names: [lamp] |  Num embs: 2 | Pcd size: (3, 2519)
+
+DEBUG:root:Detected: lamp
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 0 | Names: [lamp lamp shade pole] |  Num embs: 8 | Pcd size: (3, 55416) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 1 | Names: [lamp easel pole chair lamp shade footstall] |  Num embs: 11 | Pcd size: (3, 253626) 0.262914 0.723512
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 2 | Names: [lamp easel stool] |  Num embs: 3 | Pcd size: (3, 21328) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 3 | Names: [lamp] |  Num embs: 2 | Pcd size: (3, 41347) 0.032489 0.359982
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 4 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 2791) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 5 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 3386) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 6 | Names: [lamp] |  Num embs: 2 | Pcd size: (3, 2519) 0.000000 0.000000
+DEBUG:root:Object added
+lamp
+ID: 7 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 13343)
+DEBUG:root:Detected: lamp
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 0 | Names: [lamp lamp shade pole] |  Num embs: 8 | Pcd size: (3, 55416) 0.071771 0.141768
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 1 | Names: [lamp easel pole chair lamp shade footstall] |  Num embs: 11 | Pcd size: (3, 253626) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 2 | Names: [lamp easel stool] |  Num embs: 3 | Pcd size: (3, 21328) 0.102553 0.326282
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 3 | Names: [lamp] |  Num embs: 2 | Pcd size: (3, 41347) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 4 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 2791) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 5 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 3386) 0.277922 0.668998
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 6 | Names: [lamp] |  Num embs: 2 | Pcd size: (3, 2519) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 7 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 13343) 0.000000 0.000000
+DEBUG:root:Object added
+lamp
+ID: 8 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 8247)
+DEBUG:root:Detected: chair
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 0 | Names: [lamp lamp shade pole] |  Num embs: 8 | Pcd size: (3, 55416) 0.061382 0.130586
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 1 | Names: [lamp easel pole chair lamp shade footstall] |  Num embs: 11 | Pcd size: (3, 253626) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 2 | Names: [lamp easel stool] |  Num embs: 3 | Pcd size: (3, 21328) 0.078183 0.328073
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 3 | Names: [lamp] |  Num embs: 2 | Pcd size: (3, 41347) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 4 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 2791) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 5 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 3386) 0.239450 0.478609
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 6 | Names: [lamp] |  Num embs: 2 | Pcd size: (3, 2519) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 7 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 13343) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 8 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 8247) 0.711603 1.000000
+DEBUG:root:Object exists, aggregated to
+ID: 8 | Names: [lamp chair] |  Num embs: 2 | Pcd size: (3, 12544)
+
+DEBUG:root:Detected: pillar
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 0 | Names: [lamp lamp shade pole] |  Num embs: 8 | Pcd size: (3, 55416) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 1 | Names: [lamp easel pole chair lamp shade footstall] |  Num embs: 11 | Pcd size: (3, 253626) 0.024389 1.000000
+DEBUG:root:Object exists, aggregated to
+ID: 1 | Names: [lamp easel pole chair lamp shade footstall pillar] |  Num embs: 12 | Pcd size: (3, 258586)
+
+DEBUG:PIL.PngImagePlugin:STREAM b'IHDR' 16 13
+DEBUG:PIL.PngImagePlugin:STREAM b'IDAT' 41 8192
+DEBUG:root:caption post ram: lamp  .  pillar  .  table lamp  .  lamp shade  .  pole  .  stool  
+DEBUG:root:['lamp', 'lamp', 'lamp', 'lamp', 'pillar', 'lamp shade', 'lamp shade', 'lamp shade']
+DEBUG:root:Detected: lamp
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 0 | Names: [lamp lamp shade pole] |  Num embs: 8 | Pcd size: (3, 55416) 0.106018 1.000000
+DEBUG:root:Object exists, aggregated to
+ID: 0 | Names: [lamp lamp shade pole] |  Num embs: 9 | Pcd size: (3, 64466)
+
+DEBUG:root:Detected: lamp
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 0 | Names: [lamp lamp shade pole] |  Num embs: 9 | Pcd size: (3, 64466) 0.039900 0.106170
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 1 | Names: [lamp easel pole chair lamp shade footstall pillar] |  Num embs: 12 | Pcd size: (3, 258586) 0.014306 0.071097
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 2 | Names: [lamp easel stool] |  Num embs: 3 | Pcd size: (3, 21328) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 3 | Names: [lamp] |  Num embs: 2 | Pcd size: (3, 41347) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 4 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 2791) 0.041468 0.105970
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 5 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 3386) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 6 | Names: [lamp] |  Num embs: 2 | Pcd size: (3, 2519) 0.174855 0.999617
+DEBUG:root:Object exists, aggregated to
+ID: 6 | Names: [lamp] |  Num embs: 3 | Pcd size: (3, 3332)
+
+DEBUG:root:Detected: lamp
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 0 | Names: [lamp lamp shade pole] |  Num embs: 9 | Pcd size: (3, 64466) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 1 | Names: [lamp easel pole chair lamp shade footstall pillar] |  Num embs: 12 | Pcd size: (3, 258586) 0.363561 0.693500
+DEBUG:root:Object exists, aggregated to
+ID: 1 | Names: [lamp easel pole chair lamp shade footstall pillar] |  Num embs: 13 | Pcd size: (3, 268898)
+
+DEBUG:root:Detected: lamp
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 0 | Names: [lamp lamp shade pole] |  Num embs: 9 | Pcd size: (3, 64466) 0.170233 0.641431
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 1 | Names: [lamp easel pole chair lamp shade footstall pillar] |  Num embs: 13 | Pcd size: (3, 268898) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 2 | Names: [lamp easel stool] |  Num embs: 3 | Pcd size: (3, 21328) 0.062272 0.129965
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 3 | Names: [lamp] |  Num embs: 2 | Pcd size: (3, 41347) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 4 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 2791) 0.230038 0.865177
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 5 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 3386) 0.106622 0.706888
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 6 | Names: [lamp] |  Num embs: 3 | Pcd size: (3, 3332) 0.116600 0.214437
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 7 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 13343) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 8 | Names: [lamp chair] |  Num embs: 2 | Pcd size: (3, 12544) 0.325299 0.994618
+DEBUG:root:Object exists, aggregated to
+ID: 8 | Names: [lamp chair] |  Num embs: 3 | Pcd size: (3, 49062)
+
+DEBUG:root:Detected: pillar
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 0 | Names: [lamp lamp shade pole] |  Num embs: 9 | Pcd size: (3, 64466) 0.037167 1.000000
+DEBUG:root:Object exists, aggregated to
+ID: 0 | Names: [lamp lamp shade pole pillar] |  Num embs: 10 | Pcd size: (3, 67798)
+
+DEBUG:root:Detected: lamp shade
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 0 | Names: [lamp lamp shade pole pillar] |  Num embs: 10 | Pcd size: (3, 67798) 0.018690 1.000000
+DEBUG:root:Object exists, aggregated to
+ID: 0 | Names: [lamp lamp shade pole pillar] |  Num embs: 11 | Pcd size: (3, 73451)
+
+DEBUG:root:Detected: lamp shade
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 0 | Names: [lamp lamp shade pole pillar] |  Num embs: 11 | Pcd size: (3, 73451) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 1 | Names: [lamp easel pole chair lamp shade footstall pillar] |  Num embs: 13 | Pcd size: (3, 268898) 0.006135 1.000000
+DEBUG:root:Object exists, aggregated to
+ID: 1 | Names: [lamp easel pole chair lamp shade footstall pillar] |  Num embs: 14 | Pcd size: (3, 273374)
+
+DEBUG:root:Detected: lamp shade
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 0 | Names: [lamp lamp shade pole pillar] |  Num embs: 11 | Pcd size: (3, 73451) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 1 | Names: [lamp easel pole chair lamp shade footstall pillar] |  Num embs: 14 | Pcd size: (3, 273374) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 2 | Names: [lamp easel stool] |  Num embs: 3 | Pcd size: (3, 21328) 0.008739 1.000000
+DEBUG:root:Object exists, aggregated to
+ID: 2 | Names: [lamp easel stool lamp shade] |  Num embs: 4 | Pcd size: (3, 41505)
+
+DEBUG:PIL.PngImagePlugin:STREAM b'IHDR' 16 13
+DEBUG:PIL.PngImagePlugin:STREAM b'IDAT' 41 8192
+DEBUG:root:caption post ram: lamp  .  chair  .  image  .  lamp shade  .  pole  .  stool  
+DEBUG:root:['lamp', 'lamp', 'lamp', 'chair', 'image', 'lamp shade', 'lamp shade', 'stool']
+DEBUG:root:Detected: lamp
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 0 | Names: [lamp lamp shade pole pillar] |  Num embs: 11 | Pcd size: (3, 73451) 0.032994 1.000000
+DEBUG:root:Object exists, aggregated to
+ID: 0 | Names: [lamp lamp shade pole pillar] |  Num embs: 12 | Pcd size: (3, 74266)
+
+DEBUG:root:Detected: lamp
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 0 | Names: [lamp lamp shade pole pillar] |  Num embs: 12 | Pcd size: (3, 74266) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 1 | Names: [lamp easel pole chair lamp shade footstall pillar] |  Num embs: 14 | Pcd size: (3, 273374) 0.265166 0.998507
+DEBUG:root:Object exists, aggregated to
+ID: 1 | Names: [lamp easel pole chair lamp shade footstall pillar] |  Num embs: 15 | Pcd size: (3, 277258)
+
+DEBUG:root:Detected: lamp
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 0 | Names: [lamp lamp shade pole pillar] |  Num embs: 12 | Pcd size: (3, 74266) 0.303827 0.495136
+DEBUG:root:Object exists, aggregated to
+ID: 0 | Names: [lamp lamp shade pole pillar] |  Num embs: 13 | Pcd size: (3, 96546)
+
+DEBUG:root:Detected: chair
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 0 | Names: [lamp lamp shade pole pillar] |  Num embs: 13 | Pcd size: (3, 96546) 0.227450 1.000000
+DEBUG:root:Object exists, aggregated to
+ID: 0 | Names: [lamp lamp shade pole pillar chair] |  Num embs: 14 | Pcd size: (3, 102840)
+
+DEBUG:root:Detected: image
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 0 | Names: [lamp lamp shade pole pillar chair] |  Num embs: 14 | Pcd size: (3, 102840) 0.041442 1.000000
+DEBUG:root:Object exists, aggregated to
+ID: 0 | Names: [lamp lamp shade pole pillar chair image] |  Num embs: 15 | Pcd size: (3, 418353)
+
+DEBUG:root:Detected: lamp shade
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 0 | Names: [lamp lamp shade pole pillar chair image] |  Num embs: 15 | Pcd size: (3, 418353) 0.002282 1.000000
+DEBUG:root:Object exists, aggregated to
+ID: 0 | Names: [lamp lamp shade pole pillar chair image] |  Num embs: 16 | Pcd size: (3, 429662)
+
+DEBUG:root:Detected: lamp shade
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 0 | Names: [lamp lamp shade pole pillar chair image] |  Num embs: 16 | Pcd size: (3, 429662) 0.000540 1.000000
+DEBUG:root:Object exists, aggregated to
+ID: 0 | Names: [lamp lamp shade pole pillar chair image] |  Num embs: 17 | Pcd size: (3, 430965)
+
+DEBUG:root:Detected: stool
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 0 | Names: [lamp lamp shade pole pillar chair image] |  Num embs: 17 | Pcd size: (3, 430965) 0.007563 1.000000
+DEBUG:root:Object exists, aggregated to
+ID: 0 | Names: [lamp lamp shade pole pillar chair image stool] |  Num embs: 18 | Pcd size: (3, 432880)
+
+INFO:root:Objects stored in memory:
+
+INFO:root:['lamp', 'lamp shade', 'pole', 'pillar', 'chair', 'image', 'stool']
+INFO:root:ID: 0 | Names: [lamp lamp shade pole pillar chair image stool] |  Num embs: 18 | Pcd size: (3, 432880)
+INFO:root:['lamp', 'easel', 'pole', 'chair', 'lamp shade', 'footstall', 'pillar']
+INFO:root:ID: 1 | Names: [lamp easel pole chair lamp shade footstall pillar] |  Num embs: 15 | Pcd size: (3, 277258)
+INFO:root:['lamp', 'easel', 'stool', 'lamp shade']
+INFO:root:ID: 2 | Names: [lamp easel stool lamp shade] |  Num embs: 4 | Pcd size: (3, 41505)
+INFO:root:['lamp']
+INFO:root:ID: 3 | Names: [lamp] |  Num embs: 2 | Pcd size: (3, 41347)
+INFO:root:['lamp']
+INFO:root:ID: 4 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 2791)
+INFO:root:['lamp']
+INFO:root:ID: 5 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 3386)
+INFO:root:['lamp']
+INFO:root:ID: 6 | Names: [lamp] |  Num embs: 3 | Pcd size: (3, 3332)
+INFO:root:['lamp']
+INFO:root:ID: 7 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 13343)
+INFO:root:['lamp', 'chair']
+INFO:root:ID: 8 | Names: [lamp chair] |  Num embs: 3 | Pcd size: (3, 49062)
+DEBUG:PIL.PngImagePlugin:STREAM b'IHDR' 16 13
+DEBUG:PIL.PngImagePlugin:STREAM b'IDAT' 41 8192
+DEBUG:root:caption post ram: lamp  .  table lamp  .  lamp shade  .  pole  .  stool  .  tie  
+DEBUG:root:Pcds saved
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): huggingface.co:443
+DEBUG:urllib3.connectionpool:https://huggingface.co:443 "HEAD /google/vit-base-patch16-224-in21k/resolve/main/config.json HTTP/1.1" 200 0
+DEBUG:urllib3.connectionpool:https://huggingface.co:443 "HEAD /google/vit-base-patch16-224-in21k/resolve/main/preprocessor_config.json HTTP/1.1" 200 0
+DEBUG:urllib3.connectionpool:https://huggingface.co:443 "HEAD /google/vit-base-patch16-224-in21k/resolve/main/config.json HTTP/1.1" 200 0
+DEBUG:urllib3.connectionpool:https://huggingface.co:443 "HEAD /bert-base-uncased/resolve/main/vocab.txt HTTP/1.1" 200 0
+DEBUG:urllib3.connectionpool:https://huggingface.co:443 "HEAD /ShilongLiu/GroundingDINO/resolve/main/GroundingDINO_SwinB.cfg.py HTTP/1.1" 200 0
+DEBUG:urllib3.connectionpool:https://huggingface.co:443 "HEAD /bert-base-uncased/resolve/main/tokenizer_config.json HTTP/1.1" 200 0
+DEBUG:urllib3.connectionpool:https://huggingface.co:443 "HEAD /bert-base-uncased/resolve/main/config.json HTTP/1.1" 200 0
+DEBUG:urllib3.connectionpool:https://huggingface.co:443 "HEAD /ShilongLiu/GroundingDINO/resolve/main/groundingdino_swinb_cogcoor.pth HTTP/1.1" 302 0
+DEBUG:PIL.PngImagePlugin:STREAM b'IHDR' 16 13
+DEBUG:PIL.PngImagePlugin:STREAM b'IDAT' 41 8192
+DEBUG:root:caption post ram: lamp  .  easel  .  ladder  .  pole  .  stool  
+DEBUG:root:['lamp', 'lamp', 'lamp', 'lamp', 'easel', 'easel', 'pole']
+DEBUG:root:Detected: lamp
+DEBUG:root:Object added
+lamp
+ID: 0 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 5734)
+DEBUG:root:Detected: lamp
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 0 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 5734) 0.009149 0.196980
+DEBUG:root:Object added
+lamp
+ID: 1 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 3327)
+DEBUG:root:Detected: lamp
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 0 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 5734) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 1 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 3327) 0.000000 0.000000
+DEBUG:root:Object added
+lamp
+ID: 2 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 7906)
+DEBUG:root:Detected: lamp
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 0 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 5734) 0.009012 0.139139
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 1 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 3327) 0.642329 0.947184
+DEBUG:root:Object exists, aggregated to
+ID: 1 | Names: [lamp] |  Num embs: 2 | Pcd size: (3, 6521)
+
+DEBUG:root:Detected: easel
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 0 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 5734) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 1 | Names: [lamp] |  Num embs: 2 | Pcd size: (3, 6521) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 2 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 7906) 0.036659 1.000000
+DEBUG:root:Object exists, aggregated to
+ID: 2 | Names: [lamp easel] |  Num embs: 2 | Pcd size: (3, 19430)
+
+DEBUG:root:Detected: easel
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 0 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 5734) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 1 | Names: [lamp] |  Num embs: 2 | Pcd size: (3, 6521) 0.090041 1.000000
+DEBUG:root:Object exists, aggregated to
+ID: 1 | Names: [lamp easel] |  Num embs: 3 | Pcd size: (3, 8538)
+
+DEBUG:root:Detected: pole
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 0 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 5734) 0.008536 0.171413
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 1 | Names: [lamp easel] |  Num embs: 3 | Pcd size: (3, 8538) 0.882506 1.000000
+DEBUG:root:Object exists, aggregated to
+ID: 1 | Names: [lamp easel pole] |  Num embs: 4 | Pcd size: (3, 10272)
+
+DEBUG:PIL.PngImagePlugin:STREAM b'IHDR' 16 13
+DEBUG:PIL.PngImagePlugin:STREAM b'IDAT' 41 8192
+DEBUG:root:caption post ram: lamp  .  chair  .  table lamp  .  footstall  .  lamp shade  .  pole  .  stool  
+DEBUG:root:['lamp', 'lamp', 'lamp', 'lamp', 'chair', 'lamp shade', 'lamp shade', 'lamp shade', 'pole']
+DEBUG:root:Detected: lamp
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 0 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 5734) 0.302088 0.993900
+DEBUG:root:Object exists, aggregated to
+ID: 0 | Names: [lamp] |  Num embs: 2 | Pcd size: (3, 13667)
+
+DEBUG:root:Detected: lamp
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 0 | Names: [lamp] |  Num embs: 2 | Pcd size: (3, 13667) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 1 | Names: [lamp easel pole] |  Num embs: 4 | Pcd size: (3, 10272) 0.046120 0.232792
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 2 | Names: [lamp easel] |  Num embs: 2 | Pcd size: (3, 19430) 0.000000 0.000000
+DEBUG:root:Object added
+lamp
+ID: 3 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 18109)
+DEBUG:root:Detected: lamp
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 0 | Names: [lamp] |  Num embs: 2 | Pcd size: (3, 13667) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 1 | Names: [lamp easel pole] |  Num embs: 4 | Pcd size: (3, 10272) 0.031601 1.000000
+DEBUG:root:Object exists, aggregated to
+ID: 1 | Names: [lamp easel pole] |  Num embs: 5 | Pcd size: (3, 18059)
+
+DEBUG:root:Detected: lamp
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 0 | Names: [lamp] |  Num embs: 2 | Pcd size: (3, 13667) 0.330702 0.913021
+DEBUG:root:Object exists, aggregated to
+ID: 0 | Names: [lamp] |  Num embs: 3 | Pcd size: (3, 27819)
+
+DEBUG:root:Detected: chair
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 0 | Names: [lamp] |  Num embs: 3 | Pcd size: (3, 27819) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 1 | Names: [lamp easel pole] |  Num embs: 5 | Pcd size: (3, 18059) 0.021531 1.000000
+DEBUG:root:Object exists, aggregated to
+ID: 1 | Names: [lamp easel pole chair] |  Num embs: 6 | Pcd size: (3, 25721)
+
+DEBUG:root:Detected: lamp shade
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 0 | Names: [lamp] |  Num embs: 3 | Pcd size: (3, 27819) 0.090301 0.993188
+DEBUG:root:Object exists, aggregated to
+ID: 0 | Names: [lamp lamp shade] |  Num embs: 4 | Pcd size: (3, 33013)
+
+DEBUG:root:Detected: lamp shade
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 0 | Names: [lamp lamp shade] |  Num embs: 4 | Pcd size: (3, 33013) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 1 | Names: [lamp easel pole chair] |  Num embs: 6 | Pcd size: (3, 25721) 0.007127 1.000000
+DEBUG:root:Object exists, aggregated to
+ID: 1 | Names: [lamp easel pole chair lamp shade] |  Num embs: 7 | Pcd size: (3, 32441)
+
+DEBUG:root:Detected: lamp shade
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 0 | Names: [lamp lamp shade] |  Num embs: 4 | Pcd size: (3, 33013) 0.001433 1.000000
+DEBUG:root:Object exists, aggregated to
+ID: 0 | Names: [lamp lamp shade] |  Num embs: 5 | Pcd size: (3, 41866)
+
+DEBUG:root:Detected: pole
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 0 | Names: [lamp lamp shade] |  Num embs: 5 | Pcd size: (3, 41866) 0.829362 0.988341
+DEBUG:root:Object exists, aggregated to
+ID: 0 | Names: [lamp lamp shade pole] |  Num embs: 6 | Pcd size: (3, 47557)
+
+DEBUG:PIL.PngImagePlugin:STREAM b'IHDR' 16 13
+DEBUG:PIL.PngImagePlugin:STREAM b'IDAT' 41 8192
+DEBUG:root:caption post ram: lamp  .  chair  .  pole  .  stool  
+DEBUG:root:['lamp', 'lamp', 'lamp', 'lamp', 'chair', 'stool']
+DEBUG:root:Detected: lamp
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 0 | Names: [lamp lamp shade pole] |  Num embs: 6 | Pcd size: (3, 47557) 0.222803 0.375980
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 1 | Names: [lamp easel pole chair lamp shade] |  Num embs: 7 | Pcd size: (3, 32441) 0.037134 0.121149
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 2 | Names: [lamp easel] |  Num embs: 2 | Pcd size: (3, 19430) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 3 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 18109) 0.000000 0.000000
+DEBUG:root:Object added
+lamp
+ID: 4 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 2791)
+DEBUG:root:Detected: lamp
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 0 | Names: [lamp lamp shade pole] |  Num embs: 6 | Pcd size: (3, 47557) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 1 | Names: [lamp easel pole chair lamp shade] |  Num embs: 7 | Pcd size: (3, 32441) 0.118023 0.451023
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 2 | Names: [lamp easel] |  Num embs: 2 | Pcd size: (3, 19430) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 3 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 18109) 0.069625 0.976872
+DEBUG:root:Object exists, aggregated to
+ID: 3 | Names: [lamp] |  Num embs: 2 | Pcd size: (3, 41347)
+
+DEBUG:root:Detected: lamp
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 0 | Names: [lamp lamp shade pole] |  Num embs: 6 | Pcd size: (3, 47557) 0.183595 0.443390
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 1 | Names: [lamp easel pole chair lamp shade] |  Num embs: 7 | Pcd size: (3, 32441) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 2 | Names: [lamp easel] |  Num embs: 2 | Pcd size: (3, 19430) 0.139437 0.759539
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 3 | Names: [lamp] |  Num embs: 2 | Pcd size: (3, 41347) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 4 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 2791) 0.000000 0.000000
+DEBUG:root:Object added
+lamp
+ID: 5 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 3386)
+DEBUG:root:Detected: lamp
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 0 | Names: [lamp lamp shade pole] |  Num embs: 6 | Pcd size: (3, 47557) 0.094345 1.000000
+DEBUG:root:Object exists, aggregated to
+ID: 0 | Names: [lamp lamp shade pole] |  Num embs: 7 | Pcd size: (3, 51546)
+
+DEBUG:root:Detected: chair
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 0 | Names: [lamp lamp shade pole] |  Num embs: 7 | Pcd size: (3, 51546) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 1 | Names: [lamp easel pole chair lamp shade] |  Num embs: 7 | Pcd size: (3, 32441) 0.023013 1.000000
+DEBUG:root:Object exists, aggregated to
+ID: 1 | Names: [lamp easel pole chair lamp shade] |  Num embs: 8 | Pcd size: (3, 41190)
+
+DEBUG:root:Detected: stool
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 0 | Names: [lamp lamp shade pole] |  Num embs: 7 | Pcd size: (3, 51546) 0.036406 0.233439
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 1 | Names: [lamp easel pole chair lamp shade] |  Num embs: 8 | Pcd size: (3, 41190) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 2 | Names: [lamp easel] |  Num embs: 2 | Pcd size: (3, 19430) 0.063222 1.000000
+DEBUG:root:Object exists, aggregated to
+ID: 2 | Names: [lamp easel stool] |  Num embs: 3 | Pcd size: (3, 21327)
+
+DEBUG:PIL.PngImagePlugin:STREAM b'IHDR' 16 13
+DEBUG:PIL.PngImagePlugin:STREAM b'IDAT' 41 8192
+DEBUG:root:caption post ram: lamp  .  table lamp  .  footstall  .  lamp shade  .  martini glass  .  stool  .  wine glass  
+DEBUG:root:['lamp', 'lamp', 'footstall', 'lamp shade']
+DEBUG:root:Detected: lamp
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 0 | Names: [lamp lamp shade pole] |  Num embs: 7 | Pcd size: (3, 51546) 0.060636 0.128316
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 1 | Names: [lamp easel pole chair lamp shade] |  Num embs: 8 | Pcd size: (3, 41190) 0.012051 0.033354
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 2 | Names: [lamp easel stool] |  Num embs: 3 | Pcd size: (3, 21327) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 3 | Names: [lamp] |  Num embs: 2 | Pcd size: (3, 41347) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 4 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 2791) 0.184575 0.362033
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 5 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 3386) 0.000000 0.000000
+DEBUG:root:Object added
+lamp
+ID: 6 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 1868)
+DEBUG:root:Detected: lamp
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 0 | Names: [lamp lamp shade pole] |  Num embs: 7 | Pcd size: (3, 51546) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 1 | Names: [lamp easel pole chair lamp shade] |  Num embs: 8 | Pcd size: (3, 41190) 0.112791 0.960128
+DEBUG:root:Object exists, aggregated to
+ID: 1 | Names: [lamp easel pole chair lamp shade] |  Num embs: 9 | Pcd size: (3, 153140)
+
+DEBUG:root:Detected: footstall
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 0 | Names: [lamp lamp shade pole] |  Num embs: 7 | Pcd size: (3, 51546) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 1 | Names: [lamp easel pole chair lamp shade] |  Num embs: 9 | Pcd size: (3, 153140) 0.020949 1.000000
+DEBUG:root:Object exists, aggregated to
+ID: 1 | Names: [lamp easel pole chair lamp shade footstall] |  Num embs: 10 | Pcd size: (3, 180733)
+
+DEBUG:root:Detected: lamp shade
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 0 | Names: [lamp lamp shade pole] |  Num embs: 7 | Pcd size: (3, 51546) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 1 | Names: [lamp easel pole chair lamp shade footstall] |  Num embs: 10 | Pcd size: (3, 180733) 0.006669 1.000000
+DEBUG:root:Object exists, aggregated to
+ID: 1 | Names: [lamp easel pole chair lamp shade footstall] |  Num embs: 11 | Pcd size: (3, 253630)
+
+DEBUG:PIL.PngImagePlugin:STREAM b'IHDR' 16 13
+DEBUG:PIL.PngImagePlugin:STREAM b'IDAT' 41 8192
+DEBUG:root:caption post ram: lamp  .  chair  .  pillar  .  footstall  .  pole  .  stool  
+DEBUG:root:['lamp', 'lamp', 'lamp', 'lamp', 'chair', 'pillar']
+DEBUG:root:Detected: lamp
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 0 | Names: [lamp lamp shade pole] |  Num embs: 7 | Pcd size: (3, 51546) 0.102045 0.999903
+DEBUG:root:Object exists, aggregated to
+ID: 0 | Names: [lamp lamp shade pole] |  Num embs: 8 | Pcd size: (3, 55417)
+
+DEBUG:root:Detected: lamp
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 0 | Names: [lamp lamp shade pole] |  Num embs: 8 | Pcd size: (3, 55417) 0.036141 0.128473
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 1 | Names: [lamp easel pole chair lamp shade footstall] |  Num embs: 11 | Pcd size: (3, 253630) 0.008425 0.018157
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 2 | Names: [lamp easel stool] |  Num embs: 3 | Pcd size: (3, 21327) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 3 | Names: [lamp] |  Num embs: 2 | Pcd size: (3, 41347) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 4 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 2791) 0.084951 0.301757
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 5 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 3386) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 6 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 1868) 0.356461 0.829453
+DEBUG:root:Object exists, aggregated to
+ID: 6 | Names: [lamp] |  Num embs: 2 | Pcd size: (3, 2517)
+
+DEBUG:root:Detected: lamp
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 0 | Names: [lamp lamp shade pole] |  Num embs: 8 | Pcd size: (3, 55417) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 1 | Names: [lamp easel pole chair lamp shade footstall] |  Num embs: 11 | Pcd size: (3, 253630) 0.262914 0.723512
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 2 | Names: [lamp easel stool] |  Num embs: 3 | Pcd size: (3, 21327) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 3 | Names: [lamp] |  Num embs: 2 | Pcd size: (3, 41347) 0.032489 0.359982
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 4 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 2791) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 5 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 3386) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 6 | Names: [lamp] |  Num embs: 2 | Pcd size: (3, 2517) 0.000000 0.000000
+DEBUG:root:Object added
+lamp
+ID: 7 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 13343)
+DEBUG:root:Detected: lamp
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 0 | Names: [lamp lamp shade pole] |  Num embs: 8 | Pcd size: (3, 55417) 0.071771 0.141768
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 1 | Names: [lamp easel pole chair lamp shade footstall] |  Num embs: 11 | Pcd size: (3, 253630) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 2 | Names: [lamp easel stool] |  Num embs: 3 | Pcd size: (3, 21327) 0.102553 0.326282
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 3 | Names: [lamp] |  Num embs: 2 | Pcd size: (3, 41347) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 4 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 2791) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 5 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 3386) 0.277922 0.668998
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 6 | Names: [lamp] |  Num embs: 2 | Pcd size: (3, 2517) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 7 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 13343) 0.000000 0.000000
+DEBUG:root:Object added
+lamp
+ID: 8 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 8247)
+DEBUG:root:Detected: chair
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 0 | Names: [lamp lamp shade pole] |  Num embs: 8 | Pcd size: (3, 55417) 0.061382 0.130586
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 1 | Names: [lamp easel pole chair lamp shade footstall] |  Num embs: 11 | Pcd size: (3, 253630) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 2 | Names: [lamp easel stool] |  Num embs: 3 | Pcd size: (3, 21327) 0.078183 0.328073
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 3 | Names: [lamp] |  Num embs: 2 | Pcd size: (3, 41347) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 4 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 2791) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 5 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 3386) 0.239450 0.478609
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 6 | Names: [lamp] |  Num embs: 2 | Pcd size: (3, 2517) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 7 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 13343) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 8 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 8247) 0.711603 1.000000
+DEBUG:root:Object exists, aggregated to
+ID: 8 | Names: [lamp chair] |  Num embs: 2 | Pcd size: (3, 12546)
+
+DEBUG:root:Detected: pillar
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 0 | Names: [lamp lamp shade pole] |  Num embs: 8 | Pcd size: (3, 55417) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 1 | Names: [lamp easel pole chair lamp shade footstall] |  Num embs: 11 | Pcd size: (3, 253630) 0.024389 1.000000
+DEBUG:root:Object exists, aggregated to
+ID: 1 | Names: [lamp easel pole chair lamp shade footstall pillar] |  Num embs: 12 | Pcd size: (3, 258590)
+
+DEBUG:PIL.PngImagePlugin:STREAM b'IHDR' 16 13
+DEBUG:PIL.PngImagePlugin:STREAM b'IDAT' 41 8192
+DEBUG:root:caption post ram: lamp  .  pillar  .  table lamp  .  lamp shade  .  pole  .  stool  
+DEBUG:root:['lamp', 'lamp', 'lamp', 'lamp', 'pillar', 'lamp shade', 'lamp shade', 'lamp shade']
+DEBUG:root:Detected: lamp
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 0 | Names: [lamp lamp shade pole] |  Num embs: 8 | Pcd size: (3, 55417) 0.106018 1.000000
+DEBUG:root:Object exists, aggregated to
+ID: 0 | Names: [lamp lamp shade pole] |  Num embs: 9 | Pcd size: (3, 64467)
+
+DEBUG:root:Detected: lamp
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 0 | Names: [lamp lamp shade pole] |  Num embs: 9 | Pcd size: (3, 64467) 0.039900 0.106170
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 1 | Names: [lamp easel pole chair lamp shade footstall pillar] |  Num embs: 12 | Pcd size: (3, 258590) 0.014306 0.071097
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 2 | Names: [lamp easel stool] |  Num embs: 3 | Pcd size: (3, 21327) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 3 | Names: [lamp] |  Num embs: 2 | Pcd size: (3, 41347) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 4 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 2791) 0.041468 0.105970
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 5 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 3386) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 6 | Names: [lamp] |  Num embs: 2 | Pcd size: (3, 2517) 0.174855 0.999617
+DEBUG:root:Object exists, aggregated to
+ID: 6 | Names: [lamp] |  Num embs: 3 | Pcd size: (3, 3330)
+
+DEBUG:root:Detected: lamp
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 0 | Names: [lamp lamp shade pole] |  Num embs: 9 | Pcd size: (3, 64467) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 1 | Names: [lamp easel pole chair lamp shade footstall pillar] |  Num embs: 12 | Pcd size: (3, 258590) 0.363561 0.693500
+DEBUG:root:Object exists, aggregated to
+ID: 1 | Names: [lamp easel pole chair lamp shade footstall pillar] |  Num embs: 13 | Pcd size: (3, 268902)
+
+DEBUG:root:Detected: lamp
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 0 | Names: [lamp lamp shade pole] |  Num embs: 9 | Pcd size: (3, 64467) 0.170233 0.641431
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 1 | Names: [lamp easel pole chair lamp shade footstall pillar] |  Num embs: 13 | Pcd size: (3, 268902) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 2 | Names: [lamp easel stool] |  Num embs: 3 | Pcd size: (3, 21327) 0.062272 0.129965
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 3 | Names: [lamp] |  Num embs: 2 | Pcd size: (3, 41347) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 4 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 2791) 0.230038 0.865177
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 5 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 3386) 0.106622 0.706888
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 6 | Names: [lamp] |  Num embs: 3 | Pcd size: (3, 3330) 0.116600 0.214437
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 7 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 13343) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 8 | Names: [lamp chair] |  Num embs: 2 | Pcd size: (3, 12546) 0.325299 0.994618
+DEBUG:root:Object exists, aggregated to
+ID: 8 | Names: [lamp chair] |  Num embs: 3 | Pcd size: (3, 49064)
+
+DEBUG:root:Detected: pillar
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 0 | Names: [lamp lamp shade pole] |  Num embs: 9 | Pcd size: (3, 64467) 0.037167 1.000000
+DEBUG:root:Object exists, aggregated to
+ID: 0 | Names: [lamp lamp shade pole pillar] |  Num embs: 10 | Pcd size: (3, 67799)
+
+DEBUG:root:Detected: lamp shade
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 0 | Names: [lamp lamp shade pole pillar] |  Num embs: 10 | Pcd size: (3, 67799) 0.018690 1.000000
+DEBUG:root:Object exists, aggregated to
+ID: 0 | Names: [lamp lamp shade pole pillar] |  Num embs: 11 | Pcd size: (3, 73452)
+
+DEBUG:root:Detected: lamp shade
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 0 | Names: [lamp lamp shade pole pillar] |  Num embs: 11 | Pcd size: (3, 73452) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 1 | Names: [lamp easel pole chair lamp shade footstall pillar] |  Num embs: 13 | Pcd size: (3, 268902) 0.006135 1.000000
+DEBUG:root:Object exists, aggregated to
+ID: 1 | Names: [lamp easel pole chair lamp shade footstall pillar] |  Num embs: 14 | Pcd size: (3, 273378)
+
+DEBUG:root:Detected: lamp shade
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 0 | Names: [lamp lamp shade pole pillar] |  Num embs: 11 | Pcd size: (3, 73452) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 1 | Names: [lamp easel pole chair lamp shade footstall pillar] |  Num embs: 14 | Pcd size: (3, 273378) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 2 | Names: [lamp easel stool] |  Num embs: 3 | Pcd size: (3, 21327) 0.008739 1.000000
+DEBUG:root:Object exists, aggregated to
+ID: 2 | Names: [lamp easel stool lamp shade] |  Num embs: 4 | Pcd size: (3, 41504)
+
+DEBUG:PIL.PngImagePlugin:STREAM b'IHDR' 16 13
+DEBUG:PIL.PngImagePlugin:STREAM b'IDAT' 41 8192
+DEBUG:root:caption post ram: lamp  .  chair  .  image  .  lamp shade  .  pole  .  stool  
+DEBUG:root:['lamp', 'lamp', 'lamp', 'chair', 'image', 'lamp shade', 'lamp shade', 'stool']
+DEBUG:root:Detected: lamp
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 0 | Names: [lamp lamp shade pole pillar] |  Num embs: 11 | Pcd size: (3, 73452) 0.032994 1.000000
+DEBUG:root:Object exists, aggregated to
+ID: 0 | Names: [lamp lamp shade pole pillar] |  Num embs: 12 | Pcd size: (3, 74268)
+
+DEBUG:root:Detected: lamp
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 0 | Names: [lamp lamp shade pole pillar] |  Num embs: 12 | Pcd size: (3, 74268) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 1 | Names: [lamp easel pole chair lamp shade footstall pillar] |  Num embs: 14 | Pcd size: (3, 273378) 0.265166 0.998507
+DEBUG:root:Object exists, aggregated to
+ID: 1 | Names: [lamp easel pole chair lamp shade footstall pillar] |  Num embs: 15 | Pcd size: (3, 277262)
+
+DEBUG:root:Detected: lamp
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 0 | Names: [lamp lamp shade pole pillar] |  Num embs: 12 | Pcd size: (3, 74268) 0.303827 0.495136
+DEBUG:root:Object exists, aggregated to
+ID: 0 | Names: [lamp lamp shade pole pillar] |  Num embs: 13 | Pcd size: (3, 96548)
+
+DEBUG:root:Detected: chair
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 0 | Names: [lamp lamp shade pole pillar] |  Num embs: 13 | Pcd size: (3, 96548) 0.227450 1.000000
+DEBUG:root:Object exists, aggregated to
+ID: 0 | Names: [lamp lamp shade pole pillar chair] |  Num embs: 14 | Pcd size: (3, 102842)
+
+DEBUG:root:Detected: image
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 0 | Names: [lamp lamp shade pole pillar chair] |  Num embs: 14 | Pcd size: (3, 102842) 0.041442 1.000000
+DEBUG:root:Object exists, aggregated to
+ID: 0 | Names: [lamp lamp shade pole pillar chair image] |  Num embs: 15 | Pcd size: (3, 418355)
+
+DEBUG:root:Detected: lamp shade
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 0 | Names: [lamp lamp shade pole pillar chair image] |  Num embs: 15 | Pcd size: (3, 418355) 0.002282 1.000000
+DEBUG:root:Object exists, aggregated to
+ID: 0 | Names: [lamp lamp shade pole pillar chair image] |  Num embs: 16 | Pcd size: (3, 429664)
+
+DEBUG:root:Detected: lamp shade
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 0 | Names: [lamp lamp shade pole pillar chair image] |  Num embs: 16 | Pcd size: (3, 429664) 0.000540 1.000000
+DEBUG:root:Object exists, aggregated to
+ID: 0 | Names: [lamp lamp shade pole pillar chair image] |  Num embs: 17 | Pcd size: (3, 430965)
+
+DEBUG:root:Detected: stool
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 0 | Names: [lamp lamp shade pole pillar chair image] |  Num embs: 17 | Pcd size: (3, 430965) 0.007563 1.000000
+DEBUG:root:Object exists, aggregated to
+ID: 0 | Names: [lamp lamp shade pole pillar chair image stool] |  Num embs: 18 | Pcd size: (3, 432879)
+
+DEBUG:PIL.PngImagePlugin:STREAM b'IHDR' 16 13
+DEBUG:PIL.PngImagePlugin:STREAM b'IDAT' 41 8192
+DEBUG:root:caption post ram: lamp  .  table lamp  .  lamp shade  .  pole  .  stool  .  tie  
+DEBUG:root:Pcds saved
+DEBUG:PIL.PngImagePlugin:STREAM b'IHDR' 16 13
+DEBUG:PIL.PngImagePlugin:STREAM b'IDAT' 41 8192
+DEBUG:root:caption post ram: lamp  .  table lamp  .  lamp shade  .  pole  .  stool  .  tie  
+DEBUG:root:['lamp', 'lamp', 'lamp', 'lamp', 'lamp shade', 'lamp shade', 'stool']
+DEBUG:root:Detected: lamp
+DEBUG:root:Object added
+lamp
+ID: 0 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 15935)
+DEBUG:root:Detected: lamp
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 0 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 15935) 0.000000 0.000000
+DEBUG:root:Object added
+lamp
+ID: 1 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 3934)
+DEBUG:root:Detected: lamp
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 0 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 15935) 0.025536 0.249416
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 1 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 3934) 0.000000 0.000000
+DEBUG:root:Object added
+lamp
+ID: 2 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 4185)
+DEBUG:root:Detected: lamp
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 0 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 15935) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 1 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 3934) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 2 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 4185) 0.000000 0.000000
+DEBUG:root:Object added
+lamp
+ID: 3 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 43499)
+DEBUG:root:Detected: lamp shade
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 0 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 15935) 0.162984 0.988861
+DEBUG:root:Object exists, aggregated to
+ID: 0 | Names: [lamp lamp shade] |  Num embs: 2 | Pcd size: (3, 26724)
+
+DEBUG:root:Detected: lamp shade
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 0 | Names: [lamp lamp shade] |  Num embs: 2 | Pcd size: (3, 26724) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 1 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 3934) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 2 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 4185) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 3 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 43499) 0.002463 0.996470
+DEBUG:root:Object exists, aggregated to
+ID: 3 | Names: [lamp lamp shade] |  Num embs: 2 | Pcd size: (3, 60125)
+
+DEBUG:root:Detected: stool
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 0 | Names: [lamp lamp shade] |  Num embs: 2 | Pcd size: (3, 26724) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 1 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 3934) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 2 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 4185) 0.055950 1.000000
+DEBUG:root:Object exists, aggregated to
+ID: 2 | Names: [lamp stool] |  Num embs: 2 | Pcd size: (3, 6472)
+
+DEBUG:PIL.PngImagePlugin:STREAM b'IHDR' 16 13
+DEBUG:PIL.PngImagePlugin:STREAM b'IDAT' 41 8192
+DEBUG:root:caption post ram: lamp  .  chair  .  table lamp  .  footstall  .  lamp shade  .  pole  .  stool  
+DEBUG:root:['lamp', 'lamp', 'lamp', 'lamp', 'chair', 'lamp shade', 'lamp shade', 'lamp shade', 'pole']
+DEBUG:root:Detected: lamp
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 0 | Names: [lamp lamp shade] |  Num embs: 2 | Pcd size: (3, 26724) 0.300937 0.995612
+DEBUG:root:Object exists, aggregated to
+ID: 0 | Names: [lamp lamp shade] |  Num embs: 3 | Pcd size: (3, 34657)
+
+DEBUG:root:Detected: lamp
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 0 | Names: [lamp lamp shade] |  Num embs: 3 | Pcd size: (3, 34657) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 1 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 3934) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 2 | Names: [lamp stool] |  Num embs: 2 | Pcd size: (3, 6472) 0.028863 0.323647
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 3 | Names: [lamp lamp shade] |  Num embs: 2 | Pcd size: (3, 60125) 0.121429 0.337346
+DEBUG:root:Object added
+lamp
+ID: 4 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 18109)
+DEBUG:root:Detected: lamp
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 0 | Names: [lamp lamp shade] |  Num embs: 3 | Pcd size: (3, 34657) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 1 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 3934) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 2 | Names: [lamp stool] |  Num embs: 2 | Pcd size: (3, 6472) 0.077791 1.000000
+DEBUG:root:Object exists, aggregated to
+ID: 2 | Names: [lamp stool] |  Num embs: 3 | Pcd size: (3, 14259)
+
+DEBUG:root:Detected: lamp
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 0 | Names: [lamp lamp shade] |  Num embs: 3 | Pcd size: (3, 34657) 0.330339 0.913404
+DEBUG:root:Object exists, aggregated to
+ID: 0 | Names: [lamp lamp shade] |  Num embs: 4 | Pcd size: (3, 48809)
+
+DEBUG:root:Detected: chair
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 0 | Names: [lamp lamp shade] |  Num embs: 4 | Pcd size: (3, 48809) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 1 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 3934) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 2 | Names: [lamp stool] |  Num embs: 3 | Pcd size: (3, 14259) 0.053004 1.000000
+DEBUG:root:Object exists, aggregated to
+ID: 2 | Names: [lamp stool chair] |  Num embs: 4 | Pcd size: (3, 21921)
+
+DEBUG:root:Detected: lamp shade
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 0 | Names: [lamp lamp shade] |  Num embs: 4 | Pcd size: (3, 48809) 0.090347 0.993188
+DEBUG:root:Object exists, aggregated to
+ID: 0 | Names: [lamp lamp shade] |  Num embs: 5 | Pcd size: (3, 54003)
+
+DEBUG:root:Detected: lamp shade
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 0 | Names: [lamp lamp shade] |  Num embs: 5 | Pcd size: (3, 54003) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 1 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 3934) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 2 | Names: [lamp stool chair] |  Num embs: 4 | Pcd size: (3, 21921) 0.017524 0.998808
+DEBUG:root:Object exists, aggregated to
+ID: 2 | Names: [lamp stool chair lamp shade] |  Num embs: 5 | Pcd size: (3, 28641)
+
+DEBUG:root:Detected: lamp shade
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 0 | Names: [lamp lamp shade] |  Num embs: 5 | Pcd size: (3, 54003) 0.001434 1.000000
+DEBUG:root:Object exists, aggregated to
+ID: 0 | Names: [lamp lamp shade] |  Num embs: 6 | Pcd size: (3, 62856)
+
+DEBUG:root:Detected: pole
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 0 | Names: [lamp lamp shade] |  Num embs: 6 | Pcd size: (3, 62856) 0.829781 0.988341
+DEBUG:root:Object exists, aggregated to
+ID: 0 | Names: [lamp lamp shade pole] |  Num embs: 7 | Pcd size: (3, 68547)
+
+DEBUG:PIL.PngImagePlugin:STREAM b'IHDR' 16 13
+DEBUG:PIL.PngImagePlugin:STREAM b'IDAT' 41 8192
+DEBUG:root:caption post ram: lamp  .  chair  .  pole  .  stool  
+DEBUG:root:['lamp', 'lamp', 'lamp', 'lamp', 'chair', 'stool']
+DEBUG:root:Detected: lamp
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 0 | Names: [lamp lamp shade pole] |  Num embs: 7 | Pcd size: (3, 68547) 0.222874 0.375980
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 1 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 3934) 0.043187 0.682679
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 2 | Names: [lamp stool chair lamp shade] |  Num embs: 5 | Pcd size: (3, 28641) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 3 | Names: [lamp lamp shade] |  Num embs: 2 | Pcd size: (3, 60125) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 4 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 18109) 0.000000 0.000000
+DEBUG:root:Object added
+lamp
+ID: 5 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 2791)
+DEBUG:root:Detected: lamp
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 0 | Names: [lamp lamp shade pole] |  Num embs: 7 | Pcd size: (3, 68547) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 1 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 3934) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 2 | Names: [lamp stool chair lamp shade] |  Num embs: 5 | Pcd size: (3, 28641) 0.230997 0.437174
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 3 | Names: [lamp lamp shade] |  Num embs: 2 | Pcd size: (3, 60125) 0.054100 0.391156
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 4 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 18109) 0.069625 0.976872
+DEBUG:root:Object exists, aggregated to
+ID: 4 | Names: [lamp] |  Num embs: 2 | Pcd size: (3, 41347)
+
+DEBUG:root:Detected: lamp
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 0 | Names: [lamp lamp shade pole] |  Num embs: 7 | Pcd size: (3, 68547) 0.183555 0.443161
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 1 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 3934) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 2 | Names: [lamp stool chair lamp shade] |  Num embs: 5 | Pcd size: (3, 28641) 0.000260 0.000699
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 3 | Names: [lamp lamp shade] |  Num embs: 2 | Pcd size: (3, 60125) 0.084812 0.737091
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 4 | Names: [lamp] |  Num embs: 2 | Pcd size: (3, 41347) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 5 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 2791) 0.000000 0.000000
+DEBUG:root:Object added
+lamp
+ID: 6 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 3384)
+DEBUG:root:Detected: lamp
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 0 | Names: [lamp lamp shade pole] |  Num embs: 7 | Pcd size: (3, 68547) 0.094356 0.999636
+DEBUG:root:Object exists, aggregated to
+ID: 0 | Names: [lamp lamp shade pole] |  Num embs: 8 | Pcd size: (3, 72536)
+
+DEBUG:root:Detected: chair
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 0 | Names: [lamp lamp shade pole] |  Num embs: 8 | Pcd size: (3, 72536) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 1 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 3934) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 2 | Names: [lamp stool chair lamp shade] |  Num embs: 5 | Pcd size: (3, 28641) 0.056637 1.000000
+DEBUG:root:Object exists, aggregated to
+ID: 2 | Names: [lamp stool chair lamp shade] |  Num embs: 6 | Pcd size: (3, 37390)
+
+DEBUG:root:Detected: stool
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 0 | Names: [lamp lamp shade pole] |  Num embs: 8 | Pcd size: (3, 72536) 0.036410 0.233439
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 1 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 3934) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 2 | Names: [lamp stool chair lamp shade] |  Num embs: 6 | Pcd size: (3, 37390) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 3 | Names: [lamp lamp shade] |  Num embs: 2 | Pcd size: (3, 60125) 0.039058 1.000000
+DEBUG:root:Object exists, aggregated to
+ID: 3 | Names: [lamp lamp shade stool] |  Num embs: 3 | Pcd size: (3, 62022)
+
+DEBUG:PIL.PngImagePlugin:STREAM b'IHDR' 16 13
+DEBUG:PIL.PngImagePlugin:STREAM b'IDAT' 41 8192
+DEBUG:root:caption post ram: lamp  .  table lamp  .  footstall  .  lamp shade  .  martini glass  .  stool  .  wine glass  
+DEBUG:root:['lamp', 'lamp', 'footstall', 'lamp shade']
+DEBUG:root:Detected: lamp
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 0 | Names: [lamp lamp shade pole] |  Num embs: 8 | Pcd size: (3, 72536) 0.060641 0.128335
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 1 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 3934) 0.036839 0.763911
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 2 | Names: [lamp stool chair lamp shade] |  Num embs: 6 | Pcd size: (3, 37390) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 3 | Names: [lamp lamp shade stool] |  Num embs: 3 | Pcd size: (3, 62022) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 4 | Names: [lamp] |  Num embs: 2 | Pcd size: (3, 41347) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 5 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 2791) 0.184575 0.362033
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 6 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 3384) 0.000000 0.000000
+DEBUG:root:Object added
+lamp
+ID: 7 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 1868)
+DEBUG:root:Detected: lamp
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 0 | Names: [lamp lamp shade pole] |  Num embs: 8 | Pcd size: (3, 72536) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 1 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 3934) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 2 | Names: [lamp stool chair lamp shade] |  Num embs: 6 | Pcd size: (3, 37390) 0.280775 0.973937
+DEBUG:root:Object exists, aggregated to
+ID: 2 | Names: [lamp stool chair lamp shade] |  Num embs: 7 | Pcd size: (3, 149340)
+
+DEBUG:root:Detected: footstall
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 0 | Names: [lamp lamp shade pole] |  Num embs: 8 | Pcd size: (3, 72536) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 1 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 3934) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 2 | Names: [lamp stool chair lamp shade] |  Num embs: 7 | Pcd size: (3, 149340) 0.051253 1.000000
+DEBUG:root:Object exists, aggregated to
+ID: 2 | Names: [lamp stool chair lamp shade footstall] |  Num embs: 8 | Pcd size: (3, 176933)
+
+DEBUG:root:Detected: lamp shade
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 0 | Names: [lamp lamp shade pole] |  Num embs: 8 | Pcd size: (3, 72536) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 1 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 3934) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 2 | Names: [lamp stool chair lamp shade footstall] |  Num embs: 8 | Pcd size: (3, 176933) 0.016316 1.000000
+DEBUG:root:Object exists, aggregated to
+ID: 2 | Names: [lamp stool chair lamp shade footstall] |  Num embs: 9 | Pcd size: (3, 249830)
+
+DEBUG:PIL.PngImagePlugin:STREAM b'IHDR' 16 13
+DEBUG:PIL.PngImagePlugin:STREAM b'IDAT' 41 8192
+DEBUG:root:caption post ram: lamp  .  chair  .  pillar  .  footstall  .  pole  .  stool  
+DEBUG:root:['lamp', 'lamp', 'lamp', 'lamp', 'chair', 'pillar']
+DEBUG:root:Detected: lamp
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 0 | Names: [lamp lamp shade pole] |  Num embs: 8 | Pcd size: (3, 72536) 0.102043 0.999753
+DEBUG:root:Object exists, aggregated to
+ID: 0 | Names: [lamp lamp shade pole] |  Num embs: 9 | Pcd size: (3, 76407)
+
+DEBUG:root:Detected: lamp
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 0 | Names: [lamp lamp shade pole] |  Num embs: 9 | Pcd size: (3, 76407) 0.036141 0.128473
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 1 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 3934) 0.017136 0.761611
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 2 | Names: [lamp stool chair lamp shade footstall] |  Num embs: 9 | Pcd size: (3, 249830) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 3 | Names: [lamp lamp shade stool] |  Num embs: 3 | Pcd size: (3, 62022) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 4 | Names: [lamp] |  Num embs: 2 | Pcd size: (3, 41347) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 5 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 2791) 0.084951 0.301757
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 6 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 3384) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 7 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 1868) 0.356461 0.829453
+DEBUG:root:Object exists, aggregated to
+ID: 7 | Names: [lamp] |  Num embs: 2 | Pcd size: (3, 2517)
+
+DEBUG:root:Detected: lamp
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 0 | Names: [lamp lamp shade pole] |  Num embs: 9 | Pcd size: (3, 76407) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 1 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 3934) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 2 | Names: [lamp stool chair lamp shade footstall] |  Num embs: 9 | Pcd size: (3, 249830) 0.206320 0.344081
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 3 | Names: [lamp lamp shade stool] |  Num embs: 3 | Pcd size: (3, 62022) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 4 | Names: [lamp] |  Num embs: 2 | Pcd size: (3, 41347) 0.032489 0.359982
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 5 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 2791) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 6 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 3384) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 7 | Names: [lamp] |  Num embs: 2 | Pcd size: (3, 2517) 0.000000 0.000000
+DEBUG:root:Object added
+lamp
+ID: 8 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 13343)
+DEBUG:root:Detected: lamp
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 0 | Names: [lamp lamp shade pole] |  Num embs: 9 | Pcd size: (3, 76407) 0.071771 0.141768
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 1 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 3934) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 2 | Names: [lamp stool chair lamp shade footstall] |  Num embs: 9 | Pcd size: (3, 249830) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 3 | Names: [lamp lamp shade stool] |  Num embs: 3 | Pcd size: (3, 62022) 0.067175 0.318474
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 4 | Names: [lamp] |  Num embs: 2 | Pcd size: (3, 41347) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 5 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 2791) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 6 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 3384) 0.277922 0.668998
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 7 | Names: [lamp] |  Num embs: 2 | Pcd size: (3, 2517) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 8 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 13343) 0.000000 0.000000
+DEBUG:root:Object added
+lamp
+ID: 9 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 8247)
+DEBUG:root:Detected: chair
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 0 | Names: [lamp lamp shade pole] |  Num embs: 9 | Pcd size: (3, 76407) 0.061382 0.130586
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 1 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 3934) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 2 | Names: [lamp stool chair lamp shade footstall] |  Num embs: 9 | Pcd size: (3, 249830) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 3 | Names: [lamp lamp shade stool] |  Num embs: 3 | Pcd size: (3, 62022) 0.051588 0.328914
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 4 | Names: [lamp] |  Num embs: 2 | Pcd size: (3, 41347) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 5 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 2791) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 6 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 3384) 0.239450 0.478609
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 7 | Names: [lamp] |  Num embs: 2 | Pcd size: (3, 2517) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 8 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 13343) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 9 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 8247) 0.711603 1.000000
+DEBUG:root:Object exists, aggregated to
+ID: 9 | Names: [lamp chair] |  Num embs: 2 | Pcd size: (3, 12546)
+
+DEBUG:root:Detected: pillar
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 0 | Names: [lamp lamp shade pole] |  Num embs: 9 | Pcd size: (3, 76407) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 1 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 3934) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 2 | Names: [lamp stool chair lamp shade footstall] |  Num embs: 9 | Pcd size: (3, 249830) 0.059669 1.000000
+DEBUG:root:Object exists, aggregated to
+ID: 2 | Names: [lamp stool chair lamp shade footstall pillar] |  Num embs: 10 | Pcd size: (3, 254790)
+
+DEBUG:PIL.PngImagePlugin:STREAM b'IHDR' 16 13
+DEBUG:PIL.PngImagePlugin:STREAM b'IDAT' 41 8192
+DEBUG:root:caption post ram: lamp  .  pillar  .  table lamp  .  lamp shade  .  pole  .  stool  
+DEBUG:root:['lamp', 'lamp', 'lamp', 'lamp', 'pillar', 'lamp shade', 'lamp shade', 'lamp shade']
+DEBUG:root:Detected: lamp
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 0 | Names: [lamp lamp shade pole] |  Num embs: 9 | Pcd size: (3, 76407) 0.106018 1.000000
+DEBUG:root:Object exists, aggregated to
+ID: 0 | Names: [lamp lamp shade pole] |  Num embs: 10 | Pcd size: (3, 85457)
+
+DEBUG:root:Detected: lamp
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 0 | Names: [lamp lamp shade pole] |  Num embs: 10 | Pcd size: (3, 85457) 0.039900 0.106170
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 1 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 3934) 0.076825 0.736511
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 2 | Names: [lamp stool chair lamp shade footstall pillar] |  Num embs: 10 | Pcd size: (3, 254790) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 3 | Names: [lamp lamp shade stool] |  Num embs: 3 | Pcd size: (3, 62022) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 4 | Names: [lamp] |  Num embs: 2 | Pcd size: (3, 41347) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 5 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 2791) 0.041468 0.105970
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 6 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 3384) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 7 | Names: [lamp] |  Num embs: 2 | Pcd size: (3, 2517) 0.174855 0.999617
+DEBUG:root:Object exists, aggregated to
+ID: 7 | Names: [lamp] |  Num embs: 3 | Pcd size: (3, 3332)
+
+DEBUG:root:Detected: lamp
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 0 | Names: [lamp lamp shade pole] |  Num embs: 10 | Pcd size: (3, 85457) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 1 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 3934) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 2 | Names: [lamp stool chair lamp shade footstall pillar] |  Num embs: 10 | Pcd size: (3, 254790) 0.145876 0.321846
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 3 | Names: [lamp lamp shade stool] |  Num embs: 3 | Pcd size: (3, 62022) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 4 | Names: [lamp] |  Num embs: 2 | Pcd size: (3, 41347) 0.047894 0.354327
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 5 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 2791) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 6 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 3384) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 7 | Names: [lamp] |  Num embs: 3 | Pcd size: (3, 3332) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 8 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 13343) 0.593735 0.948549
+DEBUG:root:Object exists, aggregated to
+ID: 8 | Names: [lamp] |  Num embs: 2 | Pcd size: (3, 23655)
+
+DEBUG:root:Detected: lamp
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 0 | Names: [lamp lamp shade pole] |  Num embs: 10 | Pcd size: (3, 85457) 0.170233 0.641431
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 1 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 3934) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 2 | Names: [lamp stool chair lamp shade footstall pillar] |  Num embs: 10 | Pcd size: (3, 254790) 0.004860 0.022479
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 3 | Names: [lamp lamp shade stool] |  Num embs: 3 | Pcd size: (3, 62022) 0.047007 0.104609
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 4 | Names: [lamp] |  Num embs: 2 | Pcd size: (3, 41347) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 5 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 2791) 0.230038 0.865177
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 6 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 3384) 0.106622 0.706888
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 7 | Names: [lamp] |  Num embs: 3 | Pcd size: (3, 3332) 0.116600 0.214437
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 8 | Names: [lamp] |  Num embs: 2 | Pcd size: (3, 23655) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 9 | Names: [lamp chair] |  Num embs: 2 | Pcd size: (3, 12546) 0.325299 0.994618
+DEBUG:root:Object exists, aggregated to
+ID: 9 | Names: [lamp chair] |  Num embs: 3 | Pcd size: (3, 49064)
+
+DEBUG:root:Detected: pillar
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 0 | Names: [lamp lamp shade pole] |  Num embs: 10 | Pcd size: (3, 85457) 0.037167 1.000000
+DEBUG:root:Object exists, aggregated to
+ID: 0 | Names: [lamp lamp shade pole pillar] |  Num embs: 11 | Pcd size: (3, 88789)
+
+DEBUG:root:Detected: lamp shade
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 0 | Names: [lamp lamp shade pole pillar] |  Num embs: 11 | Pcd size: (3, 88789) 0.018690 1.000000
+DEBUG:root:Object exists, aggregated to
+ID: 0 | Names: [lamp lamp shade pole pillar] |  Num embs: 12 | Pcd size: (3, 94442)
+
+DEBUG:root:Detected: lamp shade
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 0 | Names: [lamp lamp shade pole pillar] |  Num embs: 12 | Pcd size: (3, 94442) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 1 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 3934) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 2 | Names: [lamp stool chair lamp shade footstall pillar] |  Num embs: 10 | Pcd size: (3, 254790) 0.021609 0.998367
+DEBUG:root:Object exists, aggregated to
+ID: 2 | Names: [lamp stool chair lamp shade footstall pillar] |  Num embs: 11 | Pcd size: (3, 259266)
+
+DEBUG:root:Detected: lamp shade
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 0 | Names: [lamp lamp shade pole pillar] |  Num embs: 12 | Pcd size: (3, 94442) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 1 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 3934) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 2 | Names: [lamp stool chair lamp shade footstall pillar] |  Num embs: 11 | Pcd size: (3, 259266) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 3 | Names: [lamp lamp shade stool] |  Num embs: 3 | Pcd size: (3, 62022) 0.004932 0.913933
+DEBUG:root:Object exists, aggregated to
+ID: 3 | Names: [lamp lamp shade stool] |  Num embs: 4 | Pcd size: (3, 82199)
+
+DEBUG:PIL.PngImagePlugin:STREAM b'IHDR' 16 13
+DEBUG:PIL.PngImagePlugin:STREAM b'IDAT' 41 8192
+DEBUG:root:caption post ram: lamp  .  chair  .  image  .  lamp shade  .  pole  .  stool  
+DEBUG:root:['lamp', 'lamp', 'lamp', 'chair', 'image', 'lamp shade', 'lamp shade', 'stool']
+DEBUG:root:Detected: lamp
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 0 | Names: [lamp lamp shade pole pillar] |  Num embs: 12 | Pcd size: (3, 94442) 0.032994 1.000000
+DEBUG:root:Object exists, aggregated to
+ID: 0 | Names: [lamp lamp shade pole pillar] |  Num embs: 13 | Pcd size: (3, 95256)
+
+DEBUG:root:Detected: lamp
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 0 | Names: [lamp lamp shade pole pillar] |  Num embs: 13 | Pcd size: (3, 95256) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 1 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 3934) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 2 | Names: [lamp stool chair lamp shade footstall pillar] |  Num embs: 11 | Pcd size: (3, 259266) 0.199388 0.343679
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 3 | Names: [lamp lamp shade stool] |  Num embs: 4 | Pcd size: (3, 82199) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 4 | Names: [lamp] |  Num embs: 2 | Pcd size: (3, 41347) 0.055147 0.627683
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 5 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 2791) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 6 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 3384) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 7 | Names: [lamp] |  Num embs: 3 | Pcd size: (3, 3332) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 8 | Names: [lamp] |  Num embs: 2 | Pcd size: (3, 23655) 0.520425 0.919806
+DEBUG:root:Object exists, aggregated to
+ID: 8 | Names: [lamp] |  Num embs: 3 | Pcd size: (3, 27539)
+
+DEBUG:root:Detected: lamp
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 0 | Names: [lamp lamp shade pole pillar] |  Num embs: 13 | Pcd size: (3, 95256) 0.303827 0.495136
+DEBUG:root:Object exists, aggregated to
+ID: 0 | Names: [lamp lamp shade pole pillar] |  Num embs: 14 | Pcd size: (3, 117536)
+
+DEBUG:root:Detected: chair
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 0 | Names: [lamp lamp shade pole pillar] |  Num embs: 14 | Pcd size: (3, 117536) 0.227450 1.000000
+DEBUG:root:Object exists, aggregated to
+ID: 0 | Names: [lamp lamp shade pole pillar chair] |  Num embs: 15 | Pcd size: (3, 123830)
+
+DEBUG:root:Detected: image
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 0 | Names: [lamp lamp shade pole pillar chair] |  Num embs: 15 | Pcd size: (3, 123830) 0.041442 1.000000
+DEBUG:root:Object exists, aggregated to
+ID: 0 | Names: [lamp lamp shade pole pillar chair image] |  Num embs: 16 | Pcd size: (3, 439343)
+
+DEBUG:root:Detected: lamp shade
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 0 | Names: [lamp lamp shade pole pillar chair image] |  Num embs: 16 | Pcd size: (3, 439343) 0.002282 1.000000
+DEBUG:root:Object exists, aggregated to
+ID: 0 | Names: [lamp lamp shade pole pillar chair image] |  Num embs: 17 | Pcd size: (3, 450652)
+
+DEBUG:root:Detected: lamp shade
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 0 | Names: [lamp lamp shade pole pillar chair image] |  Num embs: 17 | Pcd size: (3, 450652) 0.000540 1.000000
+DEBUG:root:Object exists, aggregated to
+ID: 0 | Names: [lamp lamp shade pole pillar chair image] |  Num embs: 18 | Pcd size: (3, 451954)
+
+DEBUG:root:Detected: stool
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 0 | Names: [lamp lamp shade pole pillar chair image] |  Num embs: 18 | Pcd size: (3, 451954) 0.007563 1.000000
+DEBUG:root:Object exists, aggregated to
+ID: 0 | Names: [lamp lamp shade pole pillar chair image stool] |  Num embs: 19 | Pcd size: (3, 453869)
+
+DEBUG:PIL.PngImagePlugin:STREAM b'IHDR' 16 13
+DEBUG:PIL.PngImagePlugin:STREAM b'IDAT' 41 8192
+DEBUG:root:caption post ram: lamp  .  easel  .  ladder  .  pole  .  stool  
+DEBUG:root:Pcds saved
+DEBUG:PIL.PngImagePlugin:STREAM b'IHDR' 16 13
+DEBUG:PIL.PngImagePlugin:STREAM b'IDAT' 41 8192
+DEBUG:root:caption post ram: lamp  .  table lamp  .  lamp shade  .  pole  .  stool  .  tie  
+DEBUG:root:['lamp', 'lamp', 'lamp', 'lamp', 'lamp shade', 'lamp shade', 'stool']
+DEBUG:root:Detected: lamp
+DEBUG:root:Object added
+lamp
+ID: 0 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 15935)
+DEBUG:root:Detected: lamp
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 0 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 15935) 0.000000 0.000000
+DEBUG:root:Object added
+lamp
+ID: 1 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 3934)
+DEBUG:root:Detected: lamp
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 0 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 15935) 0.025536 0.249416
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 1 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 3934) 0.000000 0.000000
+DEBUG:root:Object added
+lamp
+ID: 2 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 4185)
+DEBUG:root:Detected: lamp
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 0 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 15935) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 1 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 3934) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 2 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 4185) 0.000000 0.000000
+DEBUG:root:Object added
+lamp
+ID: 3 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 43499)
+DEBUG:root:Detected: lamp shade
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 0 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 15935) 0.162984 0.988861
+DEBUG:root:Object exists, aggregated to
+ID: 0 | Names: [lamp lamp shade] |  Num embs: 2 | Pcd size: (3, 26724)
+
+DEBUG:root:Detected: lamp shade
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 0 | Names: [lamp lamp shade] |  Num embs: 2 | Pcd size: (3, 26724) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 1 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 3934) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 2 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 4185) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 3 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 43499) 0.002463 0.996470
+DEBUG:root:Object exists, aggregated to
+ID: 3 | Names: [lamp lamp shade] |  Num embs: 2 | Pcd size: (3, 60125)
+
+DEBUG:root:Detected: stool
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 0 | Names: [lamp lamp shade] |  Num embs: 2 | Pcd size: (3, 26724) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 1 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 3934) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 2 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 4185) 0.055950 1.000000
+DEBUG:root:Object exists, aggregated to
+ID: 2 | Names: [lamp stool] |  Num embs: 2 | Pcd size: (3, 6473)
+
+DEBUG:PIL.PngImagePlugin:STREAM b'IHDR' 16 13
+DEBUG:PIL.PngImagePlugin:STREAM b'IDAT' 41 8192
+DEBUG:root:caption post ram: lamp  .  easel  .  ladder  .  pole  .  stool  
+DEBUG:root:['lamp', 'lamp', 'lamp', 'lamp', 'easel', 'easel', 'pole']
+DEBUG:root:Detected: lamp
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 0 | Names: [lamp lamp shade] |  Num embs: 2 | Pcd size: (3, 26724) 0.675912 0.809075
+DEBUG:root:Object exists, aggregated to
+ID: 0 | Names: [lamp lamp shade] |  Num embs: 3 | Pcd size: (3, 32458)
+
+DEBUG:root:Detected: lamp
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 0 | Names: [lamp lamp shade] |  Num embs: 3 | Pcd size: (3, 32458) 0.009054 0.160490
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 1 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 3934) 0.025449 0.895360
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 2 | Names: [lamp stool] |  Num embs: 2 | Pcd size: (3, 6473) 0.354733 0.874238
+DEBUG:root:Object exists, aggregated to
+ID: 2 | Names: [lamp stool] |  Num embs: 3 | Pcd size: (3, 9800)
+
+DEBUG:root:Detected: lamp
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 0 | Names: [lamp lamp shade] |  Num embs: 3 | Pcd size: (3, 32458) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 1 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 3934) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 2 | Names: [lamp stool] |  Num embs: 3 | Pcd size: (3, 9800) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 3 | Names: [lamp lamp shade] |  Num embs: 2 | Pcd size: (3, 60125) 0.022054 0.974336
+DEBUG:root:Object exists, aggregated to
+ID: 3 | Names: [lamp lamp shade] |  Num embs: 3 | Pcd size: (3, 68031)
+
+DEBUG:root:Detected: lamp
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 0 | Names: [lamp lamp shade] |  Num embs: 3 | Pcd size: (3, 32458) 0.008882 0.113364
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 1 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 3934) 0.012870 0.326198
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 2 | Names: [lamp stool] |  Num embs: 3 | Pcd size: (3, 9800) 0.642131 0.999566
+DEBUG:root:Object exists, aggregated to
+ID: 2 | Names: [lamp stool] |  Num embs: 4 | Pcd size: (3, 12994)
+
+DEBUG:root:Detected: easel
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 0 | Names: [lamp lamp shade] |  Num embs: 3 | Pcd size: (3, 32458) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 1 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 3934) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 2 | Names: [lamp stool] |  Num embs: 4 | Pcd size: (3, 12994) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 3 | Names: [lamp lamp shade] |  Num embs: 3 | Pcd size: (3, 68031) 0.518802 0.908720
+DEBUG:root:Object exists, aggregated to
+ID: 3 | Names: [lamp lamp shade easel] |  Num embs: 4 | Pcd size: (3, 79555)
+
+DEBUG:root:Detected: easel
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 0 | Names: [lamp lamp shade] |  Num embs: 3 | Pcd size: (3, 32458) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 1 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 3934) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 2 | Names: [lamp stool] |  Num embs: 4 | Pcd size: (3, 12994) 0.086551 1.000000
+DEBUG:root:Object exists, aggregated to
+ID: 2 | Names: [lamp stool easel] |  Num embs: 5 | Pcd size: (3, 15009)
+
+DEBUG:root:Detected: pole
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 0 | Names: [lamp lamp shade] |  Num embs: 3 | Pcd size: (3, 32458) 0.008440 0.139659
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 1 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 3934) 0.024099 0.790314
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 2 | Names: [lamp stool easel] |  Num embs: 5 | Pcd size: (3, 15009) 0.848304 1.000000
+DEBUG:root:Object exists, aggregated to
+ID: 2 | Names: [lamp stool easel pole] |  Num embs: 6 | Pcd size: (3, 16743)
+
+DEBUG:PIL.PngImagePlugin:STREAM b'IHDR' 16 13
+DEBUG:PIL.PngImagePlugin:STREAM b'IDAT' 41 8192
+DEBUG:root:caption post ram: lamp  .  chair  .  pole  .  stool  
+DEBUG:root:['lamp', 'lamp', 'lamp', 'lamp', 'chair', 'stool']
+DEBUG:root:Detected: lamp
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 0 | Names: [lamp lamp shade] |  Num embs: 3 | Pcd size: (3, 32458) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 1 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 3934) 0.043187 0.682679
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 2 | Names: [lamp stool easel pole] |  Num embs: 6 | Pcd size: (3, 16743) 0.047224 0.156917
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 3 | Names: [lamp lamp shade easel] |  Num embs: 4 | Pcd size: (3, 79555) 0.000000 0.000000
+DEBUG:root:Object added
+lamp
+ID: 4 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 2791)
+DEBUG:root:Detected: lamp
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 0 | Names: [lamp lamp shade] |  Num embs: 3 | Pcd size: (3, 32458) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 1 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 3934) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 2 | Names: [lamp stool easel pole] |  Num embs: 6 | Pcd size: (3, 16743) 0.116727 0.460381
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 3 | Names: [lamp lamp shade easel] |  Num embs: 4 | Pcd size: (3, 79555) 0.048689 0.393405
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 4 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 2791) 0.000000 0.000000
+DEBUG:root:Object added
+lamp
+ID: 5 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 23238)
+DEBUG:root:Detected: lamp
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 0 | Names: [lamp lamp shade] |  Num embs: 3 | Pcd size: (3, 32458) 0.067939 0.335088
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 1 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 3934) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 2 | Names: [lamp stool easel pole] |  Num embs: 6 | Pcd size: (3, 16743) 0.000131 0.000699
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 3 | Names: [lamp lamp shade easel] |  Num embs: 4 | Pcd size: (3, 79555) 0.077878 0.759539
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 4 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 2791) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 5 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 23238) 0.000000 0.000000
+DEBUG:root:Object added
+lamp
+ID: 6 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 3386)
+DEBUG:root:Detected: lamp
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 0 | Names: [lamp lamp shade] |  Num embs: 3 | Pcd size: (3, 32458) 0.422977 0.694532
+DEBUG:root:Object exists, aggregated to
+ID: 0 | Names: [lamp lamp shade] |  Num embs: 4 | Pcd size: (3, 36446)
+
+DEBUG:root:Detected: chair
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 0 | Names: [lamp lamp shade] |  Num embs: 4 | Pcd size: (3, 36446) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 1 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 3934) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 2 | Names: [lamp stool easel pole] |  Num embs: 6 | Pcd size: (3, 16743) 0.022121 1.000000
+DEBUG:root:Object exists, aggregated to
+ID: 2 | Names: [lamp stool easel pole chair] |  Num embs: 7 | Pcd size: (3, 25492)
+
+DEBUG:root:Detected: stool
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 0 | Names: [lamp lamp shade] |  Num embs: 4 | Pcd size: (3, 36446) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 1 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 3934) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 2 | Names: [lamp stool easel pole chair] |  Num embs: 7 | Pcd size: (3, 25492) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 3 | Names: [lamp lamp shade easel] |  Num embs: 4 | Pcd size: (3, 79555) 0.034605 1.000000
+DEBUG:root:Object exists, aggregated to
+ID: 3 | Names: [lamp lamp shade easel stool] |  Num embs: 5 | Pcd size: (3, 81453)
+
+DEBUG:PIL.PngImagePlugin:STREAM b'IHDR' 16 13
+DEBUG:PIL.PngImagePlugin:STREAM b'IDAT' 41 8192
+DEBUG:root:caption post ram: lamp  .  table lamp  .  footstall  .  lamp shade  .  martini glass  .  stool  .  wine glass  
+DEBUG:root:['lamp', 'lamp', 'footstall', 'lamp shade']
+DEBUG:root:Detected: lamp
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 0 | Names: [lamp lamp shade] |  Num embs: 4 | Pcd size: (3, 36446) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 1 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 3934) 0.036839 0.763911
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 2 | Names: [lamp stool easel pole chair] |  Num embs: 7 | Pcd size: (3, 25492) 0.015253 0.043175
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 3 | Names: [lamp lamp shade easel stool] |  Num embs: 5 | Pcd size: (3, 81453) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 4 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 2791) 0.184575 0.362033
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 5 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 23238) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 6 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 3386) 0.000000 0.000000
+DEBUG:root:Object added
+lamp
+ID: 7 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 1868)
+DEBUG:root:Detected: lamp
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 0 | Names: [lamp lamp shade] |  Num embs: 4 | Pcd size: (3, 36446) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 1 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 3934) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 2 | Names: [lamp stool easel pole chair] |  Num embs: 7 | Pcd size: (3, 25492) 0.110922 0.979910
+DEBUG:root:Object exists, aggregated to
+ID: 2 | Names: [lamp stool easel pole chair] |  Num embs: 8 | Pcd size: (3, 137442)
+
+DEBUG:root:Detected: footstall
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 0 | Names: [lamp lamp shade] |  Num embs: 4 | Pcd size: (3, 36446) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 1 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 3934) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 2 | Names: [lamp stool easel pole chair] |  Num embs: 8 | Pcd size: (3, 137442) 0.020338 1.000000
+DEBUG:root:Object exists, aggregated to
+ID: 2 | Names: [lamp stool easel pole chair footstall] |  Num embs: 9 | Pcd size: (3, 165035)
+
+DEBUG:root:Detected: lamp shade
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 0 | Names: [lamp lamp shade] |  Num embs: 4 | Pcd size: (3, 36446) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 1 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 3934) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 2 | Names: [lamp stool easel pole chair footstall] |  Num embs: 9 | Pcd size: (3, 165035) 0.006474 1.000000
+DEBUG:root:Object exists, aggregated to
+ID: 2 | Names: [lamp stool easel pole chair footstall lamp shade] |  Num embs: 10 | Pcd size: (3, 237932)
+
+DEBUG:PIL.PngImagePlugin:STREAM b'IHDR' 16 13
+DEBUG:PIL.PngImagePlugin:STREAM b'IDAT' 41 8192
+DEBUG:root:caption post ram: lamp  .  chair  .  pillar  .  footstall  .  pole  .  stool  
+DEBUG:root:['lamp', 'lamp', 'lamp', 'lamp', 'chair', 'pillar']
+DEBUG:root:Detected: lamp
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 0 | Names: [lamp lamp shade] |  Num embs: 4 | Pcd size: (3, 36446) 0.533090 0.901667
+DEBUG:root:Object exists, aggregated to
+ID: 0 | Names: [lamp lamp shade] |  Num embs: 5 | Pcd size: (3, 40317)
+
+DEBUG:root:Detected: lamp
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 0 | Names: [lamp lamp shade] |  Num embs: 5 | Pcd size: (3, 40317) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 1 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 3934) 0.017136 0.761611
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 2 | Names: [lamp stool easel pole chair footstall lamp shade] |  Num embs: 10 | Pcd size: (3, 237932) 0.010784 0.022823
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 3 | Names: [lamp lamp shade easel stool] |  Num embs: 5 | Pcd size: (3, 81453) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 4 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 2791) 0.084951 0.301757
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 5 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 23238) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 6 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 3386) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 7 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 1868) 0.356461 0.829453
+DEBUG:root:Object exists, aggregated to
+ID: 7 | Names: [lamp] |  Num embs: 2 | Pcd size: (3, 2519)
+
+DEBUG:root:Detected: lamp
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 0 | Names: [lamp lamp shade] |  Num embs: 5 | Pcd size: (3, 40317) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 1 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 3934) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 2 | Names: [lamp stool easel pole chair footstall lamp shade] |  Num embs: 10 | Pcd size: (3, 237932) 0.255999 0.723512
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 3 | Names: [lamp lamp shade easel stool] |  Num embs: 5 | Pcd size: (3, 81453) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 4 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 2791) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 5 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 23238) 0.253028 0.474328
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 6 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 3386) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 7 | Names: [lamp] |  Num embs: 2 | Pcd size: (3, 2519) 0.000000 0.000000
+DEBUG:root:Object added
+lamp
+ID: 8 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 13343)
+DEBUG:root:Detected: lamp
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 0 | Names: [lamp lamp shade] |  Num embs: 5 | Pcd size: (3, 40317) 0.017928 0.129221
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 1 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 3934) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 2 | Names: [lamp stool easel pole chair footstall lamp shade] |  Num embs: 10 | Pcd size: (3, 237932) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 3 | Names: [lamp lamp shade easel stool] |  Num embs: 5 | Pcd size: (3, 81453) 0.062554 0.328605
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 4 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 2791) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 5 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 23238) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 6 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 3386) 0.277922 0.668998
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 7 | Names: [lamp] |  Num embs: 2 | Pcd size: (3, 2519) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 8 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 13343) 0.000000 0.000000
+DEBUG:root:Object added
+lamp
+ID: 9 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 8247)
+DEBUG:root:Detected: chair
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 0 | Names: [lamp lamp shade] |  Num embs: 5 | Pcd size: (3, 40317) 0.017376 0.094096
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 1 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 3934) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 2 | Names: [lamp stool easel pole chair footstall lamp shade] |  Num embs: 10 | Pcd size: (3, 237932) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 3 | Names: [lamp lamp shade easel stool] |  Num embs: 5 | Pcd size: (3, 81453) 0.046482 0.330409
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 4 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 2791) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 5 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 23238) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 6 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 3386) 0.239450 0.478609
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 7 | Names: [lamp] |  Num embs: 2 | Pcd size: (3, 2519) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 8 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 13343) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 9 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 8247) 0.711603 1.000000
+DEBUG:root:Object exists, aggregated to
+ID: 9 | Names: [lamp chair] |  Num embs: 2 | Pcd size: (3, 12546)
+
+DEBUG:root:Detected: pillar
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 0 | Names: [lamp lamp shade] |  Num embs: 5 | Pcd size: (3, 40317) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 1 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 3934) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 2 | Names: [lamp stool easel pole chair footstall lamp shade] |  Num embs: 10 | Pcd size: (3, 237932) 0.023678 1.000000
+DEBUG:root:Object exists, aggregated to
+ID: 2 | Names: [lamp stool easel pole chair footstall lamp shade pillar] |  Num embs: 11 | Pcd size: (3, 242891)
+
+DEBUG:PIL.PngImagePlugin:STREAM b'IHDR' 16 13
+DEBUG:PIL.PngImagePlugin:STREAM b'IDAT' 41 8192
+DEBUG:root:caption post ram: lamp  .  pillar  .  table lamp  .  lamp shade  .  pole  .  stool  
+DEBUG:root:['lamp', 'lamp', 'lamp', 'lamp', 'pillar', 'lamp shade', 'lamp shade', 'lamp shade']
+DEBUG:root:Detected: lamp
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 0 | Names: [lamp lamp shade] |  Num embs: 5 | Pcd size: (3, 40317) 0.601436 1.000000
+DEBUG:root:Object exists, aggregated to
+ID: 0 | Names: [lamp lamp shade] |  Num embs: 6 | Pcd size: (3, 49367)
+
+DEBUG:root:Detected: lamp
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 0 | Names: [lamp lamp shade] |  Num embs: 6 | Pcd size: (3, 49367) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 1 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 3934) 0.076825 0.736511
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 2 | Names: [lamp stool easel pole chair footstall lamp shade pillar] |  Num embs: 11 | Pcd size: (3, 242891) 0.018297 0.092759
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 3 | Names: [lamp lamp shade easel stool] |  Num embs: 5 | Pcd size: (3, 81453) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 4 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 2791) 0.041468 0.105970
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 5 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 23238) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 6 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 3386) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 7 | Names: [lamp] |  Num embs: 2 | Pcd size: (3, 2519) 0.174855 0.999617
+DEBUG:root:Object exists, aggregated to
+ID: 7 | Names: [lamp] |  Num embs: 3 | Pcd size: (3, 3335)
+
+DEBUG:root:Detected: lamp
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 0 | Names: [lamp lamp shade] |  Num embs: 6 | Pcd size: (3, 49367) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 1 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 3934) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 2 | Names: [lamp stool easel pole chair footstall lamp shade pillar] |  Num embs: 11 | Pcd size: (3, 242891) 0.354624 0.693500
+DEBUG:root:Object exists, aggregated to
+ID: 2 | Names: [lamp stool easel pole chair footstall lamp shade pillar] |  Num embs: 12 | Pcd size: (3, 253203)
+
+DEBUG:root:Detected: lamp
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 0 | Names: [lamp lamp shade] |  Num embs: 6 | Pcd size: (3, 49367) 0.023974 0.476253
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 1 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 3934) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 2 | Names: [lamp stool easel pole chair footstall lamp shade pillar] |  Num embs: 12 | Pcd size: (3, 253203) 0.007871 0.015650
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 3 | Names: [lamp lamp shade easel stool] |  Num embs: 5 | Pcd size: (3, 81453) 0.044968 0.107632
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 4 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 2791) 0.230038 0.865177
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 5 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 23238) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 6 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 3386) 0.106622 0.706888
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 7 | Names: [lamp] |  Num embs: 3 | Pcd size: (3, 3335) 0.116600 0.214437
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 8 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 13343) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 9 | Names: [lamp chair] |  Num embs: 2 | Pcd size: (3, 12546) 0.325299 0.994618
+DEBUG:root:Object exists, aggregated to
+ID: 9 | Names: [lamp chair] |  Num embs: 3 | Pcd size: (3, 49064)
+
+DEBUG:root:Detected: pillar
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 0 | Names: [lamp lamp shade] |  Num embs: 6 | Pcd size: (3, 49367) 0.210656 0.999260
+DEBUG:root:Object exists, aggregated to
+ID: 0 | Names: [lamp lamp shade pillar] |  Num embs: 7 | Pcd size: (3, 52699)
+
+DEBUG:root:Detected: lamp shade
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 0 | Names: [lamp lamp shade pillar] |  Num embs: 7 | Pcd size: (3, 52699) 0.105968 1.000000
+DEBUG:root:Object exists, aggregated to
+ID: 0 | Names: [lamp lamp shade pillar] |  Num embs: 8 | Pcd size: (3, 58352)
+
+DEBUG:root:Detected: lamp shade
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 0 | Names: [lamp lamp shade pillar] |  Num embs: 8 | Pcd size: (3, 58352) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 1 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 3934) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 2 | Names: [lamp stool easel pole chair footstall lamp shade pillar] |  Num embs: 12 | Pcd size: (3, 253203) 0.005957 1.000000
+DEBUG:root:Object exists, aggregated to
+ID: 2 | Names: [lamp stool easel pole chair footstall lamp shade pillar] |  Num embs: 13 | Pcd size: (3, 257679)
+
+DEBUG:root:Detected: lamp shade
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 0 | Names: [lamp lamp shade pillar] |  Num embs: 8 | Pcd size: (3, 58352) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 1 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 3934) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 2 | Names: [lamp stool easel pole chair footstall lamp shade pillar] |  Num embs: 13 | Pcd size: (3, 257679) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 3 | Names: [lamp lamp shade easel stool] |  Num embs: 5 | Pcd size: (3, 81453) 0.004783 1.000000
+DEBUG:root:Object exists, aggregated to
+ID: 3 | Names: [lamp lamp shade easel stool] |  Num embs: 6 | Pcd size: (3, 101630)
+
+DEBUG:PIL.PngImagePlugin:STREAM b'IHDR' 16 13
+DEBUG:PIL.PngImagePlugin:STREAM b'IDAT' 41 8192
+DEBUG:root:caption post ram: lamp  .  chair  .  image  .  lamp shade  .  pole  .  stool  
+DEBUG:root:['lamp', 'lamp', 'lamp', 'chair', 'image', 'lamp shade', 'lamp shade', 'stool']
+DEBUG:root:Detected: lamp
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 0 | Names: [lamp lamp shade pillar] |  Num embs: 8 | Pcd size: (3, 58352) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 1 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 3934) 0.542845 0.999120
+DEBUG:root:Object exists, aggregated to
+ID: 1 | Names: [lamp] |  Num embs: 2 | Pcd size: (3, 4749)
+
+DEBUG:root:Detected: lamp
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 0 | Names: [lamp lamp shade pillar] |  Num embs: 8 | Pcd size: (3, 58352) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 1 | Names: [lamp] |  Num embs: 2 | Pcd size: (3, 4749) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 2 | Names: [lamp stool easel pole chair footstall lamp shade pillar] |  Num embs: 13 | Pcd size: (3, 257679) 0.257438 0.998507
+DEBUG:root:Object exists, aggregated to
+ID: 2 | Names: [lamp stool easel pole chair footstall lamp shade pillar] |  Num embs: 14 | Pcd size: (3, 261562)
+
+DEBUG:root:Detected: lamp
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 0 | Names: [lamp lamp shade pillar] |  Num embs: 8 | Pcd size: (3, 58352) 0.162661 0.845105
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 1 | Names: [lamp] |  Num embs: 2 | Pcd size: (3, 4749) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 2 | Names: [lamp stool easel pole chair footstall lamp shade pillar] |  Num embs: 14 | Pcd size: (3, 261562) 0.017842 0.084562
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 3 | Names: [lamp lamp shade easel stool] |  Num embs: 6 | Pcd size: (3, 101630) 0.083172 0.518819
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 4 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 2791) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 5 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 23238) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 6 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 3386) 0.539417 0.929408
+DEBUG:root:Object exists, aggregated to
+ID: 6 | Names: [lamp] |  Num embs: 2 | Pcd size: (3, 25666)
+
+DEBUG:root:Detected: chair
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 0 | Names: [lamp lamp shade pillar] |  Num embs: 8 | Pcd size: (3, 58352) 0.216030 0.550663
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 1 | Names: [lamp] |  Num embs: 2 | Pcd size: (3, 4749) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 2 | Names: [lamp stool easel pole chair footstall lamp shade pillar] |  Num embs: 14 | Pcd size: (3, 261562) 0.013650 0.137085
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 3 | Names: [lamp lamp shade easel stool] |  Num embs: 6 | Pcd size: (3, 101630) 0.030359 0.436668
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 4 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 2791) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 5 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 23238) 0.000000 0.000000
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 6 | Names: [lamp] |  Num embs: 2 | Pcd size: (3, 25666) 0.390337 1.000000
+DEBUG:root:Object exists, aggregated to
+ID: 6 | Names: [lamp chair] |  Num embs: 3 | Pcd size: (3, 31960)
+
+DEBUG:root:Detected: image
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 0 | Names: [lamp lamp shade pillar] |  Num embs: 8 | Pcd size: (3, 58352) 0.004489 1.000000
+DEBUG:root:Object exists, aggregated to
+ID: 0 | Names: [lamp lamp shade pillar image] |  Num embs: 9 | Pcd size: (3, 373865)
+
+DEBUG:root:Detected: lamp shade
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 0 | Names: [lamp lamp shade pillar image] |  Num embs: 9 | Pcd size: (3, 373865) 0.002282 1.000000
+DEBUG:root:Object exists, aggregated to
+ID: 0 | Names: [lamp lamp shade pillar image] |  Num embs: 10 | Pcd size: (3, 385174)
+
+DEBUG:root:Detected: lamp shade
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 0 | Names: [lamp lamp shade pillar image] |  Num embs: 10 | Pcd size: (3, 385174) 0.000540 1.000000
+DEBUG:root:Object exists, aggregated to
+ID: 0 | Names: [lamp lamp shade pillar image] |  Num embs: 11 | Pcd size: (3, 386477)
+
+DEBUG:root:Detected: stool
+DEBUG:root:	Found in mem (info, iou, strict_overlap): ID: 0 | Names: [lamp lamp shade pillar image] |  Num embs: 11 | Pcd size: (3, 386477) 0.007563 1.000000
+DEBUG:root:Object exists, aggregated to
+ID: 0 | Names: [lamp lamp shade pillar image stool] |  Num embs: 12 | Pcd size: (3, 388391)
+
+DEBUG:PIL.PngImagePlugin:STREAM b'IHDR' 16 13
+DEBUG:PIL.PngImagePlugin:STREAM b'IDAT' 41 8192
+DEBUG:root:caption post ram: lamp  .  chair  .  table lamp  .  footstall  .  lamp shade  .  pole  .  stool  
+DEBUG:root:Pcds saved
