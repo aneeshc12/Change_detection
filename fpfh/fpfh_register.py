@@ -17,7 +17,7 @@ def downsample_and_compute_fpfh(pcd, voxel_size):
     # Downsample the point cloud using Voxel Grid
     pcd_down = copy.deepcopy(pcd)
 
-    radius_normal = voxel_size * 3
+    radius_normal = voxel_size * 2
     pcd_down.estimate_normals(
         o3d.geometry.KDTreeSearchParamHybrid(radius=radius_normal, max_nn=30))
 
@@ -27,11 +27,11 @@ def downsample_and_compute_fpfh(pcd, voxel_size):
         o3d.geometry.KDTreeSearchParamHybrid(radius=radius_feature, max_nn=100))
     return pcd_down, pcd_fpfh
 
-def register_point_clouds(source, target, voxel_size):
+def register_point_clouds(source, target, voxel_size, global_dist_factor = 1.5, local_dist_factor = 0.4):
     source_down, source_fpfh = downsample_and_compute_fpfh(source, voxel_size)
     target_down, target_fpfh = downsample_and_compute_fpfh(target, voxel_size)
 
-    distance_threshold = voxel_size * 0.75
+    distance_threshold = voxel_size * global_dist_factor
     # print(":: RANSAC registration on downsampled point clouds.")
     # print("   Since the downsampling voxel size is %.3f," % voxel_size)
     # print("   we use a liberal distance threshold %.3f." % distance_threshold)
@@ -44,11 +44,11 @@ def register_point_clouds(source, target, voxel_size):
                 0.9),
             o3d.pipelines.registration.CorrespondenceCheckerBasedOnDistance(
                 distance_threshold)
-        ], o3d.pipelines.registration.RANSACConvergenceCriteria(500000, 500))
+        ], o3d.pipelines.registration.RANSACConvergenceCriteria(4000000, 500))
 
     # Refine the registration using ICP
     result_icp = o3d.pipelines.registration.registration_icp(
-        source_down, target_down, voxel_size*0.25, result_ransac.transformation,
+        source_down, target_down, voxel_size*local_dist_factor, result_ransac.transformation,
         o3d.pipelines.registration.TransformationEstimationPointToPoint()
     )
 

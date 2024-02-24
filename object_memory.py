@@ -58,6 +58,7 @@ from GroundingDINO.groundingdino.util.inference import predict as gd_predict
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy.spatial.transform import Rotation
+from scipy import arctan2
 import torch.nn.functional as F
 import json
 from dataclasses import dataclass, field
@@ -435,13 +436,17 @@ class ObjectFinder:
                                 "hardwood",
                                 "plywood",
                                 "waiting room",
+                                "lead to"
             ]
             sub_phrases_to_ignore = [
                                 "room",
                                 "floor",
                                 "wall",
                                 "frame",
-                                "image"
+                                "image",
+                                "building",
+                                "ceiling"
+                                "lead"
             ]
 
 
@@ -553,6 +558,27 @@ class ObjectFinder:
 #################
 """
 
+class QuaternionOps:
+    @staticmethod
+    def quaternion_multiply(q1, q2):
+        w1, x1, y1, z1 = q1
+        w2, x2, y2, z2 = q2
+        w = w1 * w2 - x1 * x2 - y1 * y2 - z1 * z2
+        x = w1 * x2 + x1 * w2 + y1 * z2 - z1 * y2
+        y = w1 * y2 - x1 * z2 + y1 * w2 + z1 * x2
+        z = w1 * z2 + x1 * y2 - y1 * x2 + z1 * w2
+        return np.array([w, x, y, z])
+
+    @staticmethod
+    def quaternion_conjugate(q):
+        w, x, y, z = q
+        return np.array([w, -x, -y, -z])
+
+    # https://math.stackexchange.com/a/3573308
+    @staticmethod
+    def quaternion_error(q1, q2): # returns orientation angle between the two
+        q_del = QuaternionOps.quaternion_multiply(QuaternionOps.quaternion_conjugate(q1), q2)
+        return np.abs(arctan2(np.linalg.norm(q_del[1:]), q_del[0]))
 
 def transform_pcd_to_global_frame(pcd, pose):
     """
@@ -693,6 +719,23 @@ class ObjectInfo:
 
         self.mean_emb = None
         self.centroid = None
+
+    def downsample(self, voxel_size, use_external_mesh):
+        temp_pc = o3d.geometry.PointCloud()
+        temp_pc.points = o3d.utility.Vector3dVector(self.pcd.T)
+
+        if use_external_mesh:
+            alpha = 0.03
+
+            mesh = o3d.geometry.TriangleMesh.create_from_point_cloud_alpha_shape(temp_pc.points, alpha)
+            mesh.compute_vertex_normals()
+
+            o3d.visualization.draw_geometries([mesh])
+
+            temp_pc.points = mesh.sample_points_uniformly(number_of_points=50000)
+
+        temp_pc = temp_pc.voxel_down_sample(voxel_size=voxel_size)
+        self.pcd = np.asarray(temp_pc.points).T 
 
     def __add__(self, info):
         self.names += info.names
@@ -988,7 +1031,10 @@ class ObjectMemory:
                     print('\tObject exists, aggregated to\n', info, '\n')
         
         # TODO consider downsampling points (optimisation)
-
+                    
+    def downsample_all_objects(self, voxel_size = 0.001, use_external_mesh = False):
+        for _, info in self.memory.items():
+            info.downsample(voxel_size, use_external_mesh)
 
     """
     Runs through all objects stored in memory, consolidates objects that have a sufficient overlap
@@ -1130,7 +1176,7 @@ class ObjectMemory:
         all_detected_pcd_filtered, _ = all_detected_pcd.remove_radius_outlier(nb_points=outlier_removal_config["radius_nb_points"],
                                                         radius=outlier_removal_config["radius"])
 
-        transform = register_point_clouds(all_detected_pcd_filtered, all_memory_pcd, voxel_size=0.1)
+        transform = register_point_clouds(all_detected_pcd_filtered, all_memory_pcd, voxel_size=0.05)
 
         R = copy.copy(transform[:3,:3])
         t = copy.copy(transform[:3, 3])
@@ -1153,6 +1199,7 @@ class LocalArgs:
     sam_checkpoint_path: str = '/scratch/aneesh.chavan/sam_vit_h_4b8939.pth'
     ram_pretrained_path: str = '/scratch/aneesh.chavan/ram_swin_large_14m.pth'
     mem_save_dir: str = ''
+    save_point_clouds: bool = True
 
 if __name__ == "__main__":
     start_time = time.time()
@@ -1175,8 +1222,8 @@ if __name__ == "__main__":
     with open(poses_json_path, 'r') as f:
         poses = json.load(f)
 
-    # for target in range(1,9): # all of them
-    for target in [6,7,8]: # sanity check
+    for target in range(1,9): # all of them
+    # for target in [6,7,8]: # sanity check
         target_num = target
         target_pose = None
         for i, view in enumerate(poses["views"]):
@@ -1210,7 +1257,7 @@ if __name__ == "__main__":
                                                               (target_num, target_num)), 
                                       depth_image_path=(os.path.join(largs.test_folder_path,"view%d/view%d.npy" % 
                                                                      (target_num, target_num))),
-                                      save_point_clouds=True,
+                                      save_point_clouds=largs.save_point_clouds,
                                       testname="pose_"+str(target)+"_")
 
         print("Target pose: ", target_pose)
