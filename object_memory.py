@@ -703,10 +703,13 @@ class ObjectInfo:
         """
         Adds information for the object, including name, embedding, and point cloud data.
         Added point cloud data is aligned with a fine-grained point-to-point ICP if the align flag is true
+        Added point cloud data is aligned with a fine-grained point-to-point ICP if the align flag is true
 
         Parameters:
         - name (str): Object name to be added.
         - embedding (numpy.ndarray): Object embedding to be added.
+        - pcd (numpy.ndarray): Object point cloud data to be added
+        - align (bool): Should the new point information be ailgned to the existing points.
         - pcd (numpy.ndarray): Object point cloud data to be added
         - align (bool): Should the new point information be ailgned to the existing points.
         """
@@ -986,6 +989,7 @@ class ObjectMemory:
         
         # TODO consider downsampling points (optimisation)
 
+
     """
     Runs through all objects stored in memory, consolidates objects that have a sufficient overlap
     Performs uniform downsampling on all pointclouds as well
@@ -1179,6 +1183,10 @@ if __name__ == "__main__":
                               pose=pose)
             print("Processed\n")
 
+        mem.view_memory()
+
+        print("Consolidating memory")
+        mem.consolidate_memory()
         mem.view_memory()
 
 
