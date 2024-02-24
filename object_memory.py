@@ -862,8 +862,8 @@ class ObjectMemory:
             return noisy_array
         
         # adding noise to pose
-        pose[:3] = add_noise(pose[:3], pose_noise['trans'])
-        pose[3:] = add_noise(pose[3:], pose_noise['rot'])
+        # pose[:3] = add_noise(pose[:3], pose_noise['trans'])
+        # pose[3:] = add_noise(pose[3:], pose_noise['rot'])
         # normalizing quaternion
         def normalize_quaternion(quaternion):
             norm = np.linalg.norm(quaternion)
@@ -928,7 +928,8 @@ class ObjectMemory:
         # TODO consider downsampling points (optimisation)
 
 
-    def localise(self, image_path, depth_image_path, testname="", save_point_clouds=False):
+    def localise(self, image_path, depth_image_path, testname="", save_point_clouds=False,
+                 outlier_removal_config=None):
         """
         Given an image and a corresponding depth image in an unknown frame, consult the stored memory
         and output a pose in the world frame of the point clouds stored in memory.
@@ -945,8 +946,15 @@ class ObjectMemory:
 
         # NOTE: removed redundant code - refer to older commits
 
+        # Default outlier removal config
+        if outlier_removal_config == None:
+            outlier_removal_config = {
+                "radius_nb_points": 8,
+                "radius": 0.05,
+            }
+
         # Extract all objects currently seen, get embeddings, point clouds in the local unknown frame
-        _, detected_embs, detected_pointclouds = self._get_object_info(image_path, depth_image_path)
+        detected_phrases, detected_embs, detected_pointclouds = self._get_object_info(image_path, depth_image_path)
 
         # Correlate embeddings with objects in memory for all seen objects
         # TODO maybe a KNN search will do better?
@@ -968,7 +976,7 @@ class ObjectMemory:
         # Save point clouds
         if save_point_clouds:
             for i, d in enumerate(detected_pointclouds):
-                np.save("pcds/detected_pcd" + str(i) + ".npy", d)
+                np.save("pcds/%sdetected_pcd" % str(testname) + str(i) + ".npy", d)
             for j, (_, m) in enumerate(self.memory.items()):
                 np.save(f"pcds/%smemory_pcd" % str(testname) + str(j) + ".npy", m.pcd)
             print("Point clouds saved")
@@ -997,6 +1005,10 @@ class ObjectMemory:
                 min_cost = cost
                 best_assignment = assn
 
+        print("Phrases: ", detected_phrases)
+        print(cosine_similarities)
+        print("Assignment: ", best_assignment)
+
         # use ALL object pointclouds together
         all_detected_points = []
         all_memory_points = []
@@ -1013,8 +1025,12 @@ class ObjectMemory:
         all_detected_pcd.points = o3d.utility.Vector3dVector(all_detected_points.T - detected_mean)
         all_memory_pcd = o3d.geometry.PointCloud()
         all_memory_pcd.points = o3d.utility.Vector3dVector(all_memory_points.T - memory_mean)
+        
+        # remove outliers from detected pcds
+        all_detected_pcd_filtered, _ = all_detected_pcd.remove_radius_outlier(nb_points=outlier_removal_config["radius_nb_points"],
+                                                        radius=outlier_removal_config["radius"])
 
-        transform = register_point_clouds(all_detected_pcd, all_memory_pcd, voxel_size=0.1)
+        transform = register_point_clouds(all_detected_pcd_filtered, all_memory_pcd, voxel_size=0.1)
 
         R = copy.copy(transform[:3,:3])
         t = copy.copy(transform[:3, 3])
@@ -1034,11 +1050,13 @@ class LocalArgs:
     lora_path: str='models/vit_finegrained_5x40_procthor.pt'
     test_folder_path: str='/home2/aneesh.chavan/Change_detection/360_zip/'
     device: str='cuda'
-    sam_checkpoint_path: str = '/scratch/aneesh/sam_vit_h_4b8939.pth'
-    ram_pretrained_path: str = '/scratch/aneesh/ram_swin_large_14m.pth'
+    sam_checkpoint_path: str = '/scratch/aneesh.chavan/sam_vit_h_4b8939.pth'
+    ram_pretrained_path: str = '/scratch/aneesh.chavan/ram_swin_large_14m.pth'
     mem_save_dir: str = ''
 
 if __name__ == "__main__":
+    start_time = time.time()
+
     largs = tyro.cli(LocalArgs, description=__doc__)
     print(largs)
 
@@ -1057,8 +1075,8 @@ if __name__ == "__main__":
     with open(poses_json_path, 'r') as f:
         poses = json.load(f)
 
-    for target in range(1,9): # all of them
-    # for target in [6]: # sanity check
+    # for target in range(1,9): # all of them
+    for target in [6,7,8]: # sanity check
         target_num = target
         target_pose = None
         for i, view in enumerate(poses["views"]):
@@ -1087,7 +1105,9 @@ if __name__ == "__main__":
         estimated_pose = mem.localise(image_path=os.path.join(largs.test_folder_path,f"view%d/view%d.png" % 
                                                               (target_num, target_num)), 
                                       depth_image_path=(os.path.join(largs.test_folder_path,"view%d/view%d.npy" % 
-                                                                     (target_num, target_num))))
+                                                                     (target_num, target_num))),
+                                      save_point_clouds=True,
+                                      testname="pose_"+str(target)+"_")
 
         print("Target pose: ", target_pose)
         print("Estimated pose: ", estimated_pose)
@@ -1128,3 +1148,6 @@ if __name__ == "__main__":
         print("Target pose:", t)
         print("Estimated pose:", p)
         print()
+
+    end_time = time.time()
+    print(f"360zip test completed in {(end_time - start_time)//60} minutes, {(end_time - start_time)%60} seconds")

@@ -1,0 +1,622 @@
+Starting imports
+Imports completed in 17.856749773025513 seconds
+LocalArgs(lora_path='models/vit_finegrained_5x40_procthor.pt', test_folder_path='/home2/aneesh.chavan/Change_detection/360_zip/', device='cuda', sam_checkpoint_path='/scratch/aneesh.chavan/sam_vit_h_4b8939.pth', ram_pretrained_path='/scratch/aneesh.chavan/ram_swin_large_14m.pth', mem_save_dir='')
+
+Begin Memory Initialization
+/encoder/layer/0/crossattention/self/query is tied
+/encoder/layer/0/crossattention/self/key is tied
+/encoder/layer/0/crossattention/self/value is tied
+/encoder/layer/0/crossattention/output/dense is tied
+/encoder/layer/0/crossattention/output/LayerNorm is tied
+/encoder/layer/0/intermediate/dense is tied
+/encoder/layer/0/output/dense is tied
+/encoder/layer/0/output/LayerNorm is tied
+/encoder/layer/1/crossattention/self/query is tied
+/encoder/layer/1/crossattention/self/key is tied
+/encoder/layer/1/crossattention/self/value is tied
+/encoder/layer/1/crossattention/output/dense is tied
+/encoder/layer/1/crossattention/output/LayerNorm is tied
+/encoder/layer/1/intermediate/dense is tied
+/encoder/layer/1/output/dense is tied
+/encoder/layer/1/output/LayerNorm is tied
+--------------
+/scratch/aneesh.chavan/ram_swin_large_14m.pth
+--------------
+load checkpoint from /scratch/aneesh.chavan/ram_swin_large_14m.pth
+vit: swin_l
+final text_encoder_type: bert-base-uncased
+Model loaded from /home2/aneesh.chavan/.cache/huggingface/hub/models--ShilongLiu--GroundingDINO/snapshots/a94c9b567a2a374598f05c584e96798a170c56fb/groundingdino_swinb_cogcoor.pth 
+ => _IncompatibleKeys(missing_keys=[], unexpected_keys=['label_enc.weight'])
+SAM loaded
+Memory Init'ed
+
+Processing img 1
+Pose:  [-2.50000000e+00  9.02656674e-01  6.25000000e+00  0.00000000e+00
+  1.00000000e+00  0.00000000e+00 -1.33158055e-07]
+caption post ram:  armchair  .  chair  .  daybed  .  couch  .  table  .  furniture  .  hassock  .  stool  
+Object phrases detected in RGBD input of ObjectMemory.process_image ['armchair', 'armchair', 'table']
+	Current Object Phrase under consideration armchair
+	Object added
+		 armchair 
+		 ID: 0 | Names: [armchair] |  Num embs: 1 | Pcd size: (3, 5988) 
+
+	Current Object Phrase under consideration armchair
+	Found in mem (info, iou, strict_overlap):  ID: 0 | Names: [armchair] |  Num embs: 1 | Pcd size: (3, 5988) 0 0
+	Object added
+		 armchair 
+		 ID: 1 | Names: [armchair] |  Num embs: 1 | Pcd size: (3, 4528) 
+
+	Current Object Phrase under consideration table
+	Found in mem (info, iou, strict_overlap):  ID: 0 | Names: [armchair] |  Num embs: 1 | Pcd size: (3, 5988) 0 0
+	Found in mem (info, iou, strict_overlap):  ID: 1 | Names: [armchair] |  Num embs: 1 | Pcd size: (3, 4528) 0 0
+	Object added
+		 table 
+		 ID: 2 | Names: [table] |  Num embs: 1 | Pcd size: (3, 3092) 
+
+Processed
+
+Processing img 2
+Pose:  [-4.5         0.90265667  6.25        0.          0.92387958  0.
+  0.38268331]
+caption post ram:  armchair  .  chair  .  daybed  .  couch  .  table  .  furniture  .  hassock  .  stool  
+Object phrases detected in RGBD input of ObjectMemory.process_image ['armchair', 'armchair', 'table']
+	Current Object Phrase under consideration armchair
+	Found in mem (info, iou, strict_overlap):  ID: 0 | Names: [armchair] |  Num embs: 1 | Pcd size: (3, 5988) 0 0
+	Found in mem (info, iou, strict_overlap):  ID: 1 | Names: [armchair] |  Num embs: 1 | Pcd size: (3, 4528) 0.8902585231865866 0.9897359693797816
+	Object exists, aggregated to
+ ID: 1 | Names: [armchair] |  Num embs: 2 | Pcd size: (3, 11804) 
+
+	Current Object Phrase under consideration armchair
+	Found in mem (info, iou, strict_overlap):  ID: 0 | Names: [armchair] |  Num embs: 1 | Pcd size: (3, 5988) 0.9189536377986461 0.9722355366054092
+	Object exists, aggregated to
+ ID: 0 | Names: [armchair] |  Num embs: 2 | Pcd size: (3, 6865) 
+
+	Current Object Phrase under consideration table
+	Found in mem (info, iou, strict_overlap):  ID: 0 | Names: [armchair] |  Num embs: 2 | Pcd size: (3, 6865) 0 0
+	Found in mem (info, iou, strict_overlap):  ID: 1 | Names: [armchair] |  Num embs: 2 | Pcd size: (3, 11804) 0 0
+	Found in mem (info, iou, strict_overlap):  ID: 2 | Names: [table] |  Num embs: 1 | Pcd size: (3, 3092) 0.9204316636552662 0.9727081753962095
+	Object exists, aggregated to
+ ID: 2 | Names: [table] |  Num embs: 2 | Pcd size: (3, 4977) 
+
+Processed
+
+Processing img 3
+Pose:  [-4.5         0.90265667  3.25        0.          0.70710683  0.
+  0.70710673]
+caption post ram:  armchair  .  chair  .  daybed  .  couch  .  table  .  furniture  .  hassock  .  stool  
+Object phrases detected in RGBD input of ObjectMemory.process_image ['armchair', 'armchair', 'table']
+	Current Object Phrase under consideration armchair
+	Found in mem (info, iou, strict_overlap):  ID: 0 | Names: [armchair] |  Num embs: 2 | Pcd size: (3, 6865) 0 0
+	Found in mem (info, iou, strict_overlap):  ID: 1 | Names: [armchair] |  Num embs: 2 | Pcd size: (3, 11804) 0.7442585206148782 0.8932124246356069
+	Object exists, aggregated to
+ ID: 1 | Names: [armchair] |  Num embs: 3 | Pcd size: (3, 68029) 
+
+	Current Object Phrase under consideration armchair
+	Found in mem (info, iou, strict_overlap):  ID: 0 | Names: [armchair] |  Num embs: 2 | Pcd size: (3, 6865) 0.9137517491122736 0.9639084492743002
+	Object exists, aggregated to
+ ID: 0 | Names: [armchair] |  Num embs: 3 | Pcd size: (3, 7853) 
+
+	Current Object Phrase under consideration table
+	Found in mem (info, iou, strict_overlap):  ID: 0 | Names: [armchair] |  Num embs: 3 | Pcd size: (3, 7853) 0 0
+	Found in mem (info, iou, strict_overlap):  ID: 1 | Names: [armchair] |  Num embs: 3 | Pcd size: (3, 68029) 0 0
+	Found in mem (info, iou, strict_overlap):  ID: 2 | Names: [table] |  Num embs: 2 | Pcd size: (3, 4977) 0.8617223047331287 0.9355850418368694
+	Object exists, aggregated to
+ ID: 2 | Names: [table] |  Num embs: 3 | Pcd size: (3, 9798) 
+
+Processed
+
+Processing img 4
+Pose:  [-4.50000000e+00  9.02656674e-01  1.49011612e-08  0.00000000e+00
+  3.82683463e-01  0.00000000e+00  9.23879520e-01]
+caption post ram:  armchair  .  chair  .  couch  .  furniture  .  hassock  
+Object phrases detected in RGBD input of ObjectMemory.process_image ['armchair', 'armchair', 'furniture', 'furniture']
+	Current Object Phrase under consideration armchair
+	Found in mem (info, iou, strict_overlap):  ID: 0 | Names: [armchair] |  Num embs: 3 | Pcd size: (3, 7853) 0 0
+	Found in mem (info, iou, strict_overlap):  ID: 1 | Names: [armchair] |  Num embs: 3 | Pcd size: (3, 68029) 0.6602440430686126 0.9264506933338325
+	Object exists, aggregated to
+ ID: 1 | Names: [armchair] |  Num embs: 4 | Pcd size: (3, 78246) 
+
+	Current Object Phrase under consideration armchair
+	Found in mem (info, iou, strict_overlap):  ID: 0 | Names: [armchair] |  Num embs: 3 | Pcd size: (3, 7853) 0 0
+	Found in mem (info, iou, strict_overlap):  ID: 1 | Names: [armchair] |  Num embs: 4 | Pcd size: (3, 78246) 0.19474013897028145 1.0
+	Object exists, aggregated to
+ ID: 1 | Names: [armchair] |  Num embs: 5 | Pcd size: (3, 79698) 
+
+	Current Object Phrase under consideration furniture
+	Found in mem (info, iou, strict_overlap):  ID: 0 | Names: [armchair] |  Num embs: 3 | Pcd size: (3, 7853) 0 0
+	Found in mem (info, iou, strict_overlap):  ID: 1 | Names: [armchair] |  Num embs: 5 | Pcd size: (3, 79698) 0.3450771978042427 0.9990020738036907
+	Object exists, aggregated to
+ ID: 1 | Names: [armchair furniture] |  Num embs: 6 | Pcd size: (3, 88469) 
+
+	Current Object Phrase under consideration furniture
+	Object has 282 points which is under 500. Ignored.
+Processed
+
+Processing img 5
+Pose:  [-2.75000000e+00  9.02656674e-01  1.49011612e-08  0.00000000e+00
+  0.00000000e+00  0.00000000e+00  1.00000000e+00]
+caption post ram:  armchair  .  chair  .  daybed  .  couch  .  furniture  .  hassock  .  stool  
+Object phrases detected in RGBD input of ObjectMemory.process_image ['armchair', 'armchair']
+	Current Object Phrase under consideration armchair
+	Found in mem (info, iou, strict_overlap):  ID: 0 | Names: [armchair] |  Num embs: 3 | Pcd size: (3, 7853) 0 0
+	Found in mem (info, iou, strict_overlap):  ID: 1 | Names: [armchair furniture] |  Num embs: 6 | Pcd size: (3, 88469) 0.6047017627139946 0.982702779150191
+	Object exists, aggregated to
+ ID: 1 | Names: [armchair furniture] |  Num embs: 7 | Pcd size: (3, 104180) 
+
+	Current Object Phrase under consideration armchair
+	Found in mem (info, iou, strict_overlap):  ID: 0 | Names: [armchair] |  Num embs: 3 | Pcd size: (3, 7853) 0.8614806255280671 0.9709064834731138
+	Object exists, aggregated to
+ ID: 0 | Names: [armchair] |  Num embs: 4 | Pcd size: (3, 9190) 
+
+Processed
+
+Processing img 6
+This is the target pose
+Processing img 7
+Pose:  [-0.5         0.90265667  3.25        0.          0.70710678  0.
+ -0.70710678]
+caption post ram:  armchair  .  chair  .  daybed  .  couch  .  table  .  furniture  .  hassock  .  stool 
+Object phrases detected in RGBD input of ObjectMemory.process_image ['armchair', 'table']
+	Current Object Phrase under consideration armchair
+	Found in mem (info, iou, strict_overlap):  ID: 0 | Names: [armchair] |  Num embs: 4 | Pcd size: (3, 9190) 0 0
+	Found in mem (info, iou, strict_overlap):  ID: 1 | Names: [armchair furniture] |  Num embs: 7 | Pcd size: (3, 104180) 0.5643667282368445 0.9788647224775642
+	Object exists, aggregated to
+ ID: 1 | Names: [armchair furniture] |  Num embs: 8 | Pcd size: (3, 121246) 
+
+	Current Object Phrase under consideration table
+	Found in mem (info, iou, strict_overlap):  ID: 0 | Names: [armchair] |  Num embs: 4 | Pcd size: (3, 9190) 0 0
+	Found in mem (info, iou, strict_overlap):  ID: 1 | Names: [armchair furniture] |  Num embs: 8 | Pcd size: (3, 121246) 0 0
+	Found in mem (info, iou, strict_overlap):  ID: 2 | Names: [table] |  Num embs: 3 | Pcd size: (3, 9798) 0.8487874285102592 0.9620808881363321
+	Object exists, aggregated to
+ ID: 2 | Names: [table] |  Num embs: 4 | Pcd size: (3, 14506) 
+
+Processed
+
+Processing img 8
+Pose:  [-0.5         0.90265667  6.25        0.          0.92387958  0.
+ -0.38268331]
+caption post ram:  armchair  .  chair  .  table  .  furniture  .  stool 
+Object phrases detected in RGBD input of ObjectMemory.process_image ['armchair', 'armchair', 'table']
+	Current Object Phrase under consideration armchair
+	Found in mem (info, iou, strict_overlap):  ID: 0 | Names: [armchair] |  Num embs: 4 | Pcd size: (3, 9190) 0.8601488955268288 0.9564283489223812
+	Object exists, aggregated to
+ ID: 0 | Names: [armchair] |  Num embs: 5 | Pcd size: (3, 18681) 
+
+	Current Object Phrase under consideration armchair
+	Found in mem (info, iou, strict_overlap):  ID: 0 | Names: [armchair] |  Num embs: 5 | Pcd size: (3, 18681) 0 0
+	Found in mem (info, iou, strict_overlap):  ID: 1 | Names: [armchair furniture] |  Num embs: 8 | Pcd size: (3, 121246) 0.5474506534540488 1.0
+	Object exists, aggregated to
+ ID: 1 | Names: [armchair furniture] |  Num embs: 9 | Pcd size: (3, 124242) 
+
+	Current Object Phrase under consideration table
+	Found in mem (info, iou, strict_overlap):  ID: 0 | Names: [armchair] |  Num embs: 5 | Pcd size: (3, 18681) 0 0
+	Found in mem (info, iou, strict_overlap):  ID: 1 | Names: [armchair furniture] |  Num embs: 9 | Pcd size: (3, 124242) 0 0
+	Found in mem (info, iou, strict_overlap):  ID: 2 | Names: [table] |  Num embs: 4 | Pcd size: (3, 14506) 0.8628123042741002 0.9983806606777408
+	Object exists, aggregated to
+ ID: 2 | Names: [table] |  Num embs: 5 | Pcd size: (3, 15750) 
+
+Processed
+
+Objects stored in memory:
+['armchair']
+ID: 0 | Names: [armchair] |  Num embs: 5 | Pcd size: (3, 18681)
+['armchair', 'furniture']
+ID: 1 | Names: [armchair furniture] |  Num embs: 9 | Pcd size: (3, 124242)
+['table']
+ID: 2 | Names: [table] |  Num embs: 5 | Pcd size: (3, 15750)
+
+caption post ram:  armchair  .  chair  .  table  .  furniture  .  hassock  .  stool  
+Point clouds saved
+Phrases:  ['armchair', 'armchair', 'table']
+tensor([[0.8322, 0.5576, 0.7910],
+        [0.4417, 0.9517, 0.3471],
+        [0.5674, 0.0358, 0.7493]])
+Assignment:  [0, 1, 2]
+[1;33m[Open3D WARNING] Too few correspondences (445) after mutual filter, fall back to original correspondences.[0;m
+Target pose:  [-5.00000000e-01  9.02656674e-01  1.49011612e-08  0.00000000e+00
+  3.82683432e-01  0.00000000e+00 -9.23879533e-01]
+Estimated pose:  [-0.51290823  1.0404631   0.01932675  0.01589666 -0.38289475 -0.003979
+  0.92364662]
+----
+
+Processing img 1
+Pose:  [-2.50000000e+00  9.02656674e-01  6.25000000e+00  0.00000000e+00
+  1.00000000e+00  0.00000000e+00 -1.33158055e-07]
+caption post ram:  armchair  .  chair  .  daybed  .  couch  .  table  .  furniture  .  hassock  .  stool  
+Object phrases detected in RGBD input of ObjectMemory.process_image ['armchair', 'armchair', 'table']
+	Current Object Phrase under consideration armchair
+	Object added
+		 armchair 
+		 ID: 0 | Names: [armchair] |  Num embs: 1 | Pcd size: (3, 5988) 
+
+	Current Object Phrase under consideration armchair
+	Found in mem (info, iou, strict_overlap):  ID: 0 | Names: [armchair] |  Num embs: 1 | Pcd size: (3, 5988) 0 0
+	Object added
+		 armchair 
+		 ID: 1 | Names: [armchair] |  Num embs: 1 | Pcd size: (3, 4528) 
+
+	Current Object Phrase under consideration table
+	Found in mem (info, iou, strict_overlap):  ID: 0 | Names: [armchair] |  Num embs: 1 | Pcd size: (3, 5988) 0 0
+	Found in mem (info, iou, strict_overlap):  ID: 1 | Names: [armchair] |  Num embs: 1 | Pcd size: (3, 4528) 0 0
+	Object added
+		 table 
+		 ID: 2 | Names: [table] |  Num embs: 1 | Pcd size: (3, 3092) 
+
+Processed
+
+Processing img 2
+Pose:  [-4.5         0.90265667  6.25        0.          0.92387958  0.
+  0.38268331]
+caption post ram:  armchair  .  chair  .  daybed  .  couch  .  table  .  furniture  .  hassock  .  stool  
+Object phrases detected in RGBD input of ObjectMemory.process_image ['armchair', 'armchair', 'table']
+	Current Object Phrase under consideration armchair
+	Found in mem (info, iou, strict_overlap):  ID: 0 | Names: [armchair] |  Num embs: 1 | Pcd size: (3, 5988) 0 0
+	Found in mem (info, iou, strict_overlap):  ID: 1 | Names: [armchair] |  Num embs: 1 | Pcd size: (3, 4528) 0.8965740896188895 0.9962278726144559
+	Object exists, aggregated to
+ ID: 1 | Names: [armchair] |  Num embs: 2 | Pcd size: (3, 11804) 
+
+	Current Object Phrase under consideration armchair
+	Found in mem (info, iou, strict_overlap):  ID: 0 | Names: [armchair] |  Num embs: 1 | Pcd size: (3, 5988) 0.9338514107297828 0.9791223895211493
+	Object exists, aggregated to
+ ID: 0 | Names: [armchair] |  Num embs: 2 | Pcd size: (3, 6865) 
+
+	Current Object Phrase under consideration table
+	Found in mem (info, iou, strict_overlap):  ID: 0 | Names: [armchair] |  Num embs: 2 | Pcd size: (3, 6865) 0 0
+	Found in mem (info, iou, strict_overlap):  ID: 1 | Names: [armchair] |  Num embs: 2 | Pcd size: (3, 11804) 0 0
+	Found in mem (info, iou, strict_overlap):  ID: 2 | Names: [table] |  Num embs: 1 | Pcd size: (3, 3092) 0.9020672858284832 0.9617489516128699
+	Object exists, aggregated to
+ ID: 2 | Names: [table] |  Num embs: 2 | Pcd size: (3, 4977) 
+
+Processed
+
+Processing img 3
+Pose:  [-4.5         0.90265667  3.25        0.          0.70710683  0.
+  0.70710673]
+caption post ram:  armchair  .  chair  .  daybed  .  couch  .  table  .  furniture  .  hassock  .  stool  
+Object phrases detected in RGBD input of ObjectMemory.process_image ['armchair', 'armchair', 'table']
+	Current Object Phrase under consideration armchair
+	Found in mem (info, iou, strict_overlap):  ID: 0 | Names: [armchair] |  Num embs: 2 | Pcd size: (3, 6865) 0 0
+	Found in mem (info, iou, strict_overlap):  ID: 1 | Names: [armchair] |  Num embs: 2 | Pcd size: (3, 11804) 0.7559962224407935 0.8958795993297568
+	Object exists, aggregated to
+ ID: 1 | Names: [armchair] |  Num embs: 3 | Pcd size: (3, 68029) 
+
+	Current Object Phrase under consideration armchair
+	Found in mem (info, iou, strict_overlap):  ID: 0 | Names: [armchair] |  Num embs: 2 | Pcd size: (3, 6865) 0.9111735847497453 0.9653460801119426
+	Object exists, aggregated to
+ ID: 0 | Names: [armchair] |  Num embs: 3 | Pcd size: (3, 7852) 
+
+	Current Object Phrase under consideration table
+	Found in mem (info, iou, strict_overlap):  ID: 0 | Names: [armchair] |  Num embs: 3 | Pcd size: (3, 7852) 0 0
+	Found in mem (info, iou, strict_overlap):  ID: 1 | Names: [armchair] |  Num embs: 3 | Pcd size: (3, 68029) 0 0
+	Found in mem (info, iou, strict_overlap):  ID: 2 | Names: [table] |  Num embs: 2 | Pcd size: (3, 4977) 0.8582931853130564 0.9445975815461499
+	Object exists, aggregated to
+ ID: 2 | Names: [table] |  Num embs: 3 | Pcd size: (3, 9798) 
+
+Processed
+
+Processing img 4
+Pose:  [-4.50000000e+00  9.02656674e-01  1.49011612e-08  0.00000000e+00
+  3.82683463e-01  0.00000000e+00  9.23879520e-01]
+caption post ram:  armchair  .  chair  .  couch  .  furniture  .  hassock  
+Object phrases detected in RGBD input of ObjectMemory.process_image ['armchair', 'armchair', 'furniture', 'furniture']
+	Current Object Phrase under consideration armchair
+	Found in mem (info, iou, strict_overlap):  ID: 0 | Names: [armchair] |  Num embs: 3 | Pcd size: (3, 7852) 0 0
+	Found in mem (info, iou, strict_overlap):  ID: 1 | Names: [armchair] |  Num embs: 3 | Pcd size: (3, 68029) 0.6603811921493405 0.9211551742743793
+	Object exists, aggregated to
+ ID: 1 | Names: [armchair] |  Num embs: 4 | Pcd size: (3, 78246) 
+
+	Current Object Phrase under consideration armchair
+	Found in mem (info, iou, strict_overlap):  ID: 0 | Names: [armchair] |  Num embs: 3 | Pcd size: (3, 7852) 0 0
+	Found in mem (info, iou, strict_overlap):  ID: 1 | Names: [armchair] |  Num embs: 4 | Pcd size: (3, 78246) 0.19904831126218778 0.9969440161727339
+	Object exists, aggregated to
+ ID: 1 | Names: [armchair] |  Num embs: 5 | Pcd size: (3, 79699) 
+
+	Current Object Phrase under consideration furniture
+	Found in mem (info, iou, strict_overlap):  ID: 0 | Names: [armchair] |  Num embs: 3 | Pcd size: (3, 7852) 0 0
+	Found in mem (info, iou, strict_overlap):  ID: 1 | Names: [armchair] |  Num embs: 5 | Pcd size: (3, 79699) 0.3458978817443608 0.9946046316874311
+	Object exists, aggregated to
+ ID: 1 | Names: [armchair furniture] |  Num embs: 6 | Pcd size: (3, 88470) 
+
+	Current Object Phrase under consideration furniture
+	Object has 286 points which is under 500. Ignored.
+Processed
+
+Processing img 5
+Pose:  [-2.75000000e+00  9.02656674e-01  1.49011612e-08  0.00000000e+00
+  0.00000000e+00  0.00000000e+00  1.00000000e+00]
+caption post ram:  armchair  .  chair  .  daybed  .  couch  .  furniture  .  hassock  .  stool  
+Object phrases detected in RGBD input of ObjectMemory.process_image ['armchair', 'armchair']
+	Current Object Phrase under consideration armchair
+	Found in mem (info, iou, strict_overlap):  ID: 0 | Names: [armchair] |  Num embs: 3 | Pcd size: (3, 7852) 0 0
+	Found in mem (info, iou, strict_overlap):  ID: 1 | Names: [armchair furniture] |  Num embs: 6 | Pcd size: (3, 88470) 0.6090867114778735 0.9829469149687047
+	Object exists, aggregated to
+ ID: 1 | Names: [armchair furniture] |  Num embs: 7 | Pcd size: (3, 104181) 
+
+	Current Object Phrase under consideration armchair
+	Found in mem (info, iou, strict_overlap):  ID: 0 | Names: [armchair] |  Num embs: 3 | Pcd size: (3, 7852) 0.8588745964966499 0.9613626450031901
+	Object exists, aggregated to
+ ID: 0 | Names: [armchair] |  Num embs: 4 | Pcd size: (3, 9187) 
+
+Processed
+
+Processing img 6
+Pose:  [-5.00000000e-01  9.02656674e-01  1.49011612e-08  0.00000000e+00
+  3.82683432e-01  0.00000000e+00 -9.23879533e-01]
+caption post ram:  armchair  .  chair  .  table  .  furniture  .  hassock  .  stool  
+Object phrases detected in RGBD input of ObjectMemory.process_image ['armchair', 'armchair', 'table']
+	Current Object Phrase under consideration armchair
+	Found in mem (info, iou, strict_overlap):  ID: 0 | Names: [armchair] |  Num embs: 4 | Pcd size: (3, 9187) 0.8787635063180443 0.9616681078129761
+	Object exists, aggregated to
+ ID: 0 | Names: [armchair] |  Num embs: 5 | Pcd size: (3, 11520) 
+
+	Current Object Phrase under consideration armchair
+	Found in mem (info, iou, strict_overlap):  ID: 0 | Names: [armchair] |  Num embs: 5 | Pcd size: (3, 11520) 0 0
+	Found in mem (info, iou, strict_overlap):  ID: 1 | Names: [armchair furniture] |  Num embs: 7 | Pcd size: (3, 104181) 0.5506480796499348 0.9935110863421679
+	Object exists, aggregated to
+ ID: 1 | Names: [armchair furniture] |  Num embs: 8 | Pcd size: (3, 111641) 
+
+	Current Object Phrase under consideration table
+	Found in mem (info, iou, strict_overlap):  ID: 0 | Names: [armchair] |  Num embs: 5 | Pcd size: (3, 11520) 0 0
+	Found in mem (info, iou, strict_overlap):  ID: 1 | Names: [armchair furniture] |  Num embs: 8 | Pcd size: (3, 111641) 0 0
+	Found in mem (info, iou, strict_overlap):  ID: 2 | Names: [table] |  Num embs: 3 | Pcd size: (3, 9798) 0.836542116193844 0.9596313937203368
+	Object exists, aggregated to
+ ID: 2 | Names: [table] |  Num embs: 4 | Pcd size: (3, 10841) 
+
+Processed
+
+Processing img 7
+This is the target pose
+Processing img 8
+Pose:  [-0.5         0.90265667  6.25        0.          0.92387958  0.
+ -0.38268331]
+caption post ram:  armchair  .  chair  .  table  .  furniture  .  stool 
+Object phrases detected in RGBD input of ObjectMemory.process_image ['armchair', 'armchair', 'table']
+	Current Object Phrase under consideration armchair
+	Found in mem (info, iou, strict_overlap):  ID: 0 | Names: [armchair] |  Num embs: 5 | Pcd size: (3, 11520) 0.8859891404562402 0.9920198370551996
+	Object exists, aggregated to
+ ID: 0 | Names: [armchair] |  Num embs: 6 | Pcd size: (3, 21011) 
+
+	Current Object Phrase under consideration armchair
+	Found in mem (info, iou, strict_overlap):  ID: 0 | Names: [armchair] |  Num embs: 6 | Pcd size: (3, 21011) 0 0
+	Found in mem (info, iou, strict_overlap):  ID: 1 | Names: [armchair furniture] |  Num embs: 8 | Pcd size: (3, 111641) 0.5509908005351069 0.9965354492677837
+	Object exists, aggregated to
+ ID: 1 | Names: [armchair furniture] |  Num embs: 9 | Pcd size: (3, 114638) 
+
+	Current Object Phrase under consideration table
+	Found in mem (info, iou, strict_overlap):  ID: 0 | Names: [armchair] |  Num embs: 6 | Pcd size: (3, 21011) 0 0
+	Found in mem (info, iou, strict_overlap):  ID: 1 | Names: [armchair furniture] |  Num embs: 9 | Pcd size: (3, 114638) 0 0
+	Found in mem (info, iou, strict_overlap):  ID: 2 | Names: [table] |  Num embs: 4 | Pcd size: (3, 10841) 0.8407405106437021 0.9867237688807649
+	Object exists, aggregated to
+ ID: 2 | Names: [table] |  Num embs: 5 | Pcd size: (3, 12086) 
+
+Processed
+
+Objects stored in memory:
+['armchair']
+ID: 0 | Names: [armchair] |  Num embs: 6 | Pcd size: (3, 21011)
+['armchair', 'furniture']
+ID: 1 | Names: [armchair furniture] |  Num embs: 9 | Pcd size: (3, 114638)
+['table']
+ID: 2 | Names: [table] |  Num embs: 5 | Pcd size: (3, 12086)
+
+caption post ram:  armchair  .  chair  .  daybed  .  couch  .  table  .  furniture  .  hassock  .  stool 
+Point clouds saved
+Phrases:  ['armchair', 'table']
+tensor([[0.4558, 0.9589, 0.1242],
+        [0.7724, 0.4088, 0.6844]])
+Assignment:  [1, 0]
+[1;33m[Open3D WARNING] Too few correspondences (562) after mutual filter, fall back to original correspondences.[0;m
+Target pose:  [-0.5         0.90265667  3.25        0.          0.70710678  0.
+ -0.70710678]
+Estimated pose:  [-2.31845605  1.85177551  0.79745915  0.42227229  0.2820169  -0.51759038
+  0.68866013]
+----
+
+Processing img 1
+Pose:  [-2.50000000e+00  9.02656674e-01  6.25000000e+00  0.00000000e+00
+  1.00000000e+00  0.00000000e+00 -1.33158055e-07]
+caption post ram:  armchair  .  chair  .  daybed  .  couch  .  table  .  furniture  .  hassock  .  stool  
+Object phrases detected in RGBD input of ObjectMemory.process_image ['armchair', 'armchair', 'table']
+	Current Object Phrase under consideration armchair
+	Object added
+		 armchair 
+		 ID: 0 | Names: [armchair] |  Num embs: 1 | Pcd size: (3, 5988) 
+
+	Current Object Phrase under consideration armchair
+	Found in mem (info, iou, strict_overlap):  ID: 0 | Names: [armchair] |  Num embs: 1 | Pcd size: (3, 5988) 0 0
+	Object added
+		 armchair 
+		 ID: 1 | Names: [armchair] |  Num embs: 1 | Pcd size: (3, 4528) 
+
+	Current Object Phrase under consideration table
+	Found in mem (info, iou, strict_overlap):  ID: 0 | Names: [armchair] |  Num embs: 1 | Pcd size: (3, 5988) 0 0
+	Found in mem (info, iou, strict_overlap):  ID: 1 | Names: [armchair] |  Num embs: 1 | Pcd size: (3, 4528) 0 0
+	Object added
+		 table 
+		 ID: 2 | Names: [table] |  Num embs: 1 | Pcd size: (3, 3092) 
+
+Processed
+
+Processing img 2
+Pose:  [-4.5         0.90265667  6.25        0.          0.92387958  0.
+  0.38268331]
+caption post ram:  armchair  .  chair  .  daybed  .  couch  .  table  .  furniture  .  hassock  .  stool  
+Object phrases detected in RGBD input of ObjectMemory.process_image ['armchair', 'armchair', 'table']
+	Current Object Phrase under consideration armchair
+	Found in mem (info, iou, strict_overlap):  ID: 0 | Names: [armchair] |  Num embs: 1 | Pcd size: (3, 5988) 0 0
+	Found in mem (info, iou, strict_overlap):  ID: 1 | Names: [armchair] |  Num embs: 1 | Pcd size: (3, 4528) 0.906369337234387 0.9968525894453498
+	Object exists, aggregated to
+ ID: 1 | Names: [armchair] |  Num embs: 2 | Pcd size: (3, 11804) 
+
+	Current Object Phrase under consideration armchair
+	Found in mem (info, iou, strict_overlap):  ID: 0 | Names: [armchair] |  Num embs: 1 | Pcd size: (3, 5988) 0.9334330513294634 0.9864298945911587
+	Object exists, aggregated to
+ ID: 0 | Names: [armchair] |  Num embs: 2 | Pcd size: (3, 6863) 
+
+	Current Object Phrase under consideration table
+	Found in mem (info, iou, strict_overlap):  ID: 0 | Names: [armchair] |  Num embs: 2 | Pcd size: (3, 6863) 0 0
+	Found in mem (info, iou, strict_overlap):  ID: 1 | Names: [armchair] |  Num embs: 2 | Pcd size: (3, 11804) 0 0
+	Found in mem (info, iou, strict_overlap):  ID: 2 | Names: [table] |  Num embs: 1 | Pcd size: (3, 3092) 0.9098544763347736 0.9703051312845248
+	Object exists, aggregated to
+ ID: 2 | Names: [table] |  Num embs: 2 | Pcd size: (3, 4977) 
+
+Processed
+
+Processing img 3
+Pose:  [-4.5         0.90265667  3.25        0.          0.70710683  0.
+  0.70710673]
+caption post ram:  armchair  .  chair  .  daybed  .  couch  .  table  .  furniture  .  hassock  .  stool  
+Object phrases detected in RGBD input of ObjectMemory.process_image ['armchair', 'armchair', 'table']
+	Current Object Phrase under consideration armchair
+	Found in mem (info, iou, strict_overlap):  ID: 0 | Names: [armchair] |  Num embs: 2 | Pcd size: (3, 6863) 0 0
+	Found in mem (info, iou, strict_overlap):  ID: 1 | Names: [armchair] |  Num embs: 2 | Pcd size: (3, 11804) 0.7559239388178807 0.8880854899319696
+	Object exists, aggregated to
+ ID: 1 | Names: [armchair] |  Num embs: 3 | Pcd size: (3, 68029) 
+
+	Current Object Phrase under consideration armchair
+	Found in mem (info, iou, strict_overlap):  ID: 0 | Names: [armchair] |  Num embs: 2 | Pcd size: (3, 6863) 0.9048475133760645 0.965052428578416
+	Object exists, aggregated to
+ ID: 0 | Names: [armchair] |  Num embs: 3 | Pcd size: (3, 7846) 
+
+	Current Object Phrase under consideration table
+	Found in mem (info, iou, strict_overlap):  ID: 0 | Names: [armchair] |  Num embs: 3 | Pcd size: (3, 7846) 0 0
+	Found in mem (info, iou, strict_overlap):  ID: 1 | Names: [armchair] |  Num embs: 3 | Pcd size: (3, 68029) 0 0
+	Found in mem (info, iou, strict_overlap):  ID: 2 | Names: [table] |  Num embs: 2 | Pcd size: (3, 4977) 0.8471983806321995 0.9342065360232858
+	Object exists, aggregated to
+ ID: 2 | Names: [table] |  Num embs: 3 | Pcd size: (3, 9797) 
+
+Processed
+
+Processing img 4
+Pose:  [-4.50000000e+00  9.02656674e-01  1.49011612e-08  0.00000000e+00
+  3.82683463e-01  0.00000000e+00  9.23879520e-01]
+caption post ram:  armchair  .  chair  .  couch  .  furniture  .  hassock  
+Object phrases detected in RGBD input of ObjectMemory.process_image ['armchair', 'armchair', 'furniture', 'furniture']
+	Current Object Phrase under consideration armchair
+	Found in mem (info, iou, strict_overlap):  ID: 0 | Names: [armchair] |  Num embs: 3 | Pcd size: (3, 7846) 0 0
+	Found in mem (info, iou, strict_overlap):  ID: 1 | Names: [armchair] |  Num embs: 3 | Pcd size: (3, 68029) 0.6608834836464217 0.9252152908932416
+	Object exists, aggregated to
+ ID: 1 | Names: [armchair] |  Num embs: 4 | Pcd size: (3, 78246) 
+
+	Current Object Phrase under consideration armchair
+	Found in mem (info, iou, strict_overlap):  ID: 0 | Names: [armchair] |  Num embs: 3 | Pcd size: (3, 7846) 0 0
+	Found in mem (info, iou, strict_overlap):  ID: 1 | Names: [armchair] |  Num embs: 4 | Pcd size: (3, 78246) 0.19476297577526594 0.9953146266852978
+	Object exists, aggregated to
+ ID: 1 | Names: [armchair] |  Num embs: 5 | Pcd size: (3, 79699) 
+
+	Current Object Phrase under consideration furniture
+	Found in mem (info, iou, strict_overlap):  ID: 0 | Names: [armchair] |  Num embs: 3 | Pcd size: (3, 7846) 0 0
+	Found in mem (info, iou, strict_overlap):  ID: 1 | Names: [armchair] |  Num embs: 5 | Pcd size: (3, 79699) 0.3439764601880099 0.999161853252777
+	Object exists, aggregated to
+ ID: 1 | Names: [armchair furniture] |  Num embs: 6 | Pcd size: (3, 88470) 
+
+	Current Object Phrase under consideration furniture
+	Object has 285 points which is under 500. Ignored.
+Processed
+
+Processing img 5
+Pose:  [-2.75000000e+00  9.02656674e-01  1.49011612e-08  0.00000000e+00
+  0.00000000e+00  0.00000000e+00  1.00000000e+00]
+caption post ram:  armchair  .  chair  .  daybed  .  couch  .  furniture  .  hassock  .  stool  
+Object phrases detected in RGBD input of ObjectMemory.process_image ['armchair', 'armchair']
+	Current Object Phrase under consideration armchair
+	Found in mem (info, iou, strict_overlap):  ID: 0 | Names: [armchair] |  Num embs: 3 | Pcd size: (3, 7846) 0 0
+	Found in mem (info, iou, strict_overlap):  ID: 1 | Names: [armchair furniture] |  Num embs: 6 | Pcd size: (3, 88470) 0.610581513348748 0.9860123618165084
+	Object exists, aggregated to
+ ID: 1 | Names: [armchair furniture] |  Num embs: 7 | Pcd size: (3, 104181) 
+
+	Current Object Phrase under consideration armchair
+	Found in mem (info, iou, strict_overlap):  ID: 0 | Names: [armchair] |  Num embs: 3 | Pcd size: (3, 7846) 0.8530894418750922 0.9574448133869266
+	Object exists, aggregated to
+ ID: 0 | Names: [armchair] |  Num embs: 4 | Pcd size: (3, 9183) 
+
+Processed
+
+Processing img 6
+Pose:  [-5.00000000e-01  9.02656674e-01  1.49011612e-08  0.00000000e+00
+  3.82683432e-01  0.00000000e+00 -9.23879533e-01]
+caption post ram:  armchair  .  chair  .  table  .  furniture  .  hassock  .  stool  
+Object phrases detected in RGBD input of ObjectMemory.process_image ['armchair', 'armchair', 'table']
+	Current Object Phrase under consideration armchair
+	Found in mem (info, iou, strict_overlap):  ID: 0 | Names: [armchair] |  Num embs: 4 | Pcd size: (3, 9183) 0.8734913874653568 0.9731691469462569
+	Object exists, aggregated to
+ ID: 0 | Names: [armchair] |  Num embs: 5 | Pcd size: (3, 11516) 
+
+	Current Object Phrase under consideration armchair
+	Found in mem (info, iou, strict_overlap):  ID: 0 | Names: [armchair] |  Num embs: 5 | Pcd size: (3, 11516) 0 0
+	Found in mem (info, iou, strict_overlap):  ID: 1 | Names: [armchair furniture] |  Num embs: 7 | Pcd size: (3, 104181) 0.5552654836783071 0.9904387397891583
+	Object exists, aggregated to
+ ID: 1 | Names: [armchair furniture] |  Num embs: 8 | Pcd size: (3, 111641) 
+
+	Current Object Phrase under consideration table
+	Found in mem (info, iou, strict_overlap):  ID: 0 | Names: [armchair] |  Num embs: 5 | Pcd size: (3, 11516) 0 0
+	Found in mem (info, iou, strict_overlap):  ID: 1 | Names: [armchair furniture] |  Num embs: 8 | Pcd size: (3, 111641) 0 0
+	Found in mem (info, iou, strict_overlap):  ID: 2 | Names: [table] |  Num embs: 3 | Pcd size: (3, 9797) 0.7956642897278094 0.9374406798074408
+	Object exists, aggregated to
+ ID: 2 | Names: [table] |  Num embs: 4 | Pcd size: (3, 10839) 
+
+Processed
+
+Processing img 7
+Pose:  [-0.5         0.90265667  3.25        0.          0.70710678  0.
+ -0.70710678]
+caption post ram:  armchair  .  chair  .  daybed  .  couch  .  table  .  furniture  .  hassock  .  stool 
+Object phrases detected in RGBD input of ObjectMemory.process_image ['armchair', 'table']
+	Current Object Phrase under consideration armchair
+	Found in mem (info, iou, strict_overlap):  ID: 0 | Names: [armchair] |  Num embs: 5 | Pcd size: (3, 11516) 0 0
+	Found in mem (info, iou, strict_overlap):  ID: 1 | Names: [armchair furniture] |  Num embs: 8 | Pcd size: (3, 111641) 0.5783085080621664 0.9929933864244032
+	Object exists, aggregated to
+ ID: 1 | Names: [armchair furniture] |  Num embs: 9 | Pcd size: (3, 128707) 
+
+	Current Object Phrase under consideration table
+	Found in mem (info, iou, strict_overlap):  ID: 0 | Names: [armchair] |  Num embs: 5 | Pcd size: (3, 11516) 0 0
+	Found in mem (info, iou, strict_overlap):  ID: 1 | Names: [armchair furniture] |  Num embs: 9 | Pcd size: (3, 128707) 0 0
+	Found in mem (info, iou, strict_overlap):  ID: 2 | Names: [table] |  Num embs: 4 | Pcd size: (3, 10839) 0.8591756979658732 1.0
+	Object exists, aggregated to
+ ID: 2 | Names: [table] |  Num embs: 5 | Pcd size: (3, 15548) 
+
+Processed
+
+Processing img 8
+This is the target pose
+Objects stored in memory:
+['armchair']
+ID: 0 | Names: [armchair] |  Num embs: 5 | Pcd size: (3, 11516)
+['armchair', 'furniture']
+ID: 1 | Names: [armchair furniture] |  Num embs: 9 | Pcd size: (3, 128707)
+['table']
+ID: 2 | Names: [table] |  Num embs: 5 | Pcd size: (3, 15548)
+
+caption post ram:  armchair  .  chair  .  table  .  furniture  .  stool 
+Point clouds saved
+Phrases:  ['armchair', 'armchair', 'table']
+tensor([[0.5809, 0.4647, 0.5220],
+        [0.6394, 0.6884, 0.4718],
+        [0.7715, 0.1341, 0.8759]])
+Assignment:  [0, 1, 2]
+[1;33m[Open3D WARNING] Too few correspondences (603) after mutual filter, fall back to original correspondences.[0;m
+Target pose:  [-0.5         0.90265667  6.25        0.          0.92387958  0.
+ -0.38268331]
+Estimated pose:  [-0.51004601  1.5602278   5.91238264  0.12282058  0.910974   -0.17249461
+ -0.35395917]
+----
+
+Pose:  1
+Target pose: [-5.00000000e-01  9.02656674e-01  1.49011612e-08  0.00000000e+00
+  3.82683432e-01  0.00000000e+00 -9.23879533e-01]
+Estimated pose: [-0.51290823  1.0404631   0.01932675  0.01589666 -0.38289475 -0.003979
+  0.92364662]
+
+Pose:  2
+Target pose: [-0.5         0.90265667  3.25        0.          0.70710678  0.
+ -0.70710678]
+Estimated pose: [-2.31845605  1.85177551  0.79745915  0.42227229  0.2820169  -0.51759038
+  0.68866013]
+
+Pose:  3
+Target pose: [-0.5         0.90265667  6.25        0.          0.92387958  0.
+ -0.38268331]
+Estimated pose: [-0.51004601  1.5602278   5.91238264  0.12282058  0.910974   -0.17249461
+ -0.35395917]
+
+360zip test completed in 3.0 minutes, 9.060223579406738 seconds
