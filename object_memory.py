@@ -661,19 +661,39 @@ class ObjectInfo:
         self.embeddings += info.embeddings
         self.pcd = np.concatenate([self.pcd, info.pcd], axis=-1)
 
-    def addInfo(self, name, embedding, pcd):
+    def addInfo(self, name, embedding, pcd, align=True, max_iteration=30, max_correspondence_distance=0.05):
         """
         Adds information for the object, including name, embedding, and point cloud data.
+        Added point cloud data is aligned with a fine-grained point-to-point ICP if the align flag is true
 
         Parameters:
         - name (str): Object name to be added.
         - embedding (numpy.ndarray): Object embedding to be added.
-        - pcd (numpy.ndarray): Object point cloud data to be added.
+        - pcd (numpy.ndarray): Object point cloud data to be added
+        - align (bool): Should the new point information be ailgned to the existing points.
         """
         if name not in self.names:
             self.names.append(name)
         self.embeddings.append(embedding)
-        self.pcd = np.concatenate([self.pcd, pcd], axis=-1)
+
+        if not align:
+            self.pcd = np.concatenate([self.pcd, pcd], axis=-1)
+        else:
+            memPcd = o3d.geometry.PointCloud()
+            newPcd = o3d.geometry.PointCloud()
+
+            memPcd.points = o3d.utility.Vector3dVector(self.points.T)
+            newPcd.points = o3d.utility.Vector3dVector(pcd.T)
+
+            # Perform ICP registration
+            reg_p2p = o3d.pipelines.registration.registration_icp(
+                source=newPcd,
+                target=memPcd,
+                max_correspondence_distance=max_correspondence_distance,  # Adjust as needed based on your data
+                estimation_method=o3d.pipelines.registration.TransformationEstimationPointToPoint(),
+                criteria=o3d.pipelines.registration.ICPConvergenceCriteria(max_iteration=30)
+            )
+
 
     def computeMeans(self):
         """
@@ -825,8 +845,6 @@ class ObjectMemory:
                 else:
                     print('Object exists, aggregated to\n', info, '\n')
             
-            # TODO consider downsampling points (optimisation)
-
     """
     Runs through all objects stored in memory, consolidates objects that have a sufficient overlap
     Performs uniform downsampling on all pointclouds as well
@@ -845,7 +863,7 @@ class ObjectMemory:
                 overlap3d = calculate_strict_overlap(new_obj_info.pcd, obj_pcd)
 
                 # object overlaps enough to be consolidated with the object in new memory
-                if IoU3d > bounding_box_threshold and overlap3d > occlusion_overlap_threshold:
+                if IoU3d > bounding_box_threshold or overlap3d > occlusion_overlap_threshold:
                     match_found = True
                     break
             
