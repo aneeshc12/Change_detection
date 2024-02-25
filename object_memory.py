@@ -874,44 +874,6 @@ class ObjectMemory:
 
         return obj_phrases, embs, obj_pointclouds
 
-    """
-    Runs through all objects stored in memory, consolidates objects that have a sufficient overlap
-    Performs uniform downsampling on all pointclouds as well
-
-    Consolidates memory in place
-    """
-    def consolidate_memory(self, bounding_box_threshold=0.3,  occlusion_overlap_threshold=0.9, downsample_voxel_size=0.01):
-        new_memory = dict()
-        for obj_id, obj_info in self.memory.items():
-            obj_pcd = obj_info.pcd
-
-            # check all objects in new_memory to try and match them
-            match_found = False
-            for new_id, new_obj_info in new_memory.items():
-                IoU3d = calculate_3d_IoU(new_obj_info.pcd, obj_pcd)
-                overlap3d = calculate_strict_overlap(new_obj_info.pcd, obj_pcd)
-
-                # object overlaps enough to be consolidated with the object in new memory
-                if IoU3d > bounding_box_threshold and overlap3d > occlusion_overlap_threshold:
-                    match_found = True
-                    break
-            
-            if match_found:
-                new_memory[new_id] += obj_info
-            else:
-                new_memory[len(new_memory)] = self.memory[obj_id]
-
-        del self.memory
-        self.memory = new_memory
-
-        # downsample all pcds
-        tempPcd = o3d.geometry.PointCloud()
-        for obj_id in self.memory:
-            tempPcd.points = o3d.utility.Vector3dVector(self.memory[obj_id].pcd.T)
-            tempPcd = tempPcd.voxel_down_sample(downsample_voxel_size)
-            self.memory[obj_id].pcd = np.array(tempPcd.points).T
-
-
 
     def process_image(self, image_path=None, depth_image_path=None, pose=None, verbose=True,
                       bounding_box_threshold=0.3,  occlusion_overlap_threshold=0.9, testname="", 
@@ -1075,7 +1037,9 @@ class ObjectMemory:
 
 
     def localise(self, image_path, depth_image_path, testname="", save_point_clouds=False,
-                 outlier_removal_config=None):
+                 outlier_removal_config=None, 
+                 fpfh_global_dist_factor = 1.5, fpfh_local_dist_factor = 0.4, 
+                 fpfh_voxel_size = 0.05):
         """
         Given an image and a corresponding depth image in an unknown frame, consult the stored memory
         and output a pose in the world frame of the point clouds stored in memory.
@@ -1176,7 +1140,9 @@ class ObjectMemory:
         all_detected_pcd_filtered, _ = all_detected_pcd.remove_radius_outlier(nb_points=outlier_removal_config["radius_nb_points"],
                                                         radius=outlier_removal_config["radius"])
 
-        transform = register_point_clouds(all_detected_pcd_filtered, all_memory_pcd, voxel_size=0.05)
+        transform = register_point_clouds(all_detected_pcd_filtered, all_memory_pcd, 
+                                          voxel_size = fpfh_voxel_size, global_dist_factor = fpfh_global_dist_factor, 
+                                          local_dist_factor = fpfh_local_dist_factor)
 
         R = copy.copy(transform[:3,:3])
         t = copy.copy(transform[:3, 3])

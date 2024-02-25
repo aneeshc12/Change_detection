@@ -19,6 +19,9 @@ class LocalArgs:
     down_sample_voxel_size: float = 0
     create_ext_mesh: bool = False
     save_point_clouds: bool = False
+    fpfh_global_dist_factor: float = 1.5
+    fpfh_local_dist_factor: float = 0.4
+    fpfh_voxel_size: float = 0.05
 
     def to_dict(self):
         return {
@@ -32,6 +35,9 @@ class LocalArgs:
             "down_sample_voxel_size": self.down_sample_voxel_size,
             "create_ext_mesh": self.create_ext_mesh,
             "save_point_clouds": self.save_point_clouds,
+            "fpfh_global_dist_factor": self.fpfh_global_dist_factor,
+            "fpfh_local_dist_factor": self.fpfh_local_dist_factor,
+            "fpfh_voxel_size": self.fpfh_voxel_size,
         }
 
 if __name__ == "__main__":
@@ -73,6 +79,8 @@ if __name__ == "__main__":
         print(f"Downsampling using voxel size as {largs.down_sample_voxel_size}")
         mem.downsample_all_objects(voxel_size=largs.down_sample_voxel_size, use_external_mesh=largs.create_ext_mesh)
 
+    print("Consolidating memory")
+    mem.consolidate_memory()
     mem.view_memory()
     print("Memory formed")
 
@@ -92,9 +100,12 @@ if __name__ == "__main__":
         print(f"With {target_num} as target")
         estimated_pose = mem.localise(image_path=os.path.join(largs.test_folder_path,f"view%d/view%d.png" % 
                                                               (target_num, target_num)), 
-                                      depth_image_path=(os.path.join(largs.test_folder_path,"view%d/view%d.npy" % 
-                                                                     (target_num, target_num))),
-                                      save_point_clouds=largs.save_point_clouds)
+                                        depth_image_path=(os.path.join(largs.test_folder_path,"view%d/view%d.npy" % 
+                                                                        (target_num, target_num))),
+                                        save_point_clouds=largs.save_point_clouds,
+                                        fpfh_global_dist_factor = largs.fpfh_global_dist_factor, 
+                                        fpfh_local_dist_factor = largs.fpfh_global_dist_factor, 
+                                        fpfh_voxel_size = largs.fpfh_voxel_size)
 
         print("Target pose: ", target_pose)
         print("Estimated pose: ", estimated_pose)
@@ -176,3 +187,5 @@ if __name__ == "__main__":
             json.dump(results, json_file)
 
         print(f"Saved results to {largs.save_results_path}")
+
+    torch.cuda.empty_cache()
