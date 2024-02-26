@@ -174,7 +174,7 @@ if __name__ == "__main__":
 
         results = {
             "peak_gpu_usage": max_cuda_memory_GBs,
-            "memory_usage": max_cuda_memory_GBs,
+            "memory_usage": memory_info_GBs,
             "total_time": end_time - start_time,
             "target_poses": [arr.tolist() for arr in tgt],
             "estimated_poses": [arr.tolist() for arr in pred],

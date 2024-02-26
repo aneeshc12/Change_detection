@@ -1,5 +1,6 @@
 from object_memory import *
 import ast, pickle, shutil
+import psutil
 
 @dataclass
 class LocalArgs:
@@ -75,6 +76,11 @@ if __name__=="__main__":
                                 image_path = image_file_path, 
                                 depth_image_path = depth_file_path, 
                                 pose=pose)
+            
+            pid = psutil.Process()
+            memory_info = pid.memory_info()
+            memory_info_GBs = memory_info.rss / (1e3 ** 3)
+            print(f"Memory usage: {memory_info_GBs:.3f} GB")
 
     pcd_list = []
     

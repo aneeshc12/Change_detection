@@ -578,7 +578,9 @@ class QuaternionOps:
     @staticmethod
     def quaternion_error(q1, q2): # returns orientation angle between the two
         q_del = QuaternionOps.quaternion_multiply(QuaternionOps.quaternion_conjugate(q1), q2)
-        return np.abs(arctan2(np.linalg.norm(q_del[1:]), q_del[0]))
+        q_del_other_way = QuaternionOps.quaternion_multiply(QuaternionOps.quaternion_conjugate(q1), -q2)
+        return min(np.abs(arctan2(np.linalg.norm(q_del[1:]), q_del[0])),
+                   np.abs(arctan2(np.linalg.norm(q_del_other_way[1:]), q_del_other_way[0])))
 
 def transform_pcd_to_global_frame(pcd, pose):
     """
@@ -878,7 +880,7 @@ class ObjectMemory:
     def process_image(self, image_path=None, depth_image_path=None, pose=None, verbose=True,
                       bounding_box_threshold=0.3,  occlusion_overlap_threshold=0.9, testname="", 
                       outlier_removal_config=None, min_points = 500, pose_noise = {'trans': 0.0005, 'rot': 0.0005},
-                      depth_noise = 0.003):
+                      depth_noise = 0.003, lora_threshold = 0.5):
         """
         Processes an RGB-D image, detects objects within and updates the object memory.
 
@@ -929,8 +931,9 @@ class ObjectMemory:
             return noisy_array
         
         # adding noise to pose
-        # pose[:3] = add_noise(pose[:3], pose_noise['trans'])
-        # pose[3:] = add_noise(pose[3:], pose_noise['rot'])
+        pose[:3] = add_noise(pose[:3], pose_noise['trans'])
+        pose[3:] = add_noise(pose[3:], pose_noise['rot'])
+
         # normalizing quaternion
         def normalize_quaternion(quaternion):
             norm = np.linalg.norm(quaternion)
@@ -971,7 +974,9 @@ class ObjectMemory:
                     print("\tFound in mem (info, iou, strict_overlap): ", info, IoU3d, overlap3d)
 
                 # if the iou is above the threshold, consider it to be the same object/instance
-                if IoU3d > bounding_box_threshold or overlap3d > occlusion_overlap_threshold:
+                    
+                if (IoU3d > bounding_box_threshold or overlap3d > occlusion_overlap_threshold) \
+                    and np.dot(info.mean_emb, emb) > lora_threshold:
                     info.addInfo(obj_phrase ,emb, q_pcd, align=False)
                     obj_exists = True
                     break
@@ -991,6 +996,9 @@ class ObjectMemory:
             else:
                 if verbose:
                     print('\tObject exists, aggregated to\n', info, '\n')
+
+        for _, m in self.memory.items():
+            m.computeMeans()  # Update object info means
         
         # TODO consider downsampling points (optimisation)
                     
