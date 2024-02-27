@@ -52,4 +52,4 @@ def register_point_clouds(source, target, voxel_size, global_dist_factor = 1.5, 
         o3d.pipelines.registration.TransformationEstimationPointToPoint()
     )
 
-    return result_icp.transformation, result_icp.fitness
+    return result_icp.transformation, result_icp.inlier_rmse
