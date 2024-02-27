@@ -819,15 +819,15 @@ class ObjectMemory:
             self.loraModule.load_lora_ckpt_from_file(lora_path, "5x40")
 
         self.num_objects_stored = 0
-        self.memory = dict() # store ObjectInfo classes here
+        self.memory = [] # store ObjectInfo classes here
 
     def view_memory(self):
         """
         Prints information about the objects stored in memory.
         """
         print("Objects stored in memory:")
-        for _, info in self.memory.items():
-            print(info.names)
+        for info in self.memory:
+            print(info.id, info.names)
             print(info)
         print()
 
@@ -836,7 +836,7 @@ class ObjectMemory:
         Clears the memory by resetting the number of stored objects and the memory dictionary.
         """
         self.num_objects_stored = 0
-        self.memory = dict()
+        self.memory = []
 
     def _get_object_info(self, image_path, depth_image_path):
         """
@@ -962,7 +962,7 @@ class ObjectMemory:
 
             obj_exists = False
 
-            for obj_id, info in self.memory.items():
+            for info in self.memory:
                 object_pcd = info.pcd
                 IoU3d = calculate_3d_IoU(q_pcd, object_pcd)
                 overlap3d = calculate_strict_overlap(q_pcd, object_pcd)
@@ -986,7 +986,7 @@ class ObjectMemory:
                 if verbose:
                     print('\tObject added\n\t\t', obj_phrase, '\n\t\t', new_obj_info, '\n')
                 
-                self.memory[self.num_objects_stored] = new_obj_info
+                self.memory.append(new_obj_info)
                 self.num_objects_stored += 1
             else:
                 if verbose:
@@ -995,7 +995,7 @@ class ObjectMemory:
         # TODO consider downsampling points (optimisation)
                     
     def downsample_all_objects(self, voxel_size = 0.001, use_external_mesh = False):
-        for _, info in self.memory.items():
+        for info in self.memory:
             info.downsample(voxel_size, use_external_mesh)
 
     """
@@ -1005,13 +1005,13 @@ class ObjectMemory:
     Consolidates memory in place
     """
     def consolidate_memory(self, bounding_box_threshold=0.3,  occlusion_overlap_threshold=0.9, downsample_voxel_size=0.01):
-        new_memory = dict()
-        for obj_id, obj_info in self.memory.items():
+        new_memory = []
+        for obj_id, obj_info in enumerate(self.memory):
             obj_pcd = obj_info.pcd
 
             # check all objects in new_memory to try and match them
             match_found = False
-            for new_id, new_obj_info in new_memory.items():
+            for new_id, new_obj_info in enumerate(new_memory):
                 IoU3d = calculate_3d_IoU(new_obj_info.pcd, obj_pcd)
                 overlap3d = calculate_strict_overlap(new_obj_info.pcd, obj_pcd)
 
@@ -1023,15 +1023,15 @@ class ObjectMemory:
             if match_found:
                 new_memory[new_id] += obj_info
             else:
-                new_memory[len(new_memory)] = self.memory[obj_id]
+                new_memory.append(self.memory[obj_id])
 
         del self.memory
         self.memory = new_memory
 
         # downsample all pcds
         tempPcd = o3d.geometry.PointCloud()
-        for obj_id in self.memory:
-            tempPcd.points = o3d.utility.Vector3dVector(self.memory[obj_id].pcd.T)
+        for obj_id, obj_info in enumerate(self.memory):
+            tempPcd.points = o3d.utility.Vector3dVector(obj_info.pcd.T)
             tempPcd = tempPcd.voxel_down_sample(downsample_voxel_size)
             self.memory[obj_id].pcd = np.array(tempPcd.points).T
 
@@ -1068,9 +1068,9 @@ class ObjectMemory:
 
         # Correlate embeddings with objects in memory for all seen objects
         # TODO maybe a KNN search will do better?
-        for _, m in self.memory.items():
+        for m in self.memory:
             m.computeMeans()  # Update object info means
-        memory_embs = torch.Tensor([m.mean_emb for _, m in self.memory.items()]).to(self.device)
+        memory_embs = torch.Tensor([m.mean_emb for m in self.memory]).to(self.device)
 
         if len(detected_embs) > len(memory_embs):
             detected_embs = detected_embs[:len(memory_embs)]
@@ -1087,7 +1087,7 @@ class ObjectMemory:
         if save_point_clouds:
             for i, d in enumerate(detected_pointclouds):
                 np.save("pcds/%sdetected_pcd" % str(testname) + str(i) + ".npy", d)
-            for j, (_, m) in enumerate(self.memory.items()):
+            for j, m in enumerate(self.memory):
                 np.save(f"pcds/%smemory_pcd" % str(testname) + str(j) + ".npy", m.pcd)
             print("Point clouds saved")
 
@@ -1191,7 +1191,7 @@ if __name__ == "__main__":
 
     # tests = [i for i in range(1,9)] # all of them
     # tests = [6,7,8]  # sanity check
-    tests = [7]  # sanity check
+    tests = [6, 7]  # sanity check
     for target in tests:
         target_num = target
         target_pose = None
