@@ -1039,7 +1039,7 @@ class ObjectMemory:
     def localise(self, image_path, depth_image_path, testname="", save_point_clouds=False,
                  outlier_removal_config=None, 
                  fpfh_global_dist_factor = 1.5, fpfh_local_dist_factor = 0.4, 
-                 fpfh_voxel_size = 0.05):
+                 fpfh_voxel_size = 0.05, topK=5):
         """
         Given an image and a corresponding depth image in an unknown frame, consult the stored memory
         and output a pose in the world frame of the point clouds stored in memory.
@@ -1097,52 +1097,48 @@ class ObjectMemory:
         j = JCBB(cosine_similarities, R_matrices)
         assns = j.get_assignments()
 
-        # calculate paths for all assingments, pick the best one
-        best_assignment = assns[0]
-        min_cost = 1e11
-
-        for assn in assns:
-            cost = 0
-
-            ### COST FUNCTION ###
-            for i,j in enumerate(assn):
-                cost += (1 - cosine_similarities[i,j])      
-            cost = np.log(cost) * 1./len(assn) # normalized product of cosine DIFFERENCES
-            # NOTE: diving by length of assignments doesn't matter as all are same rn
-
-            # get min cost
-            if cost < min_cost:
-                min_cost = cost
-                best_assignment = assn
+        # only consider the top K assingments
+        assns_to_consider = [assn[0] for assn in assns[:topK]]
 
         print("Phrases: ", detected_phrases)
         print(cosine_similarities)
-        print("Assignment: ", best_assignment)
+        print("Assignments being considered: ", assns_to_consider)
 
-        # use ALL object pointclouds together
-        all_detected_points = []
-        all_memory_points = []
-        for i,j in enumerate(best_assignment):
-            all_detected_points.append(detected_pointclouds[i])
-            all_memory_points.append(self.memory[j].pcd)
-        all_detected_points = np.concatenate(all_detected_points, axis=-1)
-        all_memory_points = np.concatenate(all_memory_points, axis=-1)
+        assn_data = [ [assn, None, None] for assn in assns_to_consider ]
 
-        # centering all the pointclouds
-        detected_mean = np.mean(all_detected_points, axis=-1)
-        memory_mean = np.mean(all_memory_points, axis=-1)
-        all_detected_pcd = o3d.geometry.PointCloud()
-        all_detected_pcd.points = o3d.utility.Vector3dVector(all_detected_points.T - detected_mean)
-        all_memory_pcd = o3d.geometry.PointCloud()
-        all_memory_pcd.points = o3d.utility.Vector3dVector(all_memory_points.T - memory_mean)
-        
-        # remove outliers from detected pcds
-        all_detected_pcd_filtered, _ = all_detected_pcd.remove_radius_outlier(nb_points=outlier_removal_config["radius_nb_points"],
-                                                        radius=outlier_removal_config["radius"])
+        # go through all top K assingments, record ICP costs
+        for assn_num, assn in enumerate(assns_to_consider):
+            # use ALL object pointclouds together
+            all_detected_points = []
+            all_memory_points = []
+            for i,j in enumerate(assn):
+                all_detected_points.append(detected_pointclouds[i])
+                all_memory_points.append(self.memory[j].pcd)
+            all_detected_points = np.concatenate(all_detected_points, axis=-1)
+            all_memory_points = np.concatenate(all_memory_points, axis=-1)
 
-        transform = register_point_clouds(all_detected_pcd_filtered, all_memory_pcd, 
-                                          voxel_size = fpfh_voxel_size, global_dist_factor = fpfh_global_dist_factor, 
-                                          local_dist_factor = fpfh_local_dist_factor)
+            # centering all the pointclouds
+            detected_mean = np.mean(all_detected_points, axis=-1)
+            memory_mean = np.mean(all_memory_points, axis=-1)
+            all_detected_pcd = o3d.geometry.PointCloud()
+            all_detected_pcd.points = o3d.utility.Vector3dVector(all_detected_points.T - detected_mean)
+            all_memory_pcd = o3d.geometry.PointCloud()
+            all_memory_pcd.points = o3d.utility.Vector3dVector(all_memory_points.T - memory_mean)
+            
+            # remove outliers from detected pcds
+            all_detected_pcd_filtered, _ = all_detected_pcd.remove_radius_outlier(nb_points=outlier_removal_config["radius_nb_points"],
+                                                            radius=outlier_removal_config["radius"])
+
+            transform, fitness = register_point_clouds(all_detected_pcd_filtered, all_memory_pcd, 
+                                            voxel_size = fpfh_voxel_size, global_dist_factor = fpfh_global_dist_factor, 
+                                            local_dist_factor = fpfh_local_dist_factor)
+
+            assn_data[assn_num] = [assn, transform, fitness]
+
+        best_assn = max(assn_data, key=lambda x: x[-1])
+
+        assn = best_assn[0]
+        transform = best_assn[1]
 
         R = copy.copy(transform[:3,:3])
         t = copy.copy(transform[:3, 3])
@@ -1152,7 +1148,9 @@ class ObjectMemory:
 
         localised_pose = np.concatenate((tAvg, qAvg))
 
-        return localised_pose
+        # moved objects will have indices that are not present in the first row of assn
+
+        return localised_pose, assn
 
 @dataclass
 class LocalArgs:
@@ -1188,8 +1186,8 @@ if __name__ == "__main__":
     with open(poses_json_path, 'r') as f:
         poses = json.load(f)
 
-    for target in range(1,9): # all of them
-    # for target in [6,7,8]: # sanity check
+    # for target in range(1,9): # all of them
+    for target in [6,7,8]: # sanity check
         target_num = target
         target_pose = None
         for i, view in enumerate(poses["views"]):
