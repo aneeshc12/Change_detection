@@ -786,8 +786,9 @@ class ObjectInfo:
         Computes the mean embedding and centroid for the object.
         """
         # TODO messy, clean this up
-        self.mean_emb = np.mean(np.asarray(
-            [e.cpu() for e in self.embeddings]), axis=0)
+        # self.mean_emb = np.mean(np.asarray(
+        #     [e.cpu() for e in self.embeddings]), axis=0)
+        self.mean_emb = np.mean(np.array(self.embeddings), axis=0)
         self.centroid = np.mean(self.pcd, axis=-1)
 
     def __repr__(self):
@@ -861,7 +862,7 @@ class ObjectMemory:
             return None, None, None
         
         # get ViT+LoRA embeddings, use bounding boxes and the image to get grounded images
-        embs = self.loraModule.encode_image(obj_grounded_imgs)
+        embs = np.array(self.loraModule.encode_image(obj_grounded_imgs).cpu())
         
         # filter out the pointclouds. NOTE: pointclouds are transformed to global pose later.
         obj_pointclouds = self.objectFinder.getDepth(depth_image_path, obj_masks)
@@ -964,7 +965,6 @@ class ObjectMemory:
                 continue
 
             obj_exists = False
-
             for obj_id, info in self.memory.items():
                 object_pcd = info.pcd
                 IoU3d = calculate_3d_IoU(q_pcd, object_pcd)
@@ -974,12 +974,17 @@ class ObjectMemory:
                     print("\tFound in mem (info, iou, strict_overlap): ", info, IoU3d, overlap3d)
 
                 # if the iou is above the threshold, consider it to be the same object/instance
-                    
-                if (IoU3d > bounding_box_threshold or overlap3d > occlusion_overlap_threshold) \
-                    and np.dot(info.mean_emb, emb) > lora_threshold:
-                    info.addInfo(obj_phrase ,emb, q_pcd, align=False)
-                    obj_exists = True
-                    break
+
+                info.computeMeans()
+
+                lora_cos_sim = np.dot(info.mean_emb, emb)/(np.linalg.norm(info.mean_emb) * np.linalg.norm(emb))
+
+                if (IoU3d > bounding_box_threshold or overlap3d > occlusion_overlap_threshold):
+                    if lora_cos_sim > 0: # NOTE; not using LoRA here
+                        info.addInfo(obj_phrase ,emb, q_pcd, align=False)
+                        obj_exists = True
+                        break
+
 
             # new object detected
             if not obj_exists:
@@ -1012,7 +1017,11 @@ class ObjectMemory:
 
     Consolidates memory in place
     """
-    def consolidate_memory(self, bounding_box_threshold=0.3,  occlusion_overlap_threshold=0.9, downsample_voxel_size=0.01):
+    def consolidate_memory(self, bounding_box_threshold=0.3,  occlusion_overlap_threshold=0.9, verbose=True):
+        if verbose:
+            print("Pre consolidation")
+            self.view_memory()
+
         new_memory = dict()
         for obj_id, obj_info in self.memory.items():
             obj_pcd = obj_info.pcd
@@ -1029,19 +1038,18 @@ class ObjectMemory:
                     break
             
             if match_found:
-                new_memory[new_id] += obj_info
+                new_obj_info += obj_info
+
             else:
-                new_memory[len(new_memory)] = self.memory[obj_id]
+                new_memory[len(new_memory)] = obj_info
 
         del self.memory
         self.memory = new_memory
 
-        # downsample all pcds
-        tempPcd = o3d.geometry.PointCloud()
-        for obj_id in self.memory:
-            tempPcd.points = o3d.utility.Vector3dVector(self.memory[obj_id].pcd.T)
-            tempPcd = tempPcd.voxel_down_sample(downsample_voxel_size)
-            self.memory[obj_id].pcd = np.array(tempPcd.points).T
+
+        if verbose:
+            print("Post consolidation")
+            self.view_memory()
 
 
     def localise(self, image_path, depth_image_path, testname="", save_point_clouds=False,
@@ -1078,14 +1086,16 @@ class ObjectMemory:
         # TODO maybe a KNN search will do better?
         for _, m in self.memory.items():
             m.computeMeans()  # Update object info means
-        memory_embs = torch.Tensor([m.mean_emb for _, m in self.memory.items()]).to(self.device)
+        memory_embs = np.array([m.mean_emb for _, m in self.memory.items()])
 
         if len(detected_embs) > len(memory_embs):
             detected_embs = detected_embs[:len(memory_embs)]
 
+        detected_embs /= np.linalg.norm(detected_embs, axis=-1, keepdims=True)
+        memory_embs /= np.linalg.norm(memory_embs, axis=-1, keepdims=True)
+
         # Detected x Mem x Emb sized
-        cosine_similarities = F.cosine_similarity(detected_embs.unsqueeze(1), memory_embs.unsqueeze(0),
-                                                    axis=-1).cpu()
+        cosine_similarities = np.dot(detected_embs, memory_embs.T)
 
         # Run ICP/FPFH loop closure to get an estimated transform for each seen object
         R_matrices = np.zeros((len(detected_pointclouds), len(memory_embs), 3, 3), dtype=np.float32)

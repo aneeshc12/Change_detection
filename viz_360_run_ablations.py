@@ -4,33 +4,6 @@ import matplotlib.pyplot as plt
 import numpy as np
 from scipy import arctan2
 
-
-# TODO: remove later
-class QuaternionOps:
-    @staticmethod
-    def quaternion_multiply(q1, q2):
-        w1, x1, y1, z1 = q1
-        w2, x2, y2, z2 = q2
-        w = w1 * w2 - x1 * x2 - y1 * y2 - z1 * z2
-        x = w1 * x2 + x1 * w2 + y1 * z2 - z1 * y2
-        y = w1 * y2 - x1 * z2 + y1 * w2 + z1 * x2
-        z = w1 * z2 + x1 * y2 - y1 * x2 + z1 * w2
-        return np.array([w, x, y, z])
-
-    @staticmethod
-    def quaternion_conjugate(q):
-        w, x, y, z = q
-        return np.array([w, -x, -y, -z])
-
-    # https://math.stackexchange.com/a/3573308
-    @staticmethod
-    def quaternion_error(q1, q2): # returns orientation angle between the two
-        q_del = QuaternionOps.quaternion_multiply(QuaternionOps.quaternion_conjugate(q1), q2)
-        q_del_other_way = QuaternionOps.quaternion_multiply(QuaternionOps.quaternion_conjugate(q1), -q2)
-        return min(np.abs(arctan2(np.linalg.norm(q_del[1:]), q_del[0])),
-                   np.abs(arctan2(np.linalg.norm(q_del_other_way[1:]), q_del_other_way[0])))
-
-
 @dataclass
 class LocalArgs:
     """
@@ -51,7 +24,7 @@ if __name__=="__main__":
     largs = tyro.cli(LocalArgs, description=__doc__)
     print(largs)
 
-    if largs.parameter in ["peak_gpu_usage", "total_time"]: # TODO: add memory after next run
+    if largs.parameter in ["peak_gpu_usage", "total_time", "memory_usage"]: 
         file_names = []
         list_of_numbers_in_file_names = []
         values = []
@@ -98,7 +71,7 @@ if __name__=="__main__":
         # Save the plot without displaying it
         plt.savefig(os.path.join(largs.plot_save_dir, f"{largs.parameter}.png"))
 
-    elif largs.parameter in ["translation_error", "rotation_error"]:
+    elif largs.parameter in ["translation_rmses", "rotation_rmses"]:
         file_names = []
         list_of_numbers_in_file_names = []
         list_of_values = []
@@ -116,34 +89,23 @@ if __name__=="__main__":
 
                 with open(file_path, 'r') as json_file:
                     data = json.load(json_file)
-                    if largs.parameter == "rotation_error": # TODO: remove after next run
-                        estimated_pose = np.array(data.get("estimated_poses", None))
-                        target_pose = np.array(data.get("target_poses", None))
 
-                        rot_errs = []
-
-                        for i in range(8):
-                            rotation_error = QuaternionOps.quaternion_error(target_pose[i][3:], estimated_pose[i][3:])
-                            rot_errs.append(rotation_error)
-
-                        list_of_values.append(rot_errs)
+                    values = data.get(largs.parameter, None)
+                    if values is not None:
+                        list_of_values.append(values)
                     else:
-                        values = data.get(largs.parameter, None)
-                        if values is not None:
-                            list_of_values.append(values)
-                        else:
-                            raise
+                        raise
 
         num_indices = len(list_of_values[0])  # Assuming all lists have the same length
 
         # Create subplots
         fig, axes = plt.subplots(num_indices + 1, 1, figsize=(16, 7*(num_indices + 1)), sharex=True)
 
+        data_tuples = sorted(zip(list_of_numbers_in_file_names, file_names, list_of_values), key=lambda x: x[0])
+        list_of_numbers_in_file_names, file_names, list_of_values = zip(*data_tuples)
+
         for idx in range(num_indices):
             subplot_values = [values[idx] for values in list_of_values]
-
-            data_tuples = sorted(zip(list_of_numbers_in_file_names, file_names, subplot_values), key=lambda x: x[0])
-            list_of_numbers_in_file_names, file_names, subplot_values = zip(*data_tuples)
 
             # Plot subplot
             axes[idx].plot(file_names, subplot_values, linestyle='-', color='r')

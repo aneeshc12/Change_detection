@@ -4,6 +4,7 @@ GLOB_DIST_VALUES=(1 1.5 2.0)
 LOCAL_DIST_VALUES=(0.1 0.4 0.8 1.2)
 FPFH_VOXEL_VALUES=(0.02 0.05 0.1)
 USE_MESH=0
+LOC_TIMES=10
 
 # Iterate over values
 for DOWNSAMPLE_VOXEL_SIZE in "${DOWNSAMPLE_VOXEL_SIZES[@]}"; do
@@ -33,6 +34,7 @@ for DOWNSAMPLE_VOXEL_SIZE in "${DOWNSAMPLE_VOXEL_SIZES[@]}"; do
                     --fpfh-global-dist-factor=${GLOB_DIST} \
                     --fpfh-local-dist-factor=${LOCAL_DIST} \
                     --fpfh-voxel-size=${FPFH_VOXEL} \
+                    --localise-times=${LOC_TIMES} \
                     > /scratch/$USER/vin-experiments/360_runs/run_${ABLATION_NAME}.txt
 
             done
