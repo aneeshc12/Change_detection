@@ -48,46 +48,43 @@ if __name__ == "__main__":
     print("Memory Init'ed")
 
     # assemble memory from train_indices
-    for i, pose in enumerate(poses):
-        num = i
+    for num in train_indices:
         print(f"Processing img %d" % num)
+        
+        pose = poses[num]
         print(pose)
-        if num == target:
-            target_pose = pose
-            continue
 
         t = pose[:3]
         q = pose[3:]
         
-        mem.process_image(testname=f"%s_view%d" % (obj, num), image_path=f"/scratch/aneesh.chavan/procthor_spinaround/rgb/%s/%d.png" % (obj, num), 
-                        depth_image_path=f"/scratch/aneesh.chavan/procthor_spinaround/depth/%s/%d.npy" % (obj, num), pose=pose)
+        mem.process_image(testname=f"%s_view%d" % ("8room-v1", num), image_path=f"/scratch/aneesh.chavan/8room/8-room-v1/rgb/%d.png" % (num), 
+                        depth_image_path=f"/scratch/aneesh.chavan/8room/8-room-v1/depth/%d.npy" % (num), pose=pose)
         print("Processed\n")
+        mem.view_memory()
+        exit(0)
 
-    mem.view_memory()
 
-    estimated_pose = mem.localise(testname=str(obj) ,image_path=f"/scratch/aneesh.chavan/procthor_spinaround/rgb/%s/%d.png" % (obj, target), 
-                                depth_image_path=f"/scratch/aneesh.chavan/procthor_spinaround/depth/%s/%d.npy" % (obj, target))
 
-    print("Target pose: ", target_pose)
-    print("Estimated pose: ", estimated_pose)
+    # test each index in test_indices
+    for target in test_indices:
+        target_pose = poses[target]
+        estimated_pose = mem.localise(testname=str("8room-v1") ,image_path=f"/scratch/aneesh.chavan/8room/8-room-v1/rgb/%d.png" % (target), 
+                                    depth_image_path=f"/scratch/aneesh.chavan/8room/8-room-v1/depth/%d.npy" % (target))
+        tgt.append(target_pose)
+        pred.append(estimated_pose)
 
     mem.clear_memory()
-
-    tgt.append(target_pose)
-    pred.append(estimated_pose)
 
     # for _, m in mem.memory.items():
     #     np.save(f"pcds/new%d.npy" % m.id, m.pcd)
     torch.cuda.empty_cache()
 
-    for i, t, p in zip(range(0,8), tgt, pred):
-        print("Pose: ", i)
+    for t, p in zip(test_indices, tgt, pred):
+        print("Test index: ", i)
         print("Target pose:", t)
         print("Estimated pose:", p)
         print()
 
-    tgt = []
-    pred = []
         
         
 
