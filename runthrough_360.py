@@ -81,20 +81,12 @@ if __name__ == "__main__":
         print(f"Downsampling using voxel size as {largs.down_sample_voxel_size}")
         mem.downsample_all_objects(voxel_size=largs.down_sample_voxel_size, use_external_mesh=largs.create_ext_mesh)
 
-    # print("Consolidating memory")
-    # mem.consolidate_memory()
-    # mem.view_memory()
-    # print("Memory formed")
-
-    # if largs.down_sample_voxel_size > 0:
-    #     print(f"Post consolidation downsampling using voxel size as {largs.down_sample_voxel_size}")
-    #     mem.downsample_all_objects(voxel_size=largs.down_sample_voxel_size, use_external_mesh=largs.create_ext_mesh)
-
     # getting results
     tgt = []
     pred = []
     trans_errors = []
     rot_errors = []
+    chosen_assignments = []
     for i, view in enumerate(poses["views"]):
         target_num = i+1
 
@@ -107,12 +99,13 @@ if __name__ == "__main__":
         cur_estimated_poses = []
         cur_translation_errors = []
         cur_rotation_errors = []
+        cur_chosen_assignments = []
 
         print(f"With {target_num} as target")
         for i in range(largs.localise_times):
             print(f"\tLocalize trial {i + 1} -----------------------")
 
-            estimated_pose = mem.localise(image_path=os.path.join(largs.test_folder_path,f"view%d/view%d.png" % 
+            estimated_pose, chosen_assignment = mem.localise(image_path=os.path.join(largs.test_folder_path,f"view%d/view%d.png" % 
                                                                 (target_num, target_num)), 
                                             depth_image_path=(os.path.join(largs.test_folder_path,"view%d/view%d.npy" % 
                                                                             (target_num, target_num))),
@@ -133,12 +126,14 @@ if __name__ == "__main__":
             cur_estimated_poses.append(estimated_pose.tolist())
             cur_translation_errors.append(translation_error)
             cur_rotation_errors.append(rotation_error)
+            cur_chosen_assignments.append(chosen_assignment)
 
             print("----\n")
 
         pred.append(cur_estimated_poses)
         trans_errors.append(cur_translation_errors)
         rot_errors.append(cur_rotation_errors)
+        chosen_assignments.append(cur_chosen_assignments)
 
     end_time = time.time()
     print(f"360zip test completed in {(end_time - start_time)//60} minutes, {(end_time - start_time)%60} seconds")
@@ -157,7 +152,7 @@ if __name__ == "__main__":
     # saving memory to scratch
     if largs.memory_save_path != "":
         pcd_list = []
-        for obj_id, info in mem.memory.items():
+        for info in mem.memory:
             object_pcd = info.pcd
             pcd_list.append(object_pcd)
 
@@ -200,6 +195,7 @@ if __name__ == "__main__":
             "peak_gpu_usage": max_cuda_memory_GBs,
             "memory_usage": memory_info_GBs,
             "total_time": end_time - start_time,
+            "chosen_assignments": chosen_assignments,
             "target_poses": [arr.tolist() for arr in tgt],
             "estimated_poses": pred,
             "translation_error": trans_errors,

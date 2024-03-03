@@ -888,7 +888,7 @@ class ObjectMemory:
         Prints information about the objects stored in memory.
         """
         print("Objects stored in memory:")
-        for _, info in self.memory.items():
+        for info in self.memory:
             print(info)
         print()
 
@@ -1023,7 +1023,7 @@ class ObjectMemory:
                 continue
 
             obj_exists = False
-            for obj_id, info in self.memory.items():
+            for info in self.memory:
 
                 object_pcd = info.pcd
                 IoU3d = calculate_3d_IoU(q_pcd, object_pcd)
@@ -1061,7 +1061,7 @@ class ObjectMemory:
                 if verbose:
                     print('\tObject exists, aggregated to\n', info, '\n')
 
-        for _, m in self.memory.items():
+        for m in self.memory:
             m.computeMeans()  # Update object info means
         
         # TODO consider downsampling points (optimisation)
@@ -1149,7 +1149,7 @@ class ObjectMemory:
         for m in self.memory:
             m.computeMeans()  # Update object info means
 
-        memory_embs = np.array([m.mean_emb for _, m in self.memory.items()])
+        memory_embs = np.array([m.mean_emb for m in self.memory])
 
 
         if len(detected_embs) > len(memory_embs):
