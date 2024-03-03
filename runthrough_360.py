@@ -16,12 +16,13 @@ class LocalArgs:
     ram_pretrained_path: str = '/scratch/aneesh.chavan/ram_swin_large_14m.pth'
     memory_save_path: str = ''
     save_results_path: str = ''
-    down_sample_voxel_size: float = 0
+    down_sample_voxel_size: float = 0.01 # best results
     create_ext_mesh: bool = False
     save_point_clouds: bool = False
     fpfh_global_dist_factor: float = 1.5
     fpfh_local_dist_factor: float = 0.4
     fpfh_voxel_size: float = 0.05
+    localise_times: int = 1
 
     def to_dict(self):
         return {
@@ -38,6 +39,7 @@ class LocalArgs:
             "fpfh_global_dist_factor": self.fpfh_global_dist_factor,
             "fpfh_local_dist_factor": self.fpfh_local_dist_factor,
             "fpfh_voxel_size": self.fpfh_voxel_size,
+            "localise_times": self.localise_times
         }
 
 if __name__ == "__main__":
@@ -79,10 +81,14 @@ if __name__ == "__main__":
         print(f"Downsampling using voxel size as {largs.down_sample_voxel_size}")
         mem.downsample_all_objects(voxel_size=largs.down_sample_voxel_size, use_external_mesh=largs.create_ext_mesh)
 
-    print("Consolidating memory")
-    mem.consolidate_memory()
-    mem.view_memory()
-    print("Memory formed")
+    # print("Consolidating memory")
+    # mem.consolidate_memory()
+    # mem.view_memory()
+    # print("Memory formed")
+
+    # if largs.down_sample_voxel_size > 0:
+    #     print(f"Post consolidation downsampling using voxel size as {largs.down_sample_voxel_size}")
+    #     mem.downsample_all_objects(voxel_size=largs.down_sample_voxel_size, use_external_mesh=largs.create_ext_mesh)
 
     # getting results
     tgt = []
@@ -96,32 +102,43 @@ if __name__ == "__main__":
         q = Rotation.from_euler('zyx', [r for _, r in view["rotation"].items()], degrees=True).as_quat()
         t = np.array([x for _, x in view["position"].items()])
         target_pose = np.concatenate([t, q])
+        tgt.append(target_pose)
+
+        cur_estimated_poses = []
+        cur_translation_errors = []
+        cur_rotation_errors = []
 
         print(f"With {target_num} as target")
-        estimated_pose = mem.localise(image_path=os.path.join(largs.test_folder_path,f"view%d/view%d.png" % 
-                                                              (target_num, target_num)), 
-                                        depth_image_path=(os.path.join(largs.test_folder_path,"view%d/view%d.npy" % 
-                                                                        (target_num, target_num))),
-                                        save_point_clouds=largs.save_point_clouds,
-                                        fpfh_global_dist_factor = largs.fpfh_global_dist_factor, 
-                                        fpfh_local_dist_factor = largs.fpfh_global_dist_factor, 
-                                        fpfh_voxel_size = largs.fpfh_voxel_size)
+        for i in range(largs.localise_times):
+            print(f"\tLocalize trial {i + 1} -----------------------")
 
-        print("Target pose: ", target_pose)
-        print("Estimated pose: ", estimated_pose)
+            estimated_pose = mem.localise(image_path=os.path.join(largs.test_folder_path,f"view%d/view%d.png" % 
+                                                                (target_num, target_num)), 
+                                            depth_image_path=(os.path.join(largs.test_folder_path,"view%d/view%d.npy" % 
+                                                                            (target_num, target_num))),
+                                            save_point_clouds=largs.save_point_clouds,
+                                            fpfh_global_dist_factor = largs.fpfh_global_dist_factor, 
+                                            fpfh_local_dist_factor = largs.fpfh_global_dist_factor, 
+                                            fpfh_voxel_size = largs.fpfh_voxel_size)
 
-        translation_error = np.linalg.norm(target_pose[:3] - estimated_pose[:3]) 
-        rotation_error = QuaternionOps.quaternion_error(target_pose[3:], estimated_pose[3:])
+            print("Target pose: ", target_pose)
+            print("Estimated pose: ", estimated_pose)
 
-        print("Translation error: ", translation_error)
-        print("Rotation_error: ", rotation_error)
+            translation_error = np.linalg.norm(target_pose[:3] - estimated_pose[:3]) 
+            rotation_error = QuaternionOps.quaternion_error(target_pose[3:], estimated_pose[3:])
 
-        print("----\n")
+            print("Translation error: ", translation_error)
+            print("Rotation_error: ", rotation_error)
 
-        tgt.append(target_pose)
-        pred.append(estimated_pose)
-        trans_errors.append(translation_error)
-        rot_errors.append(rotation_error)
+            cur_estimated_poses.append(estimated_pose.tolist())
+            cur_translation_errors.append(translation_error)
+            cur_rotation_errors.append(rotation_error)
+
+            print("----\n")
+
+        pred.append(cur_estimated_poses)
+        trans_errors.append(cur_translation_errors)
+        rot_errors.append(cur_rotation_errors)
 
     end_time = time.time()
     print(f"360zip test completed in {(end_time - start_time)//60} minutes, {(end_time - start_time)%60} seconds")
@@ -156,17 +173,24 @@ if __name__ == "__main__":
         o3d.io.write_point_cloud(largs.memory_save_path, combined_pcd)
         print("Pointcloud saved to", largs.memory_save_path)
 
-    """
-    We have
-    - Peak GPU usage
-    - Memory usage at end of run
-    - downsampling criterion
-    - fpfh
-        - voxel thresholds
-        - point to point and point to plane
-    - final results
-    - time
-    """
+    trans_rmses = []
+    rot_rmses = []
+
+    print("\n\nFinal results:")
+    for i in range(len(trans_errors)):
+        print(f"Pose {i + 1}")
+        print("Translation error", trans_errors[i])
+        print("Rotation errors", rot_errors[i])
+
+        cur_trans_rmse = np.sqrt(np.mean(np.array(trans_errors[i])**2))
+        cur_rot_rmse = np.sqrt(np.mean(np.array(rot_errors[i])**2))
+
+        print("Translation rmse", cur_trans_rmse)
+        print("Rotatiion rmse", cur_rot_rmse)
+
+        trans_rmses.append(cur_trans_rmse)
+        rot_rmses.append(cur_rot_rmse)
+
 
     # saving other results
     if largs.save_results_path != "":
@@ -174,12 +198,14 @@ if __name__ == "__main__":
 
         results = {
             "peak_gpu_usage": max_cuda_memory_GBs,
-            "memory_usage": max_cuda_memory_GBs,
+            "memory_usage": memory_info_GBs,
             "total_time": end_time - start_time,
             "target_poses": [arr.tolist() for arr in tgt],
-            "estimated_poses": [arr.tolist() for arr in pred],
+            "estimated_poses": pred,
             "translation_error": trans_errors,
             "rotation_error": rot_errors,
+            "translation_rmses": trans_rmses,
+            "rotation_rmses": rot_rmses,
             "largs": largs.to_dict(),
         }
 
