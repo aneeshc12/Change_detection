@@ -33,9 +33,9 @@ if __name__ == "__main__":
         poses[i, 3:] = Rot.from_euler('xyz', pose[3:], degrees=True).as_quat()
 
     # filter poses by a factor of 10, split these into training and test
-    start_idx = 100
-    end_idx = 250
-    filtered_indices = [i for i in range(start_idx, end_idx, 5)]
+    start_idx = 0
+    end_idx = 100
+    filtered_indices = [i for i in range(start_idx, end_idx, 2)]
 
     test_indices = filtered_indices[::5]
     train_indices = [i for i in filtered_indices if i not in test_indices]
@@ -61,16 +61,18 @@ if __name__ == "__main__":
         
         mem.process_image(testname=f"%s_view{num}" % ("8room-v1"), image_path=f"/scratch/aneesh.chavan/8room/8-room-v1/{arrangement}/rgb/{num}.png", 
                         depth_image_path=f"/scratch/aneesh.chavan/8room/8-room-v1/{arrangement}/depth/{num}.npy", pose=pose,
-                        verbose=False)
+                        verbose=False, add_noise=False)
         print("Processed\n")
         mem.view_memory()
 
 
     # test each index in test_indices
-    for target in test_indices:
+    for i, target in enumerate(test_indices[:4]):
+        print(f"Localising image {target}")
         target_pose = poses[target]
         estimated_pose = mem.localise(testname=str("8room-v1") ,image_path=f"/scratch/aneesh.chavan/8room/8-room-v1/{arrangement}/rgb/{target}.png", 
-                                    depth_image_path=f"/scratch/aneesh.chavan/8room/8-room-v1/{arrangement}/depth/{target}.npy")
+                                    depth_image_path=f"/scratch/aneesh.chavan/8room/8-room-v1/{arrangement}/depth/{target}.npy",
+                                    save_point_clouds=True)
         tgt.append(target_pose)
         pred.append(estimated_pose)
 
@@ -78,9 +80,9 @@ if __name__ == "__main__":
 
     # for _, m in mem.memory.items():
     #     np.save(f"pcds/new%d.npy" % m.id, m.pcd)
-    torch.cuda.empty_cache()
+    # torch.cuda.empty_cache()
 
-    for t, p in zip(test_indices, tgt, pred):
+    for i, t, p in zip(test_indices, tgt, pred):
         print("Test index: ", i)
         print("Target pose:", t)
         print("Estimated pose:", p)

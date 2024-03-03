@@ -936,7 +936,7 @@ class ObjectMemory:
         return obj_phrases, embs, obj_pointclouds
 
 
-    def process_image(self, image_path=None, depth_image_path=None, pose=None, verbose=True,
+    def process_image(self, image_path=None, depth_image_path=None, pose=None, verbose=True, add_noise=True,
                       bounding_box_threshold=0.3,  occlusion_overlap_threshold=0.9, testname="", 
                       outlier_removal_config=None, min_points = 500, pose_noise = {'trans': 0.0005, 'rot': 0.0005},
                       depth_noise = 0.003, lora_threshold = 0.5):
@@ -984,14 +984,15 @@ class ObjectMemory:
         if pose is None:
             raise NotImplementedError # TODO: mapping without pose :)
         
-        def add_noise(array, noise_level):
+        def add_point_noise(array, noise_level):
             noise = np.random.normal(0, noise_level, array.shape)
             noisy_array = array + noise
             return noisy_array
         
         # adding noise to pose
-        pose[:3] = add_noise(pose[:3], pose_noise['trans'])
-        pose[3:] = add_noise(pose[3:], pose_noise['rot'])
+        if add_noise:
+            pose[:3] = add_point_noise(pose[:3], pose_noise['trans'])
+            pose[3:] = add_point_noise(pose[3:], pose_noise['rot'])
 
         # normalizing quaternion
         def normalize_quaternion(quaternion):
@@ -1004,7 +1005,8 @@ class ObjectMemory:
         transformed_pointclouds = [transform_pcd_to_global_frame(pcd, pose) for pcd in filtered_pointclouds]
         
         # Adding noise to depth (pointclouds)
-        transformed_pointclouds = [add_noise(pcd, depth_noise) for pcd in transformed_pointclouds]
+        if add_noise:
+            transformed_pointclouds = [add_point_noise(pcd, depth_noise) for pcd in transformed_pointclouds]
 
         # for each tuple, consult already stored memory, match tuples to stored memory (based on 3d IoU)
             # TODO optimise and batch, fetch all memory bounding boxes once
@@ -1177,7 +1179,7 @@ class ObjectMemory:
         # assuming that all detected objects can be assigned to mem objs
         # TODO calculate rotation matrices
         j = JCBB(cosine_similarities, R_matrices)
-        assns = j.get_assignments()
+        assns = j.get_all_subset_assignments()
 
         # only consider the top K assignments based on net cosine similarity
         assns_to_consider = [assn[0] for assn in assns[:topK]]
@@ -1189,7 +1191,7 @@ class ObjectMemory:
         assn_data = [ [assn, None, None] for assn in assns_to_consider ]
 
         # go through all top K assingments, record ICP costs
-        for assn_num, assn in enumerate(assns_to_consider):
+        for assn_num, assn in tqdm(enumerate(assns_to_consider)):
             # use ALL object pointclouds together
             all_detected_points = []
             all_memory_points = []
