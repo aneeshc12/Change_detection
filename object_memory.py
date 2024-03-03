@@ -888,7 +888,7 @@ class ObjectMemory:
         Prints information about the objects stored in memory.
         """
         print("Objects stored in memory:")
-        for _, info in self.memory.items():
+        for info in self.memory:
             print(info)
         print()
 
@@ -1023,7 +1023,7 @@ class ObjectMemory:
                 continue
 
             obj_exists = False
-            for obj_id, info in self.memory.items():
+            for info in self.memory:
 
                 object_pcd = info.pcd
                 IoU3d = calculate_3d_IoU(q_pcd, object_pcd)
@@ -1061,7 +1061,7 @@ class ObjectMemory:
                 if verbose:
                     print('\tObject exists, aggregated to\n', info, '\n')
 
-        for _, m in self.memory.items():
+        for m in self.memory:
             m.computeMeans()  # Update object info means
         
         # TODO consider downsampling points (optimisation)
@@ -1149,7 +1149,7 @@ class ObjectMemory:
         for m in self.memory:
             m.computeMeans()  # Update object info means
 
-        memory_embs = np.array([m.mean_emb for _, m in self.memory.items()])
+        memory_embs = np.array([m.mean_emb for m in self.memory])
 
 
         if len(detected_embs) > len(memory_embs):
@@ -1168,9 +1168,9 @@ class ObjectMemory:
         # Save point clouds
         if save_point_clouds:
             for i, d in enumerate(detected_pointclouds):
-                np.save("pcds/%sdetected_pcd" % str(testname) + str(i) + ".npy", d)
+                np.save("pcds/%s_detected_pcd" % str(testname) + str(i) + ".npy", d)
             for j, m in enumerate(self.memory):
-                np.save(f"pcds/%smemory_pcd" % str(testname) + str(j) + ".npy", m.pcd)
+                np.save(f"pcds/%s_memory_pcd" % str(testname) + str(j) + ".npy", m.pcd)
             print("Point clouds saved")
 
         # TODO unseen objects in detected objects are not being dealt with, 
@@ -1193,7 +1193,7 @@ class ObjectMemory:
             # use ALL object pointclouds together
             all_detected_points = []
             all_memory_points = []
-            for i,j in enumerate(assn):
+            for i,j in assn:
                 all_detected_points.append(detected_pointclouds[i])
                 all_memory_points.append(self.memory[j].pcd)
             all_detected_points = np.concatenate(all_detected_points, axis=-1)

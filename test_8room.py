@@ -33,7 +33,9 @@ if __name__ == "__main__":
         poses[i, 3:] = Rot.from_euler('xyz', pose[3:], degrees=True).as_quat()
 
     # filter poses by a factor of 10, split these into training and test
-    filtered_indices = [i for i in range(1,250, 5)]
+    start_idx = 100
+    end_idx = 250
+    filtered_indices = [i for i in range(start_idx, end_idx, 5)]
 
     test_indices = filtered_indices[::5]
     train_indices = [i for i in filtered_indices if i not in test_indices]
@@ -57,19 +59,18 @@ if __name__ == "__main__":
         t = pose[:3]
         q = pose[3:]
         
-        mem.process_image(testname=f"%s_view%d" % ("8room-v1", num), image_path=f"/scratch/aneesh.chavan/8room/8-room-v1/rgb/%d.png" % (num), 
-                        depth_image_path=f"/scratch/aneesh.chavan/8room/8-room-v1/depth/%d.npy" % (num), pose=pose)
+        mem.process_image(testname=f"%s_view{num}" % ("8room-v1"), image_path=f"/scratch/aneesh.chavan/8room/8-room-v1/{arrangement}/rgb/{num}.png", 
+                        depth_image_path=f"/scratch/aneesh.chavan/8room/8-room-v1/{arrangement}/depth/{num}.npy", pose=pose,
+                        verbose=False)
         print("Processed\n")
         mem.view_memory()
-        exit(0)
-
 
 
     # test each index in test_indices
     for target in test_indices:
         target_pose = poses[target]
-        estimated_pose = mem.localise(testname=str("8room-v1") ,image_path=f"/scratch/aneesh.chavan/8room/8-room-v1/rgb/%d.png" % (target), 
-                                    depth_image_path=f"/scratch/aneesh.chavan/8room/8-room-v1/depth/%d.npy" % (target))
+        estimated_pose = mem.localise(testname=str("8room-v1") ,image_path=f"/scratch/aneesh.chavan/8room/8-room-v1/{arrangement}/rgb/{target}.png", 
+                                    depth_image_path=f"/scratch/aneesh.chavan/8room/8-room-v1/{arrangement}/depth/{target}.npy")
         tgt.append(target_pose)
         pred.append(estimated_pose)
 
