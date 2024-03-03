@@ -1,6 +1,6 @@
 from object_memory import *
-import ast, pickle, shutil
-import psutil
+import ast, pickle, shutil, time
+import psutil, os
 @dataclass
 class LocalArgs:
     """
@@ -12,13 +12,17 @@ class LocalArgs:
     sam_checkpoint_path: str = '/scratch/vineeth.bhat/sam_vit_h_4b8939.pth'
     ram_pretrained_path: str = '/scratch/vineeth.bhat/ram_swin_large_14m.pth'
     sampling_period: int = 40
-    save_dir: str = "/scratch/vineeth.bhat/large_dataset_trials/8-rooms-new"
+    save_dir: str = "/scratch/vineeth.bhat/vin-experiments/large_dataset_trials/8-rooms-new"
     start_file_index: int = 1
     last_file_index: int = -1
     rot_correction: float = 0.0 # keep as 30 for 8-room-new 
-    look_around_range: int = 3 # number of sucessive frames to consider at every frame
+    look_around_range: int = 1 # number of sucessive frames to consider at every frame
+    save_individual_objects: bool = False
+    down_sample_voxel_size: float = 0.01
 
 if __name__=="__main__":
+    start_time = time.time()
+
     largs = tyro.cli(LocalArgs, description=__doc__)
     print(largs)
 
@@ -81,6 +85,19 @@ if __name__=="__main__":
             memory_info_GBs = memory_info.rss / (1e3 ** 3)
             print(f"Memory usage: {memory_info_GBs:.3f} GB")
 
+            cuda_memory_stats = torch.cuda.memory_stats()
+            max_cuda_memory_GBs = int(cuda_memory_stats["allocated_bytes.all.peak"]) / (1e3 ** 3)
+            print(f"Max GPU memory usage: {max_cuda_memory_GBs:.3f} GB")
+
+            print("\t ----------------")
+
+    if largs.down_sample_voxel_size > 0:
+        print(f"Downsampling using voxel size as {largs.down_sample_voxel_size}")
+        mem.downsample_all_objects(voxel_size=largs.down_sample_voxel_size)
+
+    end_time = time.time()
+    print(f"Traversal completed in {end_time - start_time} seconds")
+
     pcd_list = []
     
     for obj_id, info in mem.memory.items():
@@ -89,14 +106,32 @@ if __name__=="__main__":
 
     combined_pcd = o3d.geometry.PointCloud()
 
-    for pcd_np in pcd_list:
+    if largs.save_individual_objects:
+        individual_mem_save_dir = os.path.join(largs.save_dir,
+            f"ind_mems_{largs.start_file_index}_{largs.last_file_index}_{largs.sampling_period}_{largs.look_around_range}")
+        os.makedirs(individual_mem_save_dir, exist_ok=True)
+
+    for i in range(len(pcd_list)):
+        pcd_np = pcd_list[i]
         pcd_vec = o3d.utility.Vector3dVector(pcd_np.T)
         pcd = o3d.geometry.PointCloud()
         pcd.points = pcd_vec
+
+        if largs.save_individual_objects:
+            cur_save_path = os.path.join(individual_mem_save_dir, 
+                f"memory_{i}.pcd") 
+
+            o3d.io.write_point_cloud(cur_save_path, pcd)
+            print(f"{i} pointcloud saved to", cur_save_path)
+
         combined_pcd += pcd
 
-    save_path = f"{largs.save_dir}/mem_{largs.start_file_index}_{largs.last_file_index}_{largs.sampling_period}_{largs.look_around_range}.pcd"
+    save_path = os.path.join(largs.save_dir, 
+        f"mem_{largs.start_file_index}_{largs.last_file_index}_{largs.sampling_period}_{largs.look_around_range}.pcd")
     o3d.io.write_point_cloud(save_path, combined_pcd)
     print("Memory's pointcloud saved to", save_path)
+
+    print("\n\n\t---------------------")
+    mem.view_memory()
 
 

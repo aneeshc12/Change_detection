@@ -16,7 +16,7 @@ class LocalArgs:
     ram_pretrained_path: str = '/scratch/aneesh.chavan/ram_swin_large_14m.pth'
     memory_save_path: str = ''
     save_results_path: str = ''
-    down_sample_voxel_size: float = 0
+    down_sample_voxel_size: float = 0.01 # best results
     create_ext_mesh: bool = False
     save_point_clouds: bool = False
     fpfh_global_dist_factor: float = 1.5

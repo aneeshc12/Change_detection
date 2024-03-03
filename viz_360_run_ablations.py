@@ -131,3 +131,6 @@ if __name__=="__main__":
         plt.tight_layout()
 
         plt.savefig(os.path.join(largs.plot_save_dir, f"{largs.parameter}.png"))
+
+    else: 
+        raise

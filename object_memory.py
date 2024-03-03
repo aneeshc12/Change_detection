@@ -412,7 +412,6 @@ class ObjectFinder:
             caption = inference_ram(img_ram, self.ram_model)[0].split("|")
             
             words_to_ignore = [
-                                "carpet", 
                                 "living room", 
                                 "ceiling", 
                                 "room", 
@@ -436,7 +435,52 @@ class ObjectFinder:
                                 "hardwood",
                                 "plywood",
                                 "waiting room",
-                                "lead to"
+                                "lead to",
+                                "belly",
+                                "person",
+                                "chest",
+                                "black",
+                                "accident",
+                                "act",
+                                "doorway",
+                                "illustration",
+                                "animal",
+                                "mountain",
+                                "table top", # since we don't want a flat object as an instance
+                                "pen",
+                                "pencil",
+                                "corner",
+                                "notepad",
+                                "flower",
+                                "man",
+                                "pad",
+                                "lead",
+                                "ramp",
+                                "plank",
+                                "scale",
+                                "beam",
+                                "pink",
+                                "tie",
+                                "crack",
+                                "mirror",
+                                "square",
+                                "rectangle",
+                                "woman",
+                                "tree",
+                                "umbrella",
+                                "hat",
+                                "salon",
+                                "beach",
+                                "open",
+                                "closet",
+                                "blanket",
+                                "circle",
+                                "furniture",
+                                "balustrade",
+                                "cube",
+                                "dress",
+                                "ladder",
+                                "briefcase"
             ]
             sub_phrases_to_ignore = [
                                 "room",
@@ -446,7 +490,22 @@ class ObjectFinder:
                                 "image",
                                 "building",
                                 "ceiling"
-                                "lead"
+                                "lead",
+                                "paint",
+                                "shade",
+                                "snow",
+                                "rain",
+                                "cloud",
+                                "frost",
+                                "fog",
+                                "sky",
+                                "carpet",
+                                "view",
+                                "scene",
+                                "mat",
+                                "window",
+                                "vase",
+                                "bureau",
             ]
 
 
@@ -796,7 +855,7 @@ class ObjectInfo:
         Returns a string representation of the object information.
         """
         return(f"ID: %d | Names: [%s] |  Num embs: %d | Pcd size: " % \
-              (self.id, " ".join(self.names), len(self.embeddings)) + str(self.pcd.shape))
+              (self.id, " ,".join(self.names), len(self.embeddings)) + str(self.pcd.shape))
 
 
 class ObjectMemory:
@@ -830,7 +889,6 @@ class ObjectMemory:
         """
         print("Objects stored in memory:")
         for _, info in self.memory.items():
-            print(info.names)
             print(info)
         print()
 
