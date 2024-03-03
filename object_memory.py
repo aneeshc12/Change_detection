@@ -881,7 +881,7 @@ class ObjectMemory:
             self.loraModule.load_lora_ckpt_from_file(lora_path, "5x40")
 
         self.num_objects_stored = 0
-        self.memory = dict() # store ObjectInfo classes here
+        self.memory = [] # store ObjectInfo classes here
 
     def view_memory(self):
         """
@@ -897,7 +897,7 @@ class ObjectMemory:
         Clears the memory by resetting the number of stored objects and the memory dictionary.
         """
         self.num_objects_stored = 0
-        self.memory = dict()
+        self.memory = []
 
     def _get_object_info(self, image_path, depth_image_path):
         """
@@ -1024,6 +1024,7 @@ class ObjectMemory:
 
             obj_exists = False
             for obj_id, info in self.memory.items():
+
                 object_pcd = info.pcd
                 IoU3d = calculate_3d_IoU(q_pcd, object_pcd)
                 overlap3d = calculate_strict_overlap(q_pcd, object_pcd)
@@ -1054,7 +1055,7 @@ class ObjectMemory:
                 if verbose:
                     print('\tObject added\n\t\t', obj_phrase, '\n\t\t', new_obj_info, '\n')
                 
-                self.memory[self.num_objects_stored] = new_obj_info
+                self.memory.append(new_obj_info)
                 self.num_objects_stored += 1
             else:
                 if verbose:
@@ -1066,7 +1067,7 @@ class ObjectMemory:
         # TODO consider downsampling points (optimisation)
                     
     def downsample_all_objects(self, voxel_size = 0.001, use_external_mesh = False):
-        for _, info in self.memory.items():
+        for info in self.memory:
             info.downsample(voxel_size, use_external_mesh)
 
     """
@@ -1075,18 +1076,19 @@ class ObjectMemory:
 
     Consolidates memory in place
     """
-    def consolidate_memory(self, bounding_box_threshold=0.3,  occlusion_overlap_threshold=0.9, verbose=True):
+
+    def consolidate_memory(self, bounding_box_threshold=0.3,  occlusion_overlap_threshold=0.9, downsample_voxel_size=0.01, verbose=False):
         if verbose:
             print("Pre consolidation")
             self.view_memory()
-
-        new_memory = dict()
-        for obj_id, obj_info in self.memory.items():
+        
+        new_memory = []
+        for obj_id, obj_info in enumerate(self.memory):
             obj_pcd = obj_info.pcd
 
             # check all objects in new_memory to try and match them
             match_found = False
-            for new_id, new_obj_info in new_memory.items():
+            for new_id, new_obj_info in enumerate(new_memory):
                 IoU3d = calculate_3d_IoU(new_obj_info.pcd, obj_pcd)
                 overlap3d = calculate_strict_overlap(new_obj_info.pcd, obj_pcd)
 
@@ -1099,21 +1101,23 @@ class ObjectMemory:
                 new_obj_info += obj_info
 
             else:
-                new_memory[len(new_memory)] = obj_info
+
+                new_memory.append(self.memory[obj_id])
+
 
         del self.memory
         self.memory = new_memory
-
 
         if verbose:
             print("Post consolidation")
             self.view_memory()
 
 
+
     def localise(self, image_path, depth_image_path, testname="", save_point_clouds=False,
                  outlier_removal_config=None, 
-                 fpfh_global_dist_factor = 1.5, fpfh_local_dist_factor = 0.4, 
-                 fpfh_voxel_size = 0.05):
+                 fpfh_global_dist_factor = 2, fpfh_local_dist_factor = 0.4, 
+                 fpfh_voxel_size = 0.05, topK=5):
         """
         Given an image and a corresponding depth image in an unknown frame, consult the stored memory
         and output a pose in the world frame of the point clouds stored in memory.
@@ -1142,9 +1146,11 @@ class ObjectMemory:
 
         # Correlate embeddings with objects in memory for all seen objects
         # TODO maybe a KNN search will do better?
-        for _, m in self.memory.items():
+        for m in self.memory:
             m.computeMeans()  # Update object info means
+
         memory_embs = np.array([m.mean_emb for _, m in self.memory.items()])
+
 
         if len(detected_embs) > len(memory_embs):
             detected_embs = detected_embs[:len(memory_embs)]
@@ -1163,7 +1169,7 @@ class ObjectMemory:
         if save_point_clouds:
             for i, d in enumerate(detected_pointclouds):
                 np.save("pcds/%sdetected_pcd" % str(testname) + str(i) + ".npy", d)
-            for j, (_, m) in enumerate(self.memory.items()):
+            for j, m in enumerate(self.memory):
                 np.save(f"pcds/%smemory_pcd" % str(testname) + str(j) + ".npy", m.pcd)
             print("Point clouds saved")
 
@@ -1173,52 +1179,48 @@ class ObjectMemory:
         j = JCBB(cosine_similarities, R_matrices)
         assns = j.get_assignments()
 
-        # calculate paths for all assingments, pick the best one
-        best_assignment = assns[0]
-        min_cost = 1e11
-
-        for assn in assns:
-            cost = 0
-
-            ### COST FUNCTION ###
-            for i,j in enumerate(assn):
-                cost += (1 - cosine_similarities[i,j])      
-            cost = np.log(cost) * 1./len(assn) # normalized product of cosine DIFFERENCES
-            # NOTE: diving by length of assignments doesn't matter as all are same rn
-
-            # get min cost
-            if cost < min_cost:
-                min_cost = cost
-                best_assignment = assn
+        # only consider the top K assignments based on net cosine similarity
+        assns_to_consider = [assn[0] for assn in assns[:topK]]
 
         print("Phrases: ", detected_phrases)
         print(cosine_similarities)
-        print("Assignment: ", best_assignment)
+        print("Assignments being considered: ", assns_to_consider)
 
-        # use ALL object pointclouds together
-        all_detected_points = []
-        all_memory_points = []
-        for i,j in enumerate(best_assignment):
-            all_detected_points.append(detected_pointclouds[i])
-            all_memory_points.append(self.memory[j].pcd)
-        all_detected_points = np.concatenate(all_detected_points, axis=-1)
-        all_memory_points = np.concatenate(all_memory_points, axis=-1)
+        assn_data = [ [assn, None, None] for assn in assns_to_consider ]
 
-        # centering all the pointclouds
-        detected_mean = np.mean(all_detected_points, axis=-1)
-        memory_mean = np.mean(all_memory_points, axis=-1)
-        all_detected_pcd = o3d.geometry.PointCloud()
-        all_detected_pcd.points = o3d.utility.Vector3dVector(all_detected_points.T - detected_mean)
-        all_memory_pcd = o3d.geometry.PointCloud()
-        all_memory_pcd.points = o3d.utility.Vector3dVector(all_memory_points.T - memory_mean)
-        
-        # remove outliers from detected pcds
-        all_detected_pcd_filtered, _ = all_detected_pcd.remove_radius_outlier(nb_points=outlier_removal_config["radius_nb_points"],
-                                                        radius=outlier_removal_config["radius"])
+        # go through all top K assingments, record ICP costs
+        for assn_num, assn in enumerate(assns_to_consider):
+            # use ALL object pointclouds together
+            all_detected_points = []
+            all_memory_points = []
+            for i,j in enumerate(assn):
+                all_detected_points.append(detected_pointclouds[i])
+                all_memory_points.append(self.memory[j].pcd)
+            all_detected_points = np.concatenate(all_detected_points, axis=-1)
+            all_memory_points = np.concatenate(all_memory_points, axis=-1)
 
-        transform = register_point_clouds(all_detected_pcd_filtered, all_memory_pcd, 
-                                          voxel_size = fpfh_voxel_size, global_dist_factor = fpfh_global_dist_factor, 
-                                          local_dist_factor = fpfh_local_dist_factor)
+            # centering all the pointclouds
+            detected_mean = np.mean(all_detected_points, axis=-1)
+            memory_mean = np.mean(all_memory_points, axis=-1)
+            all_detected_pcd = o3d.geometry.PointCloud()
+            all_detected_pcd.points = o3d.utility.Vector3dVector(all_detected_points.T - detected_mean)
+            all_memory_pcd = o3d.geometry.PointCloud()
+            all_memory_pcd.points = o3d.utility.Vector3dVector(all_memory_points.T - memory_mean)
+            
+            # remove outliers from detected pcds
+            all_detected_pcd_filtered, _ = all_detected_pcd.remove_radius_outlier(nb_points=outlier_removal_config["radius_nb_points"],
+                                                            radius=outlier_removal_config["radius"])
+
+            transform, rmse = register_point_clouds(all_detected_pcd_filtered, all_memory_pcd, 
+                                            voxel_size = fpfh_voxel_size, global_dist_factor = fpfh_global_dist_factor, 
+                                            local_dist_factor = fpfh_local_dist_factor)
+
+            assn_data[assn_num] = [assn, transform, rmse]
+
+        best_assn = min(assn_data, key=lambda x: x[-1])
+
+        assn = best_assn[0]
+        transform = best_assn[1]
 
         R = copy.copy(transform[:3,:3])
         t = copy.copy(transform[:3, 3])
@@ -1228,7 +1230,10 @@ class ObjectMemory:
 
         localised_pose = np.concatenate((tAvg, qAvg))
 
-        return localised_pose
+        # moved objects will have indices that are not present in the first row of assn
+
+        print(best_assn)
+        return localised_pose, assn
 
 @dataclass
 class LocalArgs:
@@ -1259,13 +1264,17 @@ if __name__ == "__main__":
                        ram_pretrained_path=largs.ram_pretrained_path,
                        sam_checkpoint_path = largs.sam_checkpoint_path,
                        lora_path=largs.lora_path)
-    print("Memory Init'ed\n")
+    print("Memory Init'ed in {} seconds\n".format(time.time() - start_time))
+
+    test_start_time = time.time()
 
     with open(poses_json_path, 'r') as f:
         poses = json.load(f)
 
-    for target in range(1,9): # all of them
-    # for target in [6,7,8]: # sanity check
+    # tests = [i for i in range(1,9)] # all of them
+    # tests = [6,7,8]  # sanity check
+    tests = [6, 7]  # sanity check
+    for target in tests:
         target_num = target
         target_pose = None
         for i, view in enumerate(poses["views"]):
@@ -1286,21 +1295,20 @@ if __name__ == "__main__":
             mem.process_image(testname=f"view%d" % num, 
                               image_path = os.path.join(largs.test_folder_path, f"view%d/view%d.png" % (num, num)), 
                               depth_image_path=os.path.join(largs.test_folder_path,f"view%d/view%d.npy" % (num, num)), 
-                              pose=pose)
+                              pose=pose,
+                              verbose=False)
             print("Processed\n")
-
-        mem.view_memory()
 
         print("Consolidating memory")
         mem.consolidate_memory()
         mem.view_memory()
 
-        estimated_pose = mem.localise(image_path=os.path.join(largs.test_folder_path,f"view%d/view%d.png" % 
+        estimated_pose, assignment = mem.localise(image_path=os.path.join(largs.test_folder_path,f"view%d/view%d.png" % 
                                                               (target_num, target_num)), 
                                       depth_image_path=(os.path.join(largs.test_folder_path,"view%d/view%d.npy" % 
                                                                      (target_num, target_num))),
                                       save_point_clouds=largs.save_point_clouds,
-                                      testname="pose_"+str(target)+"_")
+                                      testname="pose_"+str(target)+"_",)
 
         print("Target pose: ", target_pose)
         print("Estimated pose: ", estimated_pose)
@@ -1343,4 +1351,6 @@ if __name__ == "__main__":
         print()
 
     end_time = time.time()
+    test_start_time
+    print(f"Memory construction and localisation for {len(tests)} tests done in {(end_time - test_start_time)//60} minutes, {(end_time - start_time)%60} seconds")
     print(f"360zip test completed in {(end_time - start_time)//60} minutes, {(end_time - start_time)%60} seconds")

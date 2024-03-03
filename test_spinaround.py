@@ -20,15 +20,15 @@ if __name__ == "__main__":
 
     # list objects
     objects = [
-        # "armchairs",
-        # "chairs",
-        # "coffee_tables",
-        # "dining_tables",
+        "armchairs",
+        "chairs",
+        "coffee_tables",
+        "dining_tables",
         "floor_lamps",
-        # "garbage_cans",
-        # "side_tables",
-        # "sofas",
-        # "tv_stands"
+        "garbage_cans",
+        "side_tables",
+        "sofas",
+        "tv_stands"
     ]
 
     print("Begin")
