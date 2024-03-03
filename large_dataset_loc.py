@@ -198,6 +198,7 @@ if __name__=="__main__":
         target_pose = np.concatenate([t, q])
         tgt.append(target_pose)
 
+
         estimated_pose, chosen_assignment = mem.localise(image_path=image_file_path, 
                                         depth_image_path=depth_file_path,
                                         save_point_clouds=largs.save_point_clouds,
