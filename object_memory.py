@@ -412,7 +412,6 @@ class ObjectFinder:
             caption = inference_ram(img_ram, self.ram_model)[0].split("|")
             
             words_to_ignore = [
-                                "carpet", 
                                 "living room", 
                                 "ceiling", 
                                 "room", 
@@ -436,7 +435,52 @@ class ObjectFinder:
                                 "hardwood",
                                 "plywood",
                                 "waiting room",
-                                "lead to"
+                                "lead to",
+                                "belly",
+                                "person",
+                                "chest",
+                                "black",
+                                "accident",
+                                "act",
+                                "doorway",
+                                "illustration",
+                                "animal",
+                                "mountain",
+                                "table top", # since we don't want a flat object as an instance
+                                "pen",
+                                "pencil",
+                                "corner",
+                                "notepad",
+                                "flower",
+                                "man",
+                                "pad",
+                                "lead",
+                                "ramp",
+                                "plank",
+                                "scale",
+                                "beam",
+                                "pink",
+                                "tie",
+                                "crack",
+                                "mirror",
+                                "square",
+                                "rectangle",
+                                "woman",
+                                "tree",
+                                "umbrella",
+                                "hat",
+                                "salon",
+                                "beach",
+                                "open",
+                                "closet",
+                                "blanket",
+                                "circle",
+                                "furniture",
+                                "balustrade",
+                                "cube",
+                                "dress",
+                                "ladder",
+                                "briefcase"
             ]
             sub_phrases_to_ignore = [
                                 "room",
@@ -446,7 +490,22 @@ class ObjectFinder:
                                 "image",
                                 "building",
                                 "ceiling"
-                                "lead"
+                                "lead",
+                                "paint",
+                                "shade",
+                                "snow",
+                                "rain",
+                                "cloud",
+                                "frost",
+                                "fog",
+                                "sky",
+                                "carpet",
+                                "view",
+                                "scene",
+                                "mat",
+                                "window",
+                                "vase",
+                                "bureau",
             ]
 
 
@@ -578,7 +637,9 @@ class QuaternionOps:
     @staticmethod
     def quaternion_error(q1, q2): # returns orientation angle between the two
         q_del = QuaternionOps.quaternion_multiply(QuaternionOps.quaternion_conjugate(q1), q2)
-        return np.abs(arctan2(np.linalg.norm(q_del[1:]), q_del[0]))
+        q_del_other_way = QuaternionOps.quaternion_multiply(QuaternionOps.quaternion_conjugate(q1), -q2)
+        return min(np.abs(arctan2(np.linalg.norm(q_del[1:]), q_del[0])),
+                   np.abs(arctan2(np.linalg.norm(q_del_other_way[1:]), q_del_other_way[0])))
 
 def transform_pcd_to_global_frame(pcd, pose):
     """
@@ -784,8 +845,9 @@ class ObjectInfo:
         Computes the mean embedding and centroid for the object.
         """
         # TODO messy, clean this up
-        self.mean_emb = np.mean(np.asarray(
-            [e.cpu() for e in self.embeddings]), axis=0)
+        # self.mean_emb = np.mean(np.asarray(
+        #     [e.cpu() for e in self.embeddings]), axis=0)
+        self.mean_emb = np.mean(np.array(self.embeddings), axis=0)
         self.centroid = np.mean(self.pcd, axis=-1)
 
     def __repr__(self):
@@ -793,7 +855,7 @@ class ObjectInfo:
         Returns a string representation of the object information.
         """
         return(f"ID: %d | Names: [%s] |  Num embs: %d | Pcd size: " % \
-              (self.id, " ".join(self.names), len(self.embeddings)) + str(self.pcd.shape))
+              (self.id, " ,".join(self.names), len(self.embeddings)) + str(self.pcd.shape))
 
 
 class ObjectMemory:
@@ -826,8 +888,7 @@ class ObjectMemory:
         Prints information about the objects stored in memory.
         """
         print("Objects stored in memory:")
-        for info in self.memory:
-            print(info.id, info.names)
+        for _, info in self.memory.items():
             print(info)
         print()
 
@@ -859,7 +920,7 @@ class ObjectMemory:
             return None, None, None
         
         # get ViT+LoRA embeddings, use bounding boxes and the image to get grounded images
-        embs = self.loraModule.encode_image(obj_grounded_imgs)
+        embs = np.array(self.loraModule.encode_image(obj_grounded_imgs).cpu())
         
         # filter out the pointclouds. NOTE: pointclouds are transformed to global pose later.
         obj_pointclouds = self.objectFinder.getDepth(depth_image_path, obj_masks)
@@ -878,7 +939,7 @@ class ObjectMemory:
     def process_image(self, image_path=None, depth_image_path=None, pose=None, verbose=True,
                       bounding_box_threshold=0.3,  occlusion_overlap_threshold=0.9, testname="", 
                       outlier_removal_config=None, min_points = 500, pose_noise = {'trans': 0.0005, 'rot': 0.0005},
-                      depth_noise = 0.003):
+                      depth_noise = 0.003, lora_threshold = 0.5):
         """
         Processes an RGB-D image, detects objects within and updates the object memory.
 
@@ -931,6 +992,7 @@ class ObjectMemory:
         # adding noise to pose
         pose[:3] = add_noise(pose[:3], pose_noise['trans'])
         pose[3:] = add_noise(pose[3:], pose_noise['rot'])
+
         # normalizing quaternion
         def normalize_quaternion(quaternion):
             norm = np.linalg.norm(quaternion)
@@ -961,8 +1023,8 @@ class ObjectMemory:
                 continue
 
             obj_exists = False
+            for obj_id, info in self.memory.items():
 
-            for info in self.memory:
                 object_pcd = info.pcd
                 IoU3d = calculate_3d_IoU(q_pcd, object_pcd)
                 overlap3d = calculate_strict_overlap(q_pcd, object_pcd)
@@ -971,10 +1033,17 @@ class ObjectMemory:
                     print("\tFound in mem (info, iou, strict_overlap): ", info, IoU3d, overlap3d)
 
                 # if the iou is above the threshold, consider it to be the same object/instance
-                if IoU3d > bounding_box_threshold or overlap3d > occlusion_overlap_threshold:
-                    info.addInfo(obj_phrase ,emb, q_pcd, align=False)
-                    obj_exists = True
-                    break
+
+                info.computeMeans()
+
+                lora_cos_sim = np.dot(info.mean_emb, emb)/(np.linalg.norm(info.mean_emb) * np.linalg.norm(emb))
+
+                if (IoU3d > bounding_box_threshold or overlap3d > occlusion_overlap_threshold):
+                    if lora_cos_sim > 0: # NOTE; not using LoRA here
+                        info.addInfo(obj_phrase ,emb, q_pcd, align=False)
+                        obj_exists = True
+                        break
+
 
             # new object detected
             if not obj_exists:
@@ -991,6 +1060,9 @@ class ObjectMemory:
             else:
                 if verbose:
                     print('\tObject exists, aggregated to\n', info, '\n')
+
+        for _, m in self.memory.items():
+            m.computeMeans()  # Update object info means
         
         # TODO consider downsampling points (optimisation)
                     
@@ -1004,7 +1076,12 @@ class ObjectMemory:
 
     Consolidates memory in place
     """
-    def consolidate_memory(self, bounding_box_threshold=0.3,  occlusion_overlap_threshold=0.9, downsample_voxel_size=0.01):
+
+    def consolidate_memory(self, bounding_box_threshold=0.3,  occlusion_overlap_threshold=0.9, downsample_voxel_size=0.01, verbose=False):
+        if verbose:
+            print("Pre consolidation")
+            self.view_memory()
+        
         new_memory = []
         for obj_id, obj_info in enumerate(self.memory):
             obj_pcd = obj_info.pcd
@@ -1021,19 +1098,20 @@ class ObjectMemory:
                     break
             
             if match_found:
-                new_memory[new_id] += obj_info
+                new_obj_info += obj_info
+
             else:
+
                 new_memory.append(self.memory[obj_id])
+
 
         del self.memory
         self.memory = new_memory
 
-        # downsample all pcds
-        tempPcd = o3d.geometry.PointCloud()
-        for obj_id, obj_info in enumerate(self.memory):
-            tempPcd.points = o3d.utility.Vector3dVector(obj_info.pcd.T)
-            tempPcd = tempPcd.voxel_down_sample(downsample_voxel_size)
-            self.memory[obj_id].pcd = np.array(tempPcd.points).T
+        if verbose:
+            print("Post consolidation")
+            self.view_memory()
+
 
 
     def localise(self, image_path, depth_image_path, testname="", save_point_clouds=False,
@@ -1070,14 +1148,18 @@ class ObjectMemory:
         # TODO maybe a KNN search will do better?
         for m in self.memory:
             m.computeMeans()  # Update object info means
-        memory_embs = torch.Tensor([m.mean_emb for m in self.memory]).to(self.device)
+
+        memory_embs = np.array([m.mean_emb for _, m in self.memory.items()])
+
 
         if len(detected_embs) > len(memory_embs):
             detected_embs = detected_embs[:len(memory_embs)]
 
+        detected_embs /= np.linalg.norm(detected_embs, axis=-1, keepdims=True)
+        memory_embs /= np.linalg.norm(memory_embs, axis=-1, keepdims=True)
+
         # Detected x Mem x Emb sized
-        cosine_similarities = F.cosine_similarity(detected_embs.unsqueeze(1), memory_embs.unsqueeze(0),
-                                                    axis=-1).cpu()
+        cosine_similarities = np.dot(detected_embs, memory_embs.T)
 
         # Run ICP/FPFH loop closure to get an estimated transform for each seen object
         R_matrices = np.zeros((len(detected_pointclouds), len(memory_embs), 3, 3), dtype=np.float32)

@@ -1,0 +1,44 @@
+Starting imports
+Imports completed in 12.429676532745361 seconds
+LocalArgs(lora_path='models/vit_finegrained_5x40_procthor.pt', test_folder_path='/scratch/vineeth.bhat/8-room-new', device='cuda', sam_checkpoint_path='/scratch/vineeth.bhat/sam_vit_h_4b8939.pth', ram_pretrained_path='/scratch/vineeth.bhat/ram_swin_large_14m.pth', sampling_period=80, save_dir='/scratch/vineeth.bhat/vin-experiments/large_dataset_trials/8-rooms-new', start_file_index=2, last_file_index=-1, rot_correction=30.0, look_around_range=1, save_individual_objects=True, down_sample_voxel_size=0.01)
+Created save directory /scratch/vineeth.bhat/vin-experiments/large_dataset_trials/8-rooms-new
+We have 4476 files
+
+Begin Memory Initialization
+/encoder/layer/0/crossattention/self/query is tied
+/encoder/layer/0/crossattention/self/key is tied
+/encoder/layer/0/crossattention/self/value is tied
+/encoder/layer/0/crossattention/output/dense is tied
+/encoder/layer/0/crossattention/output/LayerNorm is tied
+/encoder/layer/0/intermediate/dense is tied
+/encoder/layer/0/output/dense is tied
+/encoder/layer/0/output/LayerNorm is tied
+/encoder/layer/1/crossattention/self/query is tied
+/encoder/layer/1/crossattention/self/key is tied
+/encoder/layer/1/crossattention/self/value is tied
+/encoder/layer/1/crossattention/output/dense is tied
+/encoder/layer/1/crossattention/output/LayerNorm is tied
+/encoder/layer/1/intermediate/dense is tied
+/encoder/layer/1/output/dense is tied
+/encoder/layer/1/output/LayerNorm is tied
+--------------
+/scratch/vineeth.bhat/ram_swin_large_14m.pth
+--------------
+load checkpoint from /scratch/vineeth.bhat/ram_swin_large_14m.pth
+vit: swin_l
+final text_encoder_type: bert-base-uncased
+Model loaded from /home2/vineeth.bhat/.cache/huggingface/hub/models--ShilongLiu--GroundingDINO/snapshots/a94c9b567a2a374598f05c584e96798a170c56fb/groundingdino_swinb_cogcoor.pth 
+ => _IncompatibleKeys(missing_keys=[], unexpected_keys=['label_enc.weight'])
+SAM loaded
+Memory Init'ed
+
+
+	Seeing image 2 currently
+caption post ram:   door  .  hallway  .  stair 
+Object phrases detected in RGBD input of ObjectMemory.process_image ['door', 'stair']
+	Current Object Phrase under consideration door
+	Object added
+		 door 
+		 ID: 0 | Names: [door] |  Num embs: 1 | Pcd size: (3, 26367) 
+
+	Current Object Phrase under consideration stair
