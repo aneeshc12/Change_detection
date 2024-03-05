@@ -7,6 +7,7 @@ sys.path.append(os.path.join(os.getcwd(), "Grounded-Segment-Anything"))
 sys.path.append(os.path.join(os.getcwd(), "Grounded-Segment-Anything", "GroundingDINO"))
 sys.path.append(os.path.join(os.getcwd(), "GroundingDINO"))
 sys.path.append(os.path.join(os.getcwd(), "recognize-anything"))
+sys.path.append(os.path.join(os.getcwd(), "Objectron"))
 
 import os, sys, time
 import tyro
@@ -64,6 +65,8 @@ import json
 from dataclasses import dataclass, field
 from jcbb import JCBB
 from fpfh.fpfh_register import register_point_clouds
+
+from objectron.dataset import box, iou
 
 end_time = time.time()
 print(f"Imports completed in {end_time - start_time} seconds")
@@ -739,7 +742,45 @@ def calculate_strict_overlap(pcd1, pcd2):
 
         return overlap
 
+def calculate_obj_aligned_3d_IoU(pcd1, pcd2):
+    """
+    Calculates the 3D Intersection over Union (IoU) between two 3D point clouds. Using Objectrons algorithm
+    Uses object aligned bounding boxes isntead of axis aligned
 
+    Parameters:
+    - pcd1 (numpy.ndarray): First 3D point cloud represented as a 3xN array.
+    - pcd2 (numpy.ndarray): Second 3D point cloud represented as a 3xN array.
+
+    Returns:
+    - IoU (float): 3D Intersection over Union between the two point clouds.
+    """
+    bb1 = o3d.geometry.OrientedBoundingBox.create_from_points(
+        points=o3d.utility.Vector3dVector(pcd1.T) #, robust=True
+    )
+    bb2 = o3d.geometry.OrientedBoundingBox.create_from_points(
+        points=o3d.utility.Vector3dVector(pcd2.T) #, robust=True
+    )
+
+    bb1_vertices = np.zeros((9,3), dtype=np.float32)
+    bb1_vertices[0, :] = bb1.get_center()
+    bb1_vertices[1:,:] = np.array(bb1.get_box_points())
+
+    bb2_vertices = np.zeros((9,3), dtype=np.float32)
+    bb2_vertices[0, :] = bb2.get_center()
+    bb2_vertices[1:,:] = np.array(bb2.get_box_points())
+
+    w1 = box.Box(vertices=bb1_vertices)
+    w2 = box.Box(vertices=bb2_vertices)
+
+    loss = iou.IoU(w1, w2)
+    # try:
+    iou3d = loss.iou()
+    # except:
+    #     iou3d = 0.
+
+    print("iou loss: ", iou3d)
+
+    return iou3d
 
 """
 #################
@@ -1031,7 +1072,11 @@ class ObjectMemory:
             for info in self.memory:
 
                 object_pcd = info.pcd
-                IoU3d = calculate_3d_IoU(q_pcd, object_pcd)
+
+                # replace iou with the objectron implementation
+                # IoU3d = calculate_3d_IoU(q_pcd, object_pcd)
+                IoU3d = calculate_obj_aligned_3d_IoU(q_pcd, object_pcd)
+
                 overlap3d = calculate_strict_overlap(q_pcd, object_pcd)
 
                 if verbose:
@@ -1157,8 +1202,8 @@ class ObjectMemory:
         memory_embs = np.array([m.mean_emb for m in self.memory])
 
         # TODO deal with no objects detected
-        if detected_embs == None:
-            return [0.,0.,0.,0.,0.,0.,1.], [[],[]]
+        if detected_embs is None:
+            return np.array([0.,0.,0.,0.,0.,0.,1.]), [[],[]]
 
         if len(detected_embs) > len(memory_embs):
             detected_embs = detected_embs[:len(memory_embs)]
@@ -1185,7 +1230,7 @@ class ObjectMemory:
         # assuming that all detected objects can be assigned to mem objs
         # TODO calculate rotation matrices
         j = JCBB(cosine_similarities, R_matrices)
-        assns = j.get_all_subset_assignments(min_length=len(detected_embs)-1)
+        assns = j.get_all_subset_assignments(min_length=max(1, len(detected_embs)-1))
 
         # only consider the top K assignments based on net cosine similarity
         assns_to_consider = [assn[0] for assn in assns[:topK]]

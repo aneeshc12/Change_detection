@@ -13,15 +13,16 @@ class LocalArgs:
     device: str='cuda'
     sam_checkpoint_path: str = '/scratch/aneesh.chavan/sam_vit_h_4b8939.pth'
     ram_pretrained_path: str = '/scratch/aneesh.chavan/ram_swin_large_14m.pth'
-    sampling_period: int = 40
+    sampling_period: int = 5
     downsampling_rate: int = 5 # downsample points every these many frames
-    save_dir: str = "/scratch/aneesh.chavan/results/with_noise/"
+    save_dir: str = "/scratch/aneesh.chavan/results/objectron/"
     start_file_index: int = 1
     last_file_index: int = 1000 # test with no noise also
     rot_correction: float = 0.0 # keep as 30 for 8-room-new 
     look_around_range: int = 1 # number of sucessive frames to consider at every frame
     save_individual_objects: bool = False
     down_sample_voxel_size: float = 0.01
+    add_pose_noise: bool = True
 
 if __name__=="__main__":
     start_time = time.time()
@@ -84,7 +85,7 @@ if __name__=="__main__":
                                 image_path = image_file_path, 
                                 depth_image_path = depth_file_path, 
                                 pose=pose,
-                                verbose=False, add_noise=True)
+                                verbose=False, add_noise=largs.add_pose_noise)
             
             pid = psutil.Process()
             memory_info = pid.memory_info()

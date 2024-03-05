@@ -34,6 +34,9 @@ class JCBB():
     def get_all_subset_assignments(self, min_length=1):
         # generate the power set of all assignments
         def powerset(s, l):
+            if l < 1:
+                l = 1
+            
             x = len(s)
             ps = []
             for i in range(1 << x):
