@@ -1141,9 +1141,10 @@ class ObjectMemory:
     Performs uniform downsampling on all pointclouds as well
 
     Consolidates memory in place
+    Thresholds are lower 
     """
 
-    def consolidate_memory(self, bounding_box_threshold=0.3,  occlusion_overlap_threshold=0.9, downsample_voxel_size=0.01, verbose=False):
+    def consolidate_memory(self, bounding_box_threshold=0.2,  occlusion_overlap_threshold=0.6, downsample_voxel_size=0.01, verbose=False):
         if verbose:
             print("Pre consolidation")
             self.view_memory()
@@ -1157,6 +1158,8 @@ class ObjectMemory:
             for new_id, new_obj_info in enumerate(new_memory):
                 IoU3d = calculate_obj_aligned_3d_IoU(new_obj_info.pcd, obj_pcd)
                 overlap3d = calculate_strict_overlap(new_obj_info.pcd, obj_pcd)
+                if verbose:
+                    print(f"{obj_id}, {obj_info.names} -- {new_obj_info.names} | {IoU3d}, {overlap3d}")
 
                 # object overlaps enough to be consolidated with the object in new memory
                 if IoU3d > bounding_box_threshold or overlap3d > occlusion_overlap_threshold:

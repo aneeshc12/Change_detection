@@ -15,7 +15,7 @@ class LocalArgs:
     ram_pretrained_path: str = '/scratch/aneesh.chavan/ram_swin_large_14m.pth'
     sampling_period: int = 20
     downsampling_rate: int = 5 # downsample points every these many frames
-    save_dir: str = "/scratch/aneesh.chavan/results/objectron/"
+    save_dir: str = "/scratch/aneesh.chavan/results/consolidation/"
     start_file_index: int = 1
     last_file_index: int = 400 # test with no noise also
     rot_correction: float = 0.0 # keep as 30 for 8-room-new 
