@@ -7,18 +7,21 @@ class LocalArgs:
     Class to hold local configuration arguments.
     """
     lora_path: str='models/vit_finegrained_5x40_procthor.pt'
-    test_folder_path: str='/scratch/vineeth.bhat/8-room-new'
+    test_folder_path: str='/scratch/aneesh.chavan/8room/8-room-v1/1/'
+    rearranged_test_folder_path: str='/scratch/aneesh.chavan/8room/8-room-v1/1/'
     device: str='cuda'
-    sam_checkpoint_path: str = '/scratch/vineeth.bhat/sam_vit_h_4b8939.pth'
-    ram_pretrained_path: str = '/scratch/vineeth.bhat/ram_swin_large_14m.pth'
-    sampling_period: int = 80
+    sam_checkpoint_path: str = '/scratch/aneesh.chavan/sam_vit_h_4b8939.pth'
+    ram_pretrained_path: str = '/scratch/aneesh.chavan/ram_swin_large_14m.pth'
+    sampling_period: int = 5
     downsampling_rate: int = 5 # downsample points every these many frames
-    save_dir: str = "/scratch/vineeth.bhat/vin-experiments/large_dataset_trials/8-rooms-new"
+    save_dir: str = "/scratch/aneesh.chavan/results/loc"
     start_file_index: int = 2
-    last_file_index: int = -1
+    last_file_index: int = 250
     rot_correction: float = 0.0 # keep as 30 for 8-room-new 
     look_around_range: int = 0 # number of sucessive frames to consider at every frame
-    save_individual_objects: bool = False
+    save_individual_objects: bool = True
+
+    add_pose_noise: bool = True
 
     down_sample_voxel_size: float = 0.01 # best results
     create_ext_mesh: bool = False
@@ -29,8 +32,8 @@ class LocalArgs:
     localise_times: int = 1
 
     loc_results_start_file_index: int = 1
-    loc_results_last_file_index: int = -1
-    loc_results_sampling_period: int = 400
+    loc_results_last_file_index: int = 250
+    loc_results_sampling_period: int = 13
 
 if __name__=="__main__":
     start_time = time.time()
@@ -94,7 +97,8 @@ if __name__=="__main__":
             mem.process_image(testname=f"view%d" % i, 
                                 image_path = image_file_path, 
                                 depth_image_path = depth_file_path, 
-                                pose=pose)
+                                pose=pose,
+                                verbose=False, add_noise=largs.add_pose_noise)
             
             pid = psutil.Process()
             memory_info = pid.memory_info()
@@ -169,11 +173,11 @@ if __name__=="__main__":
                    largs.loc_results_last_file_index + 1, 
                    largs.loc_results_sampling_period):
         print(f"\n\tLocalizing image {i} currently")
-        image_file_path = os.path.join(largs.test_folder_path, 
+        image_file_path = os.path.join(largs.rearranged_test_folder_path, 
                                     f"rgb/{i}.png")
-        depth_file_path = os.path.join(largs.test_folder_path, 
+        depth_file_path = os.path.join(largs.rearranged_test_folder_path, 
                                     f"depth/{i}.npy")
-        pose_file_path = os.path.join(largs.test_folder_path, 
+        pose_file_path = os.path.join(largs.rearranged_test_folder_path, 
                                     f"pose/{i}.txt")
 
         
@@ -224,6 +228,8 @@ if __name__=="__main__":
         print(f"Pose {i + 1}")
         print("Translation error", trans_errors[i])
         print("Rotation errors", rot_errors[i])
+        print("Assignment: ", chosen_assignment[i][0])
+        print("Moved objects: ", chosen_assignment[i][1])
 
     end_time = time.time()
     print(f"Localization completed in {end_time - start_time} seconds")

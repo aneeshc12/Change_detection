@@ -1,21 +1,23 @@
 from object_memory import *
 import ast, pickle, shutil, time
 import psutil, os
+from tqdm import tqdm
+
 @dataclass
 class LocalArgs:
     """
     Class to hold local configuration arguments.
     """
     lora_path: str='models/vit_finegrained_5x40_procthor.pt'
-    test_folder_path: str='/scratch/vineeth.bhat/8-room-new'
+    test_folder_path: str='/scratch/aneesh.chavan/8room/8-room-v1/2/'
     device: str='cuda'
-    sam_checkpoint_path: str = '/scratch/vineeth.bhat/sam_vit_h_4b8939.pth'
-    ram_pretrained_path: str = '/scratch/vineeth.bhat/ram_swin_large_14m.pth'
+    sam_checkpoint_path: str = '/scratch/aneesh.chavan/sam_vit_h_4b8939.pth'
+    ram_pretrained_path: str = '/scratch/aneesh.chavan/ram_swin_large_14m.pth'
     sampling_period: int = 40
     downsampling_rate: int = 5 # downsample points every these many frames
-    save_dir: str = "/scratch/vineeth.bhat/vin-experiments/large_dataset_trials/8-rooms-new"
+    save_dir: str = "/scratch/aneesh.chavan/results/with_noise/"
     start_file_index: int = 1
-    last_file_index: int = -1
+    last_file_index: int = 1000 # test with no noise also
     rot_correction: float = 0.0 # keep as 30 for 8-room-new 
     look_around_range: int = 1 # number of sucessive frames to consider at every frame
     save_individual_objects: bool = False
@@ -47,7 +49,7 @@ if __name__=="__main__":
 
     frame_counter = 0
 
-    for cur_frame in range(largs.start_file_index, largs.last_file_index + 1, largs.sampling_period):
+    for cur_frame in tqdm(range(largs.start_file_index, largs.last_file_index + 1, largs.sampling_period), total=num_files//largs.sampling_period):
         for i in range(cur_frame, min(largs.last_file_index + 1, cur_frame + largs.look_around_range + 1)):
             print(f"\n\tSeeing image {i} currently")
             image_file_path = os.path.join(largs.test_folder_path, 
@@ -81,7 +83,8 @@ if __name__=="__main__":
             mem.process_image(testname=f"view%d" % i, 
                                 image_path = image_file_path, 
                                 depth_image_path = depth_file_path, 
-                                pose=pose)
+                                pose=pose,
+                                verbose=False, add_noise=True)
             
             pid = psutil.Process()
             memory_info = pid.memory_info()

@@ -480,7 +480,10 @@ class ObjectFinder:
                                 "cube",
                                 "dress",
                                 "ladder",
-                                "briefcase"
+                                "briefcase",
+                                "marble",
+                                "pillar",
+                                "dark"
             ]
             sub_phrases_to_ignore = [
                                 "room",
@@ -1153,6 +1156,9 @@ class ObjectMemory:
 
         memory_embs = np.array([m.mean_emb for m in self.memory])
 
+        # TODO deal with no objects detected
+        if detected_embs == None:
+            return [0.,0.,0.,0.,0.,0.,1.], [[],[]]
 
         if len(detected_embs) > len(memory_embs):
             detected_embs = detected_embs[:len(memory_embs)]
@@ -1179,7 +1185,7 @@ class ObjectMemory:
         # assuming that all detected objects can be assigned to mem objs
         # TODO calculate rotation matrices
         j = JCBB(cosine_similarities, R_matrices)
-        assns = j.get_all_subset_assignments()
+        assns = j.get_all_subset_assignments(min_length=len(detected_embs)-1)
 
         # only consider the top K assignments based on net cosine similarity
         assns_to_consider = [assn[0] for assn in assns[:topK]]
@@ -1224,6 +1230,8 @@ class ObjectMemory:
         assn = best_assn[0]
         transform = best_assn[1]
 
+        moved_objs = [n for n in range(len(detected_pointclouds)) if n not in assn]
+
         R = copy.copy(transform[:3,:3])
         t = copy.copy(transform[:3, 3])
         
@@ -1235,7 +1243,7 @@ class ObjectMemory:
         # moved objects will have indices that are not present in the first row of assn
 
         print(best_assn)
-        return localised_pose, assn
+        return localised_pose, [assn, moved_objs]
 
 @dataclass
 class LocalArgs:
