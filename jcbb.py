@@ -55,6 +55,20 @@ class JCBB():
         self.sort_assignments()
         return self.leaf_nodes 
 
+    """
+    Get the top `assignments_per_length` assignments out of all subsets, sorted by normalised cos sim
+    """
+    def get_candidate_assignments(self, min_length=1, assignments_per_length=4):
+        min_length = max(1,min_length)
+        self.get_all_subset_assignments(min_length)
+
+        candidate_assns = []
+        for length in range(min_length, self.num_detected + 1):
+            cnt_len = [assn for assn in self.leaf_nodes if len(assn[0]) == length]
+            cnt_len = sorted(cnt_len, key=lambda x: x[1], reverse=True)
+            candidate_assns += cnt_len[:assignments_per_length]
+        
+        return candidate_assns
     
     def sort_assignments(self):
         self.leaf_nodes = sorted(self.leaf_nodes, key=lambda x: x[1], reverse=True)
@@ -105,15 +119,15 @@ if __name__ ==  '__main__':
 
     j = JCBB(sim, None)
 
-    paths = j.get_all_subset_assignments(min_length=1)
+    paths = j.get_candidate_assignments(min_length=1)
 
     # paths = j.get_assignments(to_be_assigned=[1,2,3])
     # paths = j.get_assignments()
     for p in paths[:20]:
         print(p[0],p[1], sep="|", end="\n")
-        # print()
+        print()
 
-    # # print(paths)
+    print(paths)
     # print("Time taken: ", time.time()-start)
 
     # print(sim)

@@ -486,7 +486,8 @@ class ObjectFinder:
                                 "briefcase",
                                 "marble",
                                 "pillar",
-                                "dark"
+                                "dark",
+                                "sea"
             ]
             sub_phrases_to_ignore = [
                                 "room",
@@ -754,6 +755,12 @@ def calculate_obj_aligned_3d_IoU(pcd1, pcd2):
     Returns:
     - IoU (float): 3D Intersection over Union between the two point clouds.
     """
+    def conv_to_objectron_ordering(v):
+        v = sorted(v, key=lambda v: v[2])
+        v = sorted(v, key=lambda v: v[1])
+        v = sorted(v, key=lambda v: v[0])
+        return v
+
     bb1 = o3d.geometry.OrientedBoundingBox.create_from_points(
         points=o3d.utility.Vector3dVector(pcd1.T) #, robust=True
     )
@@ -763,22 +770,22 @@ def calculate_obj_aligned_3d_IoU(pcd1, pcd2):
 
     bb1_vertices = np.zeros((9,3), dtype=np.float32)
     bb1_vertices[0, :] = bb1.get_center()
-    bb1_vertices[1:,:] = np.array(bb1.get_box_points())
+    bb1c = np.array(bb1.get_box_points())
+    bb1_vertices[1:,:] = conv_to_objectron_ordering(bb1c)
 
     bb2_vertices = np.zeros((9,3), dtype=np.float32)
     bb2_vertices[0, :] = bb2.get_center()
-    bb2_vertices[1:,:] = np.array(bb2.get_box_points())
+    bb2c = np.array(bb2.get_box_points())
+    bb2_vertices[1:,:] = conv_to_objectron_ordering(bb2c)
 
     w1 = box.Box(vertices=bb1_vertices)
     w2 = box.Box(vertices=bb2_vertices)
 
     loss = iou.IoU(w1, w2)
-    # try:
-    iou3d = loss.iou()
-    # except:
-    #     iou3d = 0.
-
-    print("iou loss: ", iou3d)
+    try:
+        iou3d = loss.iou()
+    except:
+        iou3d = 0.
 
     return iou3d
 
@@ -1069,13 +1076,22 @@ class ObjectMemory:
                 continue
 
             obj_exists = False
+            count = 0
             for info in self.memory:
 
                 object_pcd = info.pcd
 
                 # replace iou with the objectron implementation
-                # IoU3d = calculate_3d_IoU(q_pcd, object_pcd)
+                IoU3d_o = calculate_3d_IoU(q_pcd, object_pcd)
                 IoU3d = calculate_obj_aligned_3d_IoU(q_pcd, object_pcd)
+                
+                if IoU3d_o > 0.:
+                    print("Old iou: ", IoU3d_o, IoU3d)
+
+                if IoU3d_o > bounding_box_threshold:
+                    np.save(f"./temp/{count}_qpcd.npy", q_pcd)
+                    np.save(f"./temp/{count}_objectpcd.npy", object_pcd)
+                    count += 1
 
                 overlap3d = calculate_strict_overlap(q_pcd, object_pcd)
 
@@ -1139,7 +1155,7 @@ class ObjectMemory:
             # check all objects in new_memory to try and match them
             match_found = False
             for new_id, new_obj_info in enumerate(new_memory):
-                IoU3d = calculate_3d_IoU(new_obj_info.pcd, obj_pcd)
+                IoU3d = calculate_obj_aligned_3d_IoU(new_obj_info.pcd, obj_pcd)
                 overlap3d = calculate_strict_overlap(new_obj_info.pcd, obj_pcd)
 
                 # object overlaps enough to be consolidated with the object in new memory
@@ -1151,7 +1167,6 @@ class ObjectMemory:
                 new_obj_info += obj_info
 
             else:
-
                 new_memory.append(self.memory[obj_id])
 
 
@@ -1230,10 +1245,12 @@ class ObjectMemory:
         # assuming that all detected objects can be assigned to mem objs
         # TODO calculate rotation matrices
         j = JCBB(cosine_similarities, R_matrices)
-        assns = j.get_all_subset_assignments(min_length=max(1, len(detected_embs)-1))
+        assns = j.get_candidate_assignments(min_length=max(1, len(detected_embs)-1))
 
         # only consider the top K assignments based on net cosine similarity
-        assns_to_consider = [assn[0] for assn in assns[:topK]]
+        # assns_to_consider = [assn[0] for assn in assns[:topK]]
+
+        assns_to_consider = [assn[0] for assn in assns]
 
         print("Phrases: ", detected_phrases)
         print(cosine_similarities)

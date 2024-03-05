@@ -14,9 +14,9 @@ class LocalArgs:
     ram_pretrained_path: str = '/scratch/aneesh.chavan/ram_swin_large_14m.pth'
     sampling_period: int = 5
     downsampling_rate: int = 5 # downsample points every these many frames
-    save_dir: str = "/scratch/aneesh.chavan/results/loc"
-    start_file_index: int = 2
-    last_file_index: int = 250
+    save_dir: str = "/scratch/aneesh.chavan/results/obj_loc"
+    start_file_index: int = 100
+    last_file_index: int = 130
     rot_correction: float = 0.0 # keep as 30 for 8-room-new 
     look_around_range: int = 0 # number of sucessive frames to consider at every frame
     save_individual_objects: bool = True
@@ -31,8 +31,8 @@ class LocalArgs:
     fpfh_voxel_size: float = 0.05
     localise_times: int = 1
 
-    loc_results_start_file_index: int = 1
-    loc_results_last_file_index: int = 250
+    loc_results_start_file_index: int = 100
+    loc_results_last_file_index: int = 130
     loc_results_sampling_period: int = 13
 
 if __name__=="__main__":
@@ -169,9 +169,9 @@ if __name__=="__main__":
     rot_errors = []
     chosen_assignments = []
 
-    for i in range(largs.loc_results_start_file_index, 
+    for n, i in enumerate(range(largs.loc_results_start_file_index, 
                    largs.loc_results_last_file_index + 1, 
-                   largs.loc_results_sampling_period):
+                   largs.loc_results_sampling_period)):
         print(f"\n\tLocalizing image {i} currently")
         image_file_path = os.path.join(largs.rearranged_test_folder_path, 
                                     f"rgb/{i}.png")
@@ -224,12 +224,20 @@ if __name__=="__main__":
         rot_errors.append(rotation_error)
         chosen_assignments.append(chosen_assignment)
 
+        if n % 10 == 0:
+            for ii in range(len(trans_errors)):
+                print(f"Pose {i + 1}")
+                print("Translation error", trans_errors[ii])
+                print("Rotation errors", rot_errors[ii])
+                print("Assignment: ", chosen_assignments[ii][0])
+                print("Moved objects: ", chosen_assignments[ii][1])
+
     for i in range(len(trans_errors)):
         print(f"Pose {i + 1}")
         print("Translation error", trans_errors[i])
         print("Rotation errors", rot_errors[i])
-        print("Assignment: ", chosen_assignment[i][0])
-        print("Moved objects: ", chosen_assignment[i][1])
+        print("Assignment: ", chosen_assignments[i][0])
+        print("Moved objects: ", chosen_assignments[i][1])
 
     end_time = time.time()
     print(f"Localization completed in {end_time - start_time} seconds")

@@ -13,14 +13,14 @@ class LocalArgs:
     device: str='cuda'
     sam_checkpoint_path: str = '/scratch/aneesh.chavan/sam_vit_h_4b8939.pth'
     ram_pretrained_path: str = '/scratch/aneesh.chavan/ram_swin_large_14m.pth'
-    sampling_period: int = 5
+    sampling_period: int = 20
     downsampling_rate: int = 5 # downsample points every these many frames
     save_dir: str = "/scratch/aneesh.chavan/results/objectron/"
     start_file_index: int = 1
-    last_file_index: int = 1000 # test with no noise also
+    last_file_index: int = 400 # test with no noise also
     rot_correction: float = 0.0 # keep as 30 for 8-room-new 
     look_around_range: int = 1 # number of sucessive frames to consider at every frame
-    save_individual_objects: bool = False
+    save_individual_objects: bool = True
     down_sample_voxel_size: float = 0.01
     add_pose_noise: bool = True
 
@@ -139,6 +139,26 @@ if __name__=="__main__":
             print(f"{i} pointcloud saved to", cur_save_path)
 
         combined_pcd += pcd
+
+    # consolidate and check
+    mem.consolidate_memory(verbose=True)
+    pcd_list = []
+    for info in mem.memory:
+        object_pcd = info.pcd
+        pcd_list.append(object_pcd)
+        
+    for i in range(len(pcd_list)):
+        pcd_np = pcd_list[i]
+        pcd_vec = o3d.utility.Vector3dVector(pcd_np.T)
+        pcd = o3d.geometry.PointCloud()
+        pcd.points = pcd_vec
+
+        if largs.save_individual_objects:
+            cur_save_path = os.path.join(individual_mem_save_dir, 
+                f"cons_{i}.pcd") 
+
+            o3d.io.write_point_cloud(cur_save_path, pcd)
+            print(f"{i} pointcloud saved to", cur_save_path)
 
     save_path = os.path.join(largs.save_dir, 
         f"mem_{largs.start_file_index}_{largs.last_file_index}_{largs.sampling_period}_{largs.look_around_range}.pcd")

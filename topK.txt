@@ -1,0 +1,61 @@
+Target pose:  [ 8.75        0.90099978 20.          0.02083255  0.96279173 -0.2579793
+  0.07774814]
+Estimated pose:  [ 5.69352012 -1.87186348 20.27019841  0.71763578  0.543257    0.23957377
+  0.36397132]
+Translation error:  4.135679765464347
+Rotation_error:  1.0420091302882846
+Pose 132
+Translation error 2.212580206130358
+Rotation errors 0.003737279962573004
+Assignment:  [[0, 0]]
+Moved objects:  [0, 1]
+Pose 132
+Translation error 4.6177943458724995
+Rotation errors 0.03912758933793614
+Assignment:  [[0, 0]]
+Moved objects:  [0]
+Pose 132
+Translation error 2.187446339101752
+Rotation errors 0.00022800332843367946
+Assignment:  [[0, 0]]
+Moved objects:  [0, 1]
+Pose 132
+Translation error 2.186580910176423
+Rotation errors 0.0021419446792984545
+Assignment:  [[0, 0]]
+Moved objects:  [0, 1]
+Pose 132
+Translation error 2.8546976359191176
+Rotation errors 0.002390018714070955
+Assignment:  [[0, 0]]
+Moved objects:  [0, 1]
+Pose 132
+Translation error 3.0174154337377215
+Rotation errors 1.5701686900583094
+Assignment:  [[1, 6]]
+Moved objects:  [0, 1]
+Pose 132
+Translation error 2.238249654417932
+Rotation errors 0.01548401089654997
+Assignment:  [[0, 0]]
+Moved objects:  [0, 1]
+Pose 132
+Translation error 2.940112018226519
+Rotation errors 0.8370633269517475
+Assignment:  [[0, 6]]
+Moved objects:  [0]
+Pose 132
+Translation error 1.3617460602456026
+Rotation errors 1.1583694687794697
+Assignment:  [[0, 6]]
+Moved objects:  [0]
+Pose 132
+Translation error 3.870231026599401
+Rotation errors 1.5688489735697735
+Assignment:  [[0, 0], [1, 8]]
+Moved objects:  [0, 1, 2]
+Pose 132
+Translation error 4.135679765464347
+Rotation errors 1.0420091302882846
+Assignment:  [[0, 17]]
+Moved objects:  [0]
