@@ -90,26 +90,29 @@ def JCBBNode(tree, indices_left, similarity_sum, depth, path, choices_left):
         return
     
     # recurse through 
+    to_be_assigned = indices_left[0]
+    remaining = indices_left[1:]
+    # indices_left.pop(0)
     for c in choices_left:
-        child_path = copy(path)
-
         # let this child be assignment (indices_left[0], c), 
         #       remove c from choices
         #       remove indices_left[0] from indices_left
-        child_path.append([indices_left[0], c])
+        # print("ind: ", indices_left)
+        child_path = path + [[to_be_assigned, c]]
         child_choices_left = [d for d in choices_left if d != c]
         
         # add the cosine similarity of this assignment to the cost (indices)
-        new_sum = similarity_sum + np.log(tree.cosine_similarities[indices_left[0]][c])
+        new_sum = similarity_sum + np.log(tree.cosine_similarities[to_be_assigned][c])
         
         JCBBNode(
             tree,
-            indices_left[1:],
+            remaining,
             new_sum,
             depth+1,
             child_path,
             child_choices_left
         )
+    return
 
 if __name__ ==  '__main__':
     np.random.seed(seed=42)
@@ -117,17 +120,17 @@ if __name__ ==  '__main__':
 
     start = time.time()
 
-    j = JCBB(sim, None)
+    j = JCBB(sim, np.random.uniform(size=(4,40,3,3)))
 
-    paths = j.get_candidate_assignments(min_length=1)
+    paths = j.get_assignments()
 
     # paths = j.get_assignments(to_be_assigned=[1,2,3])
     # paths = j.get_assignments()
-    for p in paths[:20]:
-        print(p[0],p[1], sep="|", end="\n")
-        print()
+    # for p in paths[:20]:
+    #     print(p[0],p[1], sep="|", end="\n")
+    #     print()
 
     print(paths)
-    # print("Time taken: ", time.time()-start)
+    print("Time taken: ", time.time()-start)
 
     # print(sim)

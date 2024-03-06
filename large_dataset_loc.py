@@ -14,9 +14,9 @@ class LocalArgs:
     ram_pretrained_path: str = '/scratch/aneesh.chavan/ram_swin_large_14m.pth'
     sampling_period: int = 5
     downsampling_rate: int = 5 # downsample points every these many frames
-    save_dir: str = "/scratch/aneesh.chavan/results/obj_loc"
+    save_dir: str = "/scratch/aneesh.chavan/results/fix"
     start_file_index: int = 100
-    last_file_index: int = 130
+    last_file_index: int = 160
     rot_correction: float = 0.0 # keep as 30 for 8-room-new 
     look_around_range: int = 0 # number of sucessive frames to consider at every frame
     save_individual_objects: bool = True
@@ -31,8 +31,8 @@ class LocalArgs:
     fpfh_voxel_size: float = 0.05
     localise_times: int = 1
 
-    loc_results_start_file_index: int = 100
-    loc_results_last_file_index: int = 130
+    loc_results_start_file_index: int = 106
+    loc_results_last_file_index: int = 160
     loc_results_sampling_period: int = 13
 
 if __name__=="__main__":
@@ -209,6 +209,18 @@ if __name__=="__main__":
                                         fpfh_global_dist_factor = largs.fpfh_global_dist_factor, 
                                         fpfh_local_dist_factor = largs.fpfh_global_dist_factor, 
                                         fpfh_voxel_size = largs.fpfh_voxel_size)
+
+        # save detected objs
+        _, _, detected_pcds = mem._get_object_info(image_path=image_file_path, depth_image_path=depth_file_path)
+        if largs.save_individual_objects and detected_pcds is not None:
+            p = o3d.geometry.PointCloud()
+            for j, det_pcd in enumerate(detected_pcds):
+                save_path = os.path.join(largs.save_dir, 
+                    f"detected_img_{n}_{j}.pcd")
+                p.points = o3d.utility.Vector3dVector(detected_pcds[j].T)
+                o3d.io.write_point_cloud(save_path, p)
+                print(f"Img {i} obj {j} pointcloud saved to", save_path)
+
 
         print("Target pose: ", target_pose)
         print("Estimated pose: ", estimated_pose)
