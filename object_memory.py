@@ -7,6 +7,7 @@ sys.path.append(os.path.join(os.getcwd(), "Grounded-Segment-Anything"))
 sys.path.append(os.path.join(os.getcwd(), "Grounded-Segment-Anything", "GroundingDINO"))
 sys.path.append(os.path.join(os.getcwd(), "GroundingDINO"))
 sys.path.append(os.path.join(os.getcwd(), "recognize-anything"))
+sys.path.append(os.path.join(os.getcwd(), "Objectron"))
 
 import os, sys, time
 import tyro
@@ -64,6 +65,8 @@ import json
 from dataclasses import dataclass, field
 from jcbb import JCBB
 from fpfh.fpfh_register import register_point_clouds
+
+from objectron.dataset import box, iou
 
 end_time = time.time()
 print(f"Imports completed in {end_time - start_time} seconds")
@@ -480,7 +483,11 @@ class ObjectFinder:
                                 "cube",
                                 "dress",
                                 "ladder",
-                                "briefcase"
+                                "briefcase",
+                                "marble",
+                                "pillar",
+                                "dark",
+                                "sea"
             ]
             sub_phrases_to_ignore = [
                                 "room",
@@ -736,7 +743,51 @@ def calculate_strict_overlap(pcd1, pcd2):
 
         return overlap
 
+def calculate_obj_aligned_3d_IoU(pcd1, pcd2):
+    """
+    Calculates the 3D Intersection over Union (IoU) between two 3D point clouds. Using Objectrons algorithm
+    Uses object aligned bounding boxes isntead of axis aligned
 
+    Parameters:
+    - pcd1 (numpy.ndarray): First 3D point cloud represented as a 3xN array.
+    - pcd2 (numpy.ndarray): Second 3D point cloud represented as a 3xN array.
+
+    Returns:
+    - IoU (float): 3D Intersection over Union between the two point clouds.
+    """
+    def conv_to_objectron_ordering(v):
+        v = sorted(v, key=lambda v: v[2])
+        v = sorted(v, key=lambda v: v[1])
+        v = sorted(v, key=lambda v: v[0])
+        return v
+
+    bb1 = o3d.geometry.OrientedBoundingBox.create_from_points(
+        points=o3d.utility.Vector3dVector(pcd1.T) #, robust=True
+    )
+    bb2 = o3d.geometry.OrientedBoundingBox.create_from_points(
+        points=o3d.utility.Vector3dVector(pcd2.T) #, robust=True
+    )
+
+    bb1_vertices = np.zeros((9,3), dtype=np.float32)
+    bb1_vertices[0, :] = bb1.get_center()
+    bb1c = np.array(bb1.get_box_points())
+    bb1_vertices[1:,:] = conv_to_objectron_ordering(bb1c)
+
+    bb2_vertices = np.zeros((9,3), dtype=np.float32)
+    bb2_vertices[0, :] = bb2.get_center()
+    bb2c = np.array(bb2.get_box_points())
+    bb2_vertices[1:,:] = conv_to_objectron_ordering(bb2c)
+
+    w1 = box.Box(vertices=bb1_vertices)
+    w2 = box.Box(vertices=bb2_vertices)
+
+    loss = iou.IoU(w1, w2)
+    try:
+        iou3d = loss.iou()
+    except:
+        iou3d = 0.
+
+    return iou3d
 
 """
 #################
@@ -935,8 +986,7 @@ class ObjectMemory:
 
         return obj_phrases, embs, obj_pointclouds
 
-
-    def process_image(self, image_path=None, depth_image_path=None, pose=None, verbose=True,
+    def process_image(self, image_path=None, depth_image_path=None, pose=None, verbose=True, add_noise=True,
                       bounding_box_threshold=0.3,  occlusion_overlap_threshold=0.9, testname="", 
                       outlier_removal_config=None, min_points = 500, pose_noise = {'trans': 0.0005, 'rot': 0.0005},
                       depth_noise = 0.003, lora_threshold = 0.5):
@@ -960,7 +1010,7 @@ class ObjectMemory:
         # Default outlier removal config
         if outlier_removal_config == None:
             outlier_removal_config = {
-                "radius_nb_points": 8,
+                "radius_nb_points": 12,
                 "radius": 0.05,
             }
 
@@ -984,14 +1034,15 @@ class ObjectMemory:
         if pose is None:
             raise NotImplementedError # TODO: mapping without pose :)
         
-        def add_noise(array, noise_level):
+        def add_point_noise(array, noise_level):
             noise = np.random.normal(0, noise_level, array.shape)
             noisy_array = array + noise
             return noisy_array
         
         # adding noise to pose
-        pose[:3] = add_noise(pose[:3], pose_noise['trans'])
-        pose[3:] = add_noise(pose[3:], pose_noise['rot'])
+        if add_noise:
+            pose[:3] = add_point_noise(pose[:3], pose_noise['trans'])
+            pose[3:] = add_point_noise(pose[3:], pose_noise['rot'])
 
         # normalizing quaternion
         def normalize_quaternion(quaternion):
@@ -1004,7 +1055,8 @@ class ObjectMemory:
         transformed_pointclouds = [transform_pcd_to_global_frame(pcd, pose) for pcd in filtered_pointclouds]
         
         # Adding noise to depth (pointclouds)
-        transformed_pointclouds = [add_noise(pcd, depth_noise) for pcd in transformed_pointclouds]
+        if add_noise:
+            transformed_pointclouds = [add_point_noise(pcd, depth_noise) for pcd in transformed_pointclouds]
 
         # for each tuple, consult already stored memory, match tuples to stored memory (based on 3d IoU)
             # TODO optimise and batch, fetch all memory bounding boxes once
@@ -1023,10 +1075,23 @@ class ObjectMemory:
                 continue
 
             obj_exists = False
+            count = 0
             for info in self.memory:
 
                 object_pcd = info.pcd
-                IoU3d = calculate_3d_IoU(q_pcd, object_pcd)
+
+                # replace iou with the objectron implementation
+                IoU3d_o = calculate_3d_IoU(q_pcd, object_pcd)
+                IoU3d = calculate_obj_aligned_3d_IoU(q_pcd, object_pcd)
+                
+                if IoU3d_o > 0.:
+                    print("Old iou: ", IoU3d_o, IoU3d)
+
+                if IoU3d_o > bounding_box_threshold:
+                    # np.save(f"./temp/{count}_qpcd.npy", q_pcd)
+                    # np.save(f"./temp/{count}_objectpcd.npy", object_pcd)
+                    count += 1
+
                 overlap3d = calculate_strict_overlap(q_pcd, object_pcd)
 
                 if verbose:
@@ -1069,15 +1134,32 @@ class ObjectMemory:
     def downsample_all_objects(self, voxel_size = 0.001, use_external_mesh = False):
         for info in self.memory:
             info.downsample(voxel_size, use_external_mesh)
+    
+    def remove_object_floors(self, floor_thickness=0.1):
+        floor_height = 1e8
+        for info in self.memory:
+            low = np.min(info.pcd[1,:])
+            floor_height = min(low, floor_height)
+
+        for info in self.memory:
+            info.pcd = (info.pcd.T[(info.pcd[1,:] > floor_height + floor_thickness)]).T
+
+            if len(info.pcd) == 0:
+                self.memory.remove(info)
+            
+            if len(info.pcd[0]) == 0:
+                self.memory.remove(info)
+                continue
 
     """
     Runs through all objects stored in memory, consolidates objects that have a sufficient overlap
     Performs uniform downsampling on all pointclouds as well
 
     Consolidates memory in place
+    Thresholds are lower 
     """
 
-    def consolidate_memory(self, bounding_box_threshold=0.3,  occlusion_overlap_threshold=0.9, downsample_voxel_size=0.01, verbose=False):
+    def consolidate_memory(self, bounding_box_threshold=0.2,  occlusion_overlap_threshold=0.6, downsample_voxel_size=0.01, verbose=False):
         if verbose:
             print("Pre consolidation")
             self.view_memory()
@@ -1089,8 +1171,10 @@ class ObjectMemory:
             # check all objects in new_memory to try and match them
             match_found = False
             for new_id, new_obj_info in enumerate(new_memory):
-                IoU3d = calculate_3d_IoU(new_obj_info.pcd, obj_pcd)
+                IoU3d = calculate_obj_aligned_3d_IoU(new_obj_info.pcd, obj_pcd)
                 overlap3d = calculate_strict_overlap(new_obj_info.pcd, obj_pcd)
+                if verbose:
+                    print(f"{obj_id}, {obj_info.names} -- {new_obj_info.names} | {IoU3d}, {overlap3d}")
 
                 # object overlaps enough to be consolidated with the object in new memory
                 if IoU3d > bounding_box_threshold or overlap3d > occlusion_overlap_threshold:
@@ -1101,7 +1185,6 @@ class ObjectMemory:
                 new_obj_info += obj_info
 
             else:
-
                 new_memory.append(self.memory[obj_id])
 
 
@@ -1151,6 +1234,9 @@ class ObjectMemory:
 
         memory_embs = np.array([m.mean_emb for m in self.memory])
 
+        # TODO deal with no objects detected
+        if detected_embs is None:
+            return np.array([0.,0.,0.,0.,0.,0.,1.]), [[],[]]
 
         if len(detected_embs) > len(memory_embs):
             detected_embs = detected_embs[:len(memory_embs)]
@@ -1168,19 +1254,24 @@ class ObjectMemory:
         # Save point clouds
         if save_point_clouds:
             for i, d in enumerate(detected_pointclouds):
-                np.save("pcds/%sdetected_pcd" % str(testname) + str(i) + ".npy", d)
+                np.save("pcds/%s_detected_pcd" % str(testname) + str(i) + ".npy", d)
             for j, m in enumerate(self.memory):
-                np.save(f"pcds/%smemory_pcd" % str(testname) + str(j) + ".npy", m.pcd)
+                np.save(f"pcds/%s_memory_pcd" % str(testname) + str(j) + ".npy", m.pcd)
             print("Point clouds saved")
 
         # TODO unseen objects in detected objects are not being dealt with, 
         # assuming that all detected objects can be assigned to mem objs
         # TODO calculate rotation matrices
         j = JCBB(cosine_similarities, R_matrices)
-        assns = j.get_assignments()
+        # assns = j.get_candidate_assignments(min_length=max(1, len(detected_embs)-1))
+        print("Getting assignments")
+        assns = j.get_candidate_assignments(max_length=3)
+        del j
 
         # only consider the top K assignments based on net cosine similarity
-        assns_to_consider = [assn[0] for assn in assns[:topK]]
+        # assns_to_consider = [assn[0] for assn in assns[:topK]]
+
+        assns_to_consider = [assn[0] for assn in assns]
 
         print("Phrases: ", detected_phrases)
         print(cosine_similarities)
@@ -1189,11 +1280,11 @@ class ObjectMemory:
         assn_data = [ [assn, None, None] for assn in assns_to_consider ]
 
         # go through all top K assingments, record ICP costs
-        for assn_num, assn in enumerate(assns_to_consider):
+        for assn_num, assn in tqdm(enumerate(assns_to_consider)):
             # use ALL object pointclouds together
             all_detected_points = []
             all_memory_points = []
-            for i,j in enumerate(assn):
+            for i,j in assn:
                 all_detected_points.append(detected_pointclouds[i])
                 all_memory_points.append(self.memory[j].pcd)
             all_detected_points = np.concatenate(all_detected_points, axis=-1)
@@ -1211,16 +1302,26 @@ class ObjectMemory:
             all_detected_pcd_filtered, _ = all_detected_pcd.remove_radius_outlier(nb_points=outlier_removal_config["radius_nb_points"],
                                                             radius=outlier_removal_config["radius"])
 
+            all_memory_pcd.paint_uniform_color([0,1,0])
+            all_detected_pcd_filtered.paint_uniform_color([1,0,0])
+            # o3d.io.write_point_cloud(f"./temp/{str(assn)}-{testname}-detmem.ply", all_memory_pcd + all_detected_pcd_filtered)
+
             transform, rmse = register_point_clouds(all_detected_pcd_filtered, all_memory_pcd, 
                                             voxel_size = fpfh_voxel_size, global_dist_factor = fpfh_global_dist_factor, 
                                             local_dist_factor = fpfh_local_dist_factor)
 
             assn_data[assn_num] = [assn, transform, rmse]
 
+            # o3d.io.write_point_cloud(f"./temp/{str(assn)}-{testname}-trns.ply", all_memory_pcd + 
+            #                         all_detected_pcd_filtered.transform(transform))
+            # import pdb; pdb.set_trace()
+
         best_assn = min(assn_data, key=lambda x: x[-1])
 
         assn = best_assn[0]
         transform = best_assn[1]
+
+        moved_objs = [n for n in range(len(detected_pointclouds)) if n not in assn]
 
         R = copy.copy(transform[:3,:3])
         t = copy.copy(transform[:3, 3])
@@ -1233,7 +1334,7 @@ class ObjectMemory:
         # moved objects will have indices that are not present in the first row of assn
 
         print(best_assn)
-        return localised_pose, assn
+        return localised_pose, [assn, moved_objs]
 
 @dataclass
 class LocalArgs:

@@ -1,25 +1,28 @@
 from object_memory import *
 import ast, pickle, shutil, time
 import psutil, os
+from tqdm import tqdm
+import pdb
 @dataclass
 class LocalArgs:
     """
     Class to hold local configuration arguments.
     """
     lora_path: str='models/vit_finegrained_5x40_procthor.pt'
-    test_folder_path: str='/scratch/vineeth.bhat/8-room-new'
+    test_folder_path: str='/scratch/aneesh.chavan/8room/8-room-v1/1/'
     device: str='cuda'
-    sam_checkpoint_path: str = '/scratch/vineeth.bhat/sam_vit_h_4b8939.pth'
-    ram_pretrained_path: str = '/scratch/vineeth.bhat/ram_swin_large_14m.pth'
-    sampling_period: int = 40
+    sam_checkpoint_path: str = '/scratch/aneesh.chavan/sam_vit_h_4b8939.pth'
+    ram_pretrained_path: str = '/scratch/aneesh.chavan/ram_swin_large_14m.pth'
+    sampling_period: int = 20
     downsampling_rate: int = 5 # downsample points every these many frames
-    save_dir: str = "/scratch/vineeth.bhat/vin-experiments/large_dataset_trials/8-rooms-new"
+    save_dir: str = "/scratch/aneesh.chavan/results/trav/"
     start_file_index: int = 1
-    last_file_index: int = -1
+    last_file_index: int = 400 # test with no noise also
     rot_correction: float = 0.0 # keep as 30 for 8-room-new 
     look_around_range: int = 1 # number of sucessive frames to consider at every frame
-    save_individual_objects: bool = False
+    save_individual_objects: bool = True
     down_sample_voxel_size: float = 0.01
+    add_pose_noise: bool = True
 
 if __name__=="__main__":
     start_time = time.time()
@@ -47,7 +50,7 @@ if __name__=="__main__":
 
     frame_counter = 0
 
-    for cur_frame in range(largs.start_file_index, largs.last_file_index + 1, largs.sampling_period):
+    for cur_frame in tqdm(range(largs.start_file_index, largs.last_file_index + 1, largs.sampling_period), total=(largs.last_file_index-largs.start_file_index)//largs.sampling_period):
         for i in range(cur_frame, min(largs.last_file_index + 1, cur_frame + largs.look_around_range + 1)):
             print(f"\n\tSeeing image {i} currently")
             image_file_path = os.path.join(largs.test_folder_path, 
@@ -81,7 +84,8 @@ if __name__=="__main__":
             mem.process_image(testname=f"view%d" % i, 
                                 image_path = image_file_path, 
                                 depth_image_path = depth_file_path, 
-                                pose=pose)
+                                pose=pose,
+                                verbose=False, add_noise=largs.add_pose_noise)
             
             pid = psutil.Process()
             memory_info = pid.memory_info()
@@ -98,8 +102,34 @@ if __name__=="__main__":
                 if largs.down_sample_voxel_size > 0:
                     print(f"Downsampling at {frame_counter} frame voxel size as {largs.down_sample_voxel_size}")
                     mem.downsample_all_objects(voxel_size=largs.down_sample_voxel_size)
+                mem.remove_object_floors()
 
             frame_counter += 1
+
+        # begin debug
+    pcd_list = []
+    
+    for info in mem.memory:
+        object_pcd = info.pcd
+        pcd_list.append(object_pcd)
+
+    combined_pcd = o3d.geometry.PointCloud()
+
+    for bhencho in range(len(pcd_list)):
+        pcd_np = pcd_list[bhencho]
+        pcd_vec = o3d.utility.Vector3dVector(pcd_np.T)
+        pcd = o3d.geometry.PointCloud()
+        pcd.points = pcd_vec
+        pcd.paint_uniform_color(np.random.rand(3))
+        combined_pcd += pcd
+
+    save_path = os.path.join(largs.save_dir, 
+        f"/home2/aneesh.chavan/Change_detection/temp/{i}.pcd")
+    o3d.io.write_point_cloud(save_path, combined_pcd)
+    print("Memory's pointcloud saved to", save_path)
+
+    pdb.set_trace()
+    # end debug
 
     if largs.down_sample_voxel_size > 0:
         print(f"Downsampling using voxel size as {largs.down_sample_voxel_size}")
@@ -135,6 +165,31 @@ if __name__=="__main__":
             print(f"{i} pointcloud saved to", cur_save_path)
 
         combined_pcd += pcd
+
+    save_path = os.path.join(largs.save_dir, 
+        f"normal_mem_{largs.start_file_index}_{largs.last_file_index}_{largs.sampling_period}_{largs.look_around_range}.pcd")
+    o3d.io.write_point_cloud(save_path, combined_pcd)
+    print("Memory's pointcloud saved to", save_path)
+
+    # consolidate and check
+    mem.consolidate_memory(verbose=True)
+    pcd_list = []
+    for info in mem.memory:
+        object_pcd = info.pcd
+        pcd_list.append(object_pcd)
+        
+    for i in range(len(pcd_list)):
+        pcd_np = pcd_list[i]
+        pcd_vec = o3d.utility.Vector3dVector(pcd_np.T)
+        pcd = o3d.geometry.PointCloud()
+        pcd.points = pcd_vec
+
+        if largs.save_individual_objects:
+            cur_save_path = os.path.join(individual_mem_save_dir, 
+                f"cons_{i}.pcd") 
+
+            o3d.io.write_point_cloud(cur_save_path, pcd)
+            print(f"{i} pointcloud saved to", cur_save_path)
 
     save_path = os.path.join(largs.save_dir, 
         f"mem_{largs.start_file_index}_{largs.last_file_index}_{largs.sampling_period}_{largs.look_around_range}.pcd")

@@ -1,0 +1,4 @@
+Starting imports
+Imports completed in 12.700072050094604 seconds
+LocalArgs(lora_path='models/vit_finegrained_5x40_procthor.pt', test_folder_path='/scratch/aneesh.chavan/8-room-new', device='cuda', sam_checkpoint_path='/scratch/aneesh.chavan/sam_vit_h_4b8939.pth', ram_pretrained_path='/scratch/aneesh.chavan/ram_swin_large_14m.pth', sampling_period=5, downsampling_rate=5, save_dir='/scratch/aneesh.chavan/results', start_file_index=2, last_file_index=250, rot_correction=0.0, look_around_range=0, save_individual_objects=False, down_sample_voxel_size=0.01, create_ext_mesh=False, save_point_clouds=False, fpfh_global_dist_factor=1.5, fpfh_local_dist_factor=0.4, fpfh_voxel_size=0.05, localise_times=1, loc_results_start_file_index=1, loc_results_last_file_index=250, loc_results_sampling_period=10)
+Created save directory /scratch/aneesh.chavan/results
