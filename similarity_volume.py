@@ -58,7 +58,7 @@ class SimVolume():
         # print(f"e constructed at {time.time() - start}")
 
         # set unique assignments to 1
-        for comb in itertools.permutations([i for i in range(vol_dim)], vol_dim):
+        for comb in itertools.permutations([i for i in range(volume.shape[0] - 1)], vol_dim):
             e[comb] = 1
 
             for j in range(1, 1 << vol_dim):
@@ -82,6 +82,23 @@ class SimVolume():
 
         return volume, rep_volume
     
+    """
+    Simpler volume, no space for rearrangements, all given objects are given an assignment
+    """
+    def construct_volume_choose_e(self, chosen_e):
+        assert len(chosen_e) <= self.aug.shape[0]
+
+        volume = np.einsum('i,j', self.aug[chosen_e[0]], self.aug[chosen_e[1]])
+        for i, row_num in enumerate(chosen_e[2:]):
+            # print(i, row)
+            row = self.aug[row_num]
+            vb = volume.shape
+            volume = np.einsum('...i,j', volume, row)
+            # print(f"einsum {i} done in {time.time() - start} seconds")
+            # print(f"{vb} -> {volume.shape}\n")
+        return volume
+    
+    # def get_minimum(self, chosen_e, vol):
 
 
 
@@ -197,10 +214,18 @@ def test_repeated_multiple_missing(rep_vol, cs, verbose=False):
 
     return rep_vol[indices] == prod
 
+def get_topK_inplace(vol, K):
+    topK = []
+    for i in range(K):
+        ind = np.unravel_index(np.argmax(rep_vol, axis=None), rep_vol.shape)
+        topK.append(ind)
+        vol[ind] = -np.inf
+    return topK
+
 if __name__ == "__main__":
 
-    cs = np.array([i for i in range(50)])
-    cs2 = np.array([i for i in range(5)])
+    cs = np.array([i for i in range(20)])
+    cs2 = np.array([i for i in range(3)])
     cs = cs2.reshape(-1,1) + cs.reshape(1,-1)
     
     sv = SimVolume(cs)
@@ -212,6 +237,14 @@ if __name__ == "__main__":
     time_taken = time.time() - start
     print(f"in {time_taken} seconds")
     start = time.time()
+
+    ind = np.unravel_index(np.argmax(rep_vol, axis=None), rep_vol.shape)
+    print(ind, rep_vol[ind])#, rep_vol[49,48,47])
+
+    print(get_topK_inplace(rep_vol,10))
+
+    # v2 = sv.construct_volume_choose_e([1,2,3])
+    # print(v2.shape)
 
     exit(0)
 
