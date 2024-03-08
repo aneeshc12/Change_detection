@@ -986,7 +986,6 @@ class ObjectMemory:
 
         return obj_phrases, embs, obj_pointclouds
 
-
     def process_image(self, image_path=None, depth_image_path=None, pose=None, verbose=True, add_noise=True,
                       bounding_box_threshold=0.3,  occlusion_overlap_threshold=0.9, testname="", 
                       outlier_removal_config=None, min_points = 500, pose_noise = {'trans': 0.0005, 'rot': 0.0005},
@@ -1011,7 +1010,7 @@ class ObjectMemory:
         # Default outlier removal config
         if outlier_removal_config == None:
             outlier_removal_config = {
-                "radius_nb_points": 8,
+                "radius_nb_points": 12,
                 "radius": 0.05,
             }
 
@@ -1089,8 +1088,8 @@ class ObjectMemory:
                     print("Old iou: ", IoU3d_o, IoU3d)
 
                 if IoU3d_o > bounding_box_threshold:
-                    np.save(f"./temp/{count}_qpcd.npy", q_pcd)
-                    np.save(f"./temp/{count}_objectpcd.npy", object_pcd)
+                    # np.save(f"./temp/{count}_qpcd.npy", q_pcd)
+                    # np.save(f"./temp/{count}_objectpcd.npy", object_pcd)
                     count += 1
 
                 overlap3d = calculate_strict_overlap(q_pcd, object_pcd)
@@ -1135,6 +1134,22 @@ class ObjectMemory:
     def downsample_all_objects(self, voxel_size = 0.001, use_external_mesh = False):
         for info in self.memory:
             info.downsample(voxel_size, use_external_mesh)
+    
+    def remove_object_floors(self, floor_thickness=0.1):
+        floor_height = 1e8
+        for info in self.memory:
+            low = np.min(info.pcd[1,:])
+            floor_height = min(low, floor_height)
+
+        for info in self.memory:
+            info.pcd = (info.pcd.T[(info.pcd[1,:] > floor_height + floor_thickness)]).T
+
+            if len(info.pcd) == 0:
+                self.memory.remove(info)
+            
+            if len(info.pcd[0]) == 0:
+                self.memory.remove(info)
+                continue
 
     """
     Runs through all objects stored in memory, consolidates objects that have a sufficient overlap
@@ -1287,11 +1302,19 @@ class ObjectMemory:
             all_detected_pcd_filtered, _ = all_detected_pcd.remove_radius_outlier(nb_points=outlier_removal_config["radius_nb_points"],
                                                             radius=outlier_removal_config["radius"])
 
+            all_memory_pcd.paint_uniform_color([0,1,0])
+            all_detected_pcd_filtered.paint_uniform_color([1,0,0])
+            # o3d.io.write_point_cloud(f"./temp/{str(assn)}-{testname}-detmem.ply", all_memory_pcd + all_detected_pcd_filtered)
+
             transform, rmse = register_point_clouds(all_detected_pcd_filtered, all_memory_pcd, 
                                             voxel_size = fpfh_voxel_size, global_dist_factor = fpfh_global_dist_factor, 
                                             local_dist_factor = fpfh_local_dist_factor)
 
             assn_data[assn_num] = [assn, transform, rmse]
+
+            # o3d.io.write_point_cloud(f"./temp/{str(assn)}-{testname}-trns.ply", all_memory_pcd + 
+            #                         all_detected_pcd_filtered.transform(transform))
+            # import pdb; pdb.set_trace()
 
         best_assn = min(assn_data, key=lambda x: x[-1])
 

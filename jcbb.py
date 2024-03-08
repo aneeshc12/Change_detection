@@ -91,7 +91,7 @@ def JCBBNode(tree, indices_left, similarity_sum, depth, path, choices_left):
         return
     
     # recurse through 
-    print("call JCBBNode block2 ", depth)
+    # print("call JCBBNode block2 ", depth)
 
     to_be_assigned = indices_left[0]
     remaining = indices_left[1:]
@@ -106,7 +106,7 @@ def JCBBNode(tree, indices_left, similarity_sum, depth, path, choices_left):
         
         # add the cosine similarity of this assignment to the cost (indices)
         new_sum = similarity_sum + np.log(tree.cosine_similarities[to_be_assigned][c])
-        print("about to call ", depth)
+        # print("about to call ", depth)
         
         JCBBNode(
             tree,

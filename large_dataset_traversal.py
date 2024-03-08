@@ -2,20 +2,20 @@ from object_memory import *
 import ast, pickle, shutil, time
 import psutil, os
 from tqdm import tqdm
-
+import pdb
 @dataclass
 class LocalArgs:
     """
     Class to hold local configuration arguments.
     """
     lora_path: str='models/vit_finegrained_5x40_procthor.pt'
-    test_folder_path: str='/scratch/aneesh.chavan/8room/8-room-v1/2/'
+    test_folder_path: str='/scratch/aneesh.chavan/8room/8-room-v1/1/'
     device: str='cuda'
     sam_checkpoint_path: str = '/scratch/aneesh.chavan/sam_vit_h_4b8939.pth'
     ram_pretrained_path: str = '/scratch/aneesh.chavan/ram_swin_large_14m.pth'
     sampling_period: int = 20
     downsampling_rate: int = 5 # downsample points every these many frames
-    save_dir: str = "/scratch/aneesh.chavan/results/consolidation/"
+    save_dir: str = "/scratch/aneesh.chavan/results/trav/"
     start_file_index: int = 1
     last_file_index: int = 400 # test with no noise also
     rot_correction: float = 0.0 # keep as 30 for 8-room-new 
@@ -102,8 +102,34 @@ if __name__=="__main__":
                 if largs.down_sample_voxel_size > 0:
                     print(f"Downsampling at {frame_counter} frame voxel size as {largs.down_sample_voxel_size}")
                     mem.downsample_all_objects(voxel_size=largs.down_sample_voxel_size)
+                mem.remove_object_floors()
 
             frame_counter += 1
+
+        # begin debug
+    pcd_list = []
+    
+    for info in mem.memory:
+        object_pcd = info.pcd
+        pcd_list.append(object_pcd)
+
+    combined_pcd = o3d.geometry.PointCloud()
+
+    for bhencho in range(len(pcd_list)):
+        pcd_np = pcd_list[bhencho]
+        pcd_vec = o3d.utility.Vector3dVector(pcd_np.T)
+        pcd = o3d.geometry.PointCloud()
+        pcd.points = pcd_vec
+        pcd.paint_uniform_color(np.random.rand(3))
+        combined_pcd += pcd
+
+    save_path = os.path.join(largs.save_dir, 
+        f"/home2/aneesh.chavan/Change_detection/temp/{i}.pcd")
+    o3d.io.write_point_cloud(save_path, combined_pcd)
+    print("Memory's pointcloud saved to", save_path)
+
+    pdb.set_trace()
+    # end debug
 
     if largs.down_sample_voxel_size > 0:
         print(f"Downsampling using voxel size as {largs.down_sample_voxel_size}")
@@ -139,6 +165,11 @@ if __name__=="__main__":
             print(f"{i} pointcloud saved to", cur_save_path)
 
         combined_pcd += pcd
+
+    save_path = os.path.join(largs.save_dir, 
+        f"normal_mem_{largs.start_file_index}_{largs.last_file_index}_{largs.sampling_period}_{largs.look_around_range}.pcd")
+    o3d.io.write_point_cloud(save_path, combined_pcd)
+    print("Memory's pointcloud saved to", save_path)
 
     # consolidate and check
     mem.consolidate_memory(verbose=True)
