@@ -23,17 +23,30 @@ class SimVolume():
         eg. vol[3, -1, 4, 0]
     """
     def construct_volume(self):
+        start = time.time()
+
         if self.aug.shape[0] < 2:
             print("Too few detected embs")
             return self.aug
 
         # prepare main volume
+        # einsum_prompt = ""
+        # for i, row in enumerate(self.aug[:-1]):
+        #     einsum_prompt += chr(i + 97) + ","
+        # einsum_prompt += chr(len(self.aug) + 97 - 1)
+        # print("prompt: ", einsum_prompt)
+
+        # t = [row for row in self.aug]
+        # volume = np.einsum(einsum_prompt, *t)
+
         volume = np.einsum('i,j', self.aug[0], self.aug[1])
         for i, row in enumerate(self.aug[2:]):
             # print(i, row)
             vb = volume.shape
             volume = np.einsum('...i,j', volume, row)
+            # print(f"einsum {i} done in {time.time() - start} seconds")
             # print(f"{vb} -> {volume.shape}\n")
+
 
         # disallow repeats
         e = -np.inf * np.ones_like(volume)
@@ -41,12 +54,8 @@ class SimVolume():
         vol_dim = len(volume.shape)
 
         # unassigned may be repeated
-        # for i in range(vol_dim):
-            # mask = [slice(None) for _ in range(vol_dim)]
-            # mask[i] = -1
-            # mask = tuple(mask)
 
-            # e[mask] = 1
+        # print(f"e constructed at {time.time() - start}")
 
         # set unique assignments to 1
         for comb in itertools.permutations([i for i in range(vol_dim)], vol_dim):
@@ -61,11 +70,15 @@ class SimVolume():
 
                 e[tuple(c)] = 1
         
+        # print(f"unique at {time.time() - start}")
+
         # apply mask, fix all 0 * np.infs
         with warnings.catch_warnings():
             warnings.filterwarnings("ignore", message="invalid value encountered in multiply")
             rep_volume = volume * e
-            np.nan_to_num(rep_volume, copy=False, nan=-np.inf, neginf=-np.inf)
+            # print(f"mask at {time.time() - start}")
+            rep_volume[np.isnan(rep_volume)] = -np.inf
+            # print(f"fill at {time.time() - start}")
 
         return volume, rep_volume
     
@@ -185,12 +198,22 @@ def test_repeated_multiple_missing(rep_vol, cs, verbose=False):
     return rep_vol[indices] == prod
 
 if __name__ == "__main__":
-    cs = np.array([i for i in range(6)])
-    cs = cs.reshape(-1,1) + cs.reshape(1,-1)
+
+    cs = np.array([i for i in range(50)])
+    cs2 = np.array([i for i in range(5)])
+    cs = cs2.reshape(-1,1) + cs.reshape(1,-1)
     
     sv = SimVolume(cs)
 
+    start = time.time()
     vol, rep_vol = sv.construct_volume()
+    print(f"Volume constructed, dim: {rep_vol.shape}")
+
+    time_taken = time.time() - start
+    print(f"in {time_taken} seconds")
+    start = time.time()
+
+    exit(0)
 
     for i in range(100):
         assert(test_vol(vol, cs, False))
@@ -217,3 +240,6 @@ if __name__ == "__main__":
     Volume says: 150.0
     Product: 1200
     """
+
+    time_taken = time.time() - start
+    print(f"Tests completed in {time_taken} seconds")
