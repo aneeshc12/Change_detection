@@ -58,12 +58,13 @@ class JCBB():
     """
     Get the top `assignments_per_length` assignments out of all subsets, sorted by normalised cos sim
     """
-    def get_candidate_assignments(self, min_length=1, assignments_per_length=4):
+    def get_candidate_assignments(self, min_length=1, max_length=1e3, assignments_per_length=4):
         min_length = max(1,min_length)
+        max_length = min(self.num_detected, max_length)
         self.get_all_subset_assignments(min_length)
 
         candidate_assns = []
-        for length in range(min_length, self.num_detected + 1):
+        for length in range(min_length, max_length + 1):
             cnt_len = [assn for assn in self.leaf_nodes if len(assn[0]) == length]
             cnt_len = sorted(cnt_len, key=lambda x: x[1], reverse=True)
             candidate_assns += cnt_len[:assignments_per_length]
@@ -90,6 +91,8 @@ def JCBBNode(tree, indices_left, similarity_sum, depth, path, choices_left):
         return
     
     # recurse through 
+    print("call JCBBNode block2 ", depth)
+
     to_be_assigned = indices_left[0]
     remaining = indices_left[1:]
     # indices_left.pop(0)
@@ -103,6 +106,7 @@ def JCBBNode(tree, indices_left, similarity_sum, depth, path, choices_left):
         
         # add the cosine similarity of this assignment to the cost (indices)
         new_sum = similarity_sum + np.log(tree.cosine_similarities[to_be_assigned][c])
+        print("about to call ", depth)
         
         JCBBNode(
             tree,

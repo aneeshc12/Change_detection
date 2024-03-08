@@ -1249,12 +1249,14 @@ class ObjectMemory:
         # TODO calculate rotation matrices
         j = JCBB(cosine_similarities, R_matrices)
         # assns = j.get_candidate_assignments(min_length=max(1, len(detected_embs)-1))
-        assns = j.get_assignments()
+        print("Getting assignments")
+        assns = j.get_candidate_assignments(max_length=3)
+        del j
 
         # only consider the top K assignments based on net cosine similarity
         # assns_to_consider = [assn[0] for assn in assns[:topK]]
 
-        assns_to_consider = [assn[0] for assn in assns][:topK]
+        assns_to_consider = [assn[0] for assn in assns]
 
         print("Phrases: ", detected_phrases)
         print(cosine_similarities)

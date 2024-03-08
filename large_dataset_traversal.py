@@ -50,7 +50,7 @@ if __name__=="__main__":
 
     frame_counter = 0
 
-    for cur_frame in tqdm(range(largs.start_file_index, largs.last_file_index + 1, largs.sampling_period), total=num_files//largs.sampling_period):
+    for cur_frame in tqdm(range(largs.start_file_index, largs.last_file_index + 1, largs.sampling_period), total=(largs.last_file_index-largs.start_file_index)//largs.sampling_period):
         for i in range(cur_frame, min(largs.last_file_index + 1, cur_frame + largs.look_around_range + 1)):
             print(f"\n\tSeeing image {i} currently")
             image_file_path = os.path.join(largs.test_folder_path, 
