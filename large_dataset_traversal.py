@@ -196,6 +196,11 @@ if __name__=="__main__":
     o3d.io.write_point_cloud(save_path, combined_pcd)
     print("Memory's pointcloud saved to", save_path)
 
+    save_path = os.path.join(largs.save_dir, 
+        f"/home2/aneesh.chavan/Change_detection/temp/cons_{i}.pcd")
+    o3d.io.write_point_cloud(save_path, combined_pcd)
+    print("Memory's pointcloud saved to", save_path)
+
     print("\n\n\t---------------------")
     mem.view_memory()
 

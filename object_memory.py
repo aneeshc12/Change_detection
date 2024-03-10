@@ -1159,14 +1159,28 @@ class ObjectMemory:
     Thresholds are lower 
     """
 
-    def consolidate_memory(self, bounding_box_threshold=0.2,  occlusion_overlap_threshold=0.6, downsample_voxel_size=0.01, verbose=False):
+    def consolidate_memory(self, bounding_box_threshold=0.4,  occlusion_overlap_threshold=0.6, downsample_voxel_size=0.01, verbose=False, outlier_removal_config=None):
         if verbose:
             print("Pre consolidation")
             self.view_memory()
         
+        if outlier_removal_config == None:
+            outlier_removal_config = {
+                "radius_nb_points": 12,
+                "radius": 0.05,
+            }
+
+        
         new_memory = []
+        temp_pcd = o3d.geometry.PointCloud()
         for obj_id, obj_info in enumerate(self.memory):
             obj_pcd = obj_info.pcd
+
+            temp_pcd.points = o3d.utility.Vector3dVector(obj_pcd.T)
+
+            inlier_pcd, _ = temp_pcd.remove_radius_outlier(nb_points=outlier_removal_config["radius_nb_points"],
+                                                            radius=outlier_removal_config["radius"])
+            obj_pcd = np.array(inlier_pcd.points).T
 
             # check all objects in new_memory to try and match them
             match_found = False
@@ -1177,7 +1191,9 @@ class ObjectMemory:
                     print(f"{obj_id}, {obj_info.names} -- {new_obj_info.names} | {IoU3d}, {overlap3d}")
 
                 # object overlaps enough to be consolidated with the object in new memory
-                if IoU3d > bounding_box_threshold or overlap3d > occlusion_overlap_threshold:
+                # if IoU3d > bounding_box_threshold or overlap3d > occlusion_overlap_threshold:
+                if IoU3d > bounding_box_threshold:
+                    
                     match_found = True
                     break
             
@@ -1312,28 +1328,74 @@ class ObjectMemory:
 
             assn_data[assn_num] = [assn, transform, rmse]
 
-            # o3d.io.write_point_cloud(f"./temp/{str(assn)}-{testname}-trns.ply", all_memory_pcd + 
-            #                         all_detected_pcd_filtered.transform(transform))
-            # import pdb; pdb.set_trace()
 
         best_assn = min(assn_data, key=lambda x: x[-1])
 
         assn = best_assn[0]
         transform = best_assn[1]
 
+
+        # GET THE CORRECT MEAN
+        all_detected_points = []
+        all_memory_points = []
+        for i,j in assn:
+            all_detected_points.append(detected_pointclouds[i])
+            all_memory_points.append(self.memory[j].pcd)
+        all_detected_points = np.concatenate(all_detected_points, axis=-1)
+        all_memory_points = np.concatenate(all_memory_points, axis=-1)
+
+        detected_mean = np.mean(all_detected_points, axis=-1)
+        memory_mean = np.mean(all_memory_points, axis=-1)
+
+
         moved_objs = [n for n in range(len(detected_pointclouds)) if n not in assn]
 
         R = copy.copy(transform[:3,:3])
         t = copy.copy(transform[:3, 3])
         
-        tAvg = t + memory_mean - R@detected_mean
+        tAvg = t + memory_mean - R@detected_mean  
+        # tAvg = t + detected_mean - R@memory_mean #incorrect smh
         qAvg = Rotation.from_matrix(R).as_quat()
 
         localised_pose = np.concatenate((tAvg, qAvg))
+        print(best_assn)
+
+        ## DEBUG
+        print("R: ", R )
+        print("t: ", t)
+
+        # use ALL object pointclouds together
+        all_detected_points = []
+        all_memory_points = []
+        for i,j in assn:
+            all_detected_points.append(detected_pointclouds[i])
+            all_memory_points.append(self.memory[j].pcd)
+        all_detected_points = np.concatenate(all_detected_points, axis=-1)
+        all_memory_points = np.concatenate(all_memory_points, axis=-1)
+
+        # centering all the pointclouds
+        detected_mean = np.mean(all_detected_points, axis=-1)
+        memory_mean = np.mean(all_memory_points, axis=-1)
+        all_detected_pcd = o3d.geometry.PointCloud()
+        all_detected_pcd.points = o3d.utility.Vector3dVector(all_detected_points.T - detected_mean)
+        all_memory_pcd = o3d.geometry.PointCloud()
+        all_memory_pcd.points = o3d.utility.Vector3dVector(all_memory_points.T - memory_mean)
+        
+        # remove outliers from detected pcds
+        all_detected_pcd_filtered, _ = all_detected_pcd.remove_radius_outlier(nb_points=outlier_removal_config["radius_nb_points"],
+                                                        radius=outlier_removal_config["radius"])
+
+        all_memory_pcd.paint_uniform_color([0,1,0])
+        all_detected_pcd_filtered.paint_uniform_color([1,0,0])
+
+
+        o3d.io.write_point_cloud(f"./temp/{str(assn)}-{testname}-trns.ply", all_memory_pcd + 
+                                all_detected_pcd_filtered.transform(transform))
+        # import pdb; pdb.set_trace()
+
 
         # moved objects will have indices that are not present in the first row of assn
 
-        print(best_assn)
         return localised_pose, [assn, moved_objs]
 
 @dataclass
