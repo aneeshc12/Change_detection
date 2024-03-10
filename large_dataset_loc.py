@@ -16,7 +16,7 @@ class LocalArgs:
     sampling_period: int = 5
     downsampling_rate: int = 5 # downsample points every these many frames
     save_dir: str = "/scratch/aneesh.chavan/results/viz2"
-    start_file_index: int = 100
+    start_file_index: int = 1
     last_file_index: int = 300
     rot_correction: float = 0.0 # keep as 30 for 8-room-new 
     look_around_range: int = 0 # number of sucessive frames to consider at every frame
@@ -33,7 +33,7 @@ class LocalArgs:
     localise_times: int = 1
 
     loc_results_start_file_index: int = 106
-    loc_results_last_file_index: int = 300
+    loc_results_last_file_index: int = 200
     loc_results_sampling_period: int = 8
 
 if __name__=="__main__":
@@ -113,12 +113,74 @@ if __name__=="__main__":
             print("\t ----------------")
 
             if frame_counter % largs.downsampling_rate == 0:
+                
+                    # begin debug
+                if i > 60:
+                    pcd_list = []
+                    
+                    for info in mem.memory:
+                        object_pcd = info.pcd
+                        pcd_list.append(object_pcd)
+
+                    combined_pcd = o3d.geometry.PointCloud()
+
+                    for bhencho in range(len(pcd_list)):
+                        pcd_np = pcd_list[bhencho]
+                        pcd_vec = o3d.utility.Vector3dVector(pcd_np.T)
+                        pcd = o3d.geometry.PointCloud()
+                        pcd.points = pcd_vec
+                        pcd.paint_uniform_color(np.random.rand(3))
+                        combined_pcd += pcd
+
+                    save_path = os.path.join(largs.save_dir, 
+                        f"/home2/aneesh.chavan/Change_detection/temp/{i}_before_cons.pcd")
+                    o3d.io.write_point_cloud(save_path, combined_pcd)
+                    print("Memory's pointcloud saved to", save_path)
+
+                    # end debug
+
                 if largs.down_sample_voxel_size > 0:
                     print(f"Downsampling at {frame_counter} frame voxel size as {largs.down_sample_voxel_size}")
                     mem.downsample_all_objects(voxel_size=largs.down_sample_voxel_size)
+                    mem.consolidate_memory()
                 mem.remove_object_floors()
 
+
+                # begin debug
+                if i > 60:
+                    pcd_list = []
+                    
+                    for info in mem.memory:
+                        object_pcd = info.pcd
+                        pcd_list.append(object_pcd)
+
+                    combined_pcd = o3d.geometry.PointCloud()
+
+                    for bhencho in range(len(pcd_list)):
+                        pcd_np = pcd_list[bhencho]
+                        pcd_vec = o3d.utility.Vector3dVector(pcd_np.T)
+                        pcd = o3d.geometry.PointCloud()
+                        pcd.points = pcd_vec
+                        pcd.paint_uniform_color(np.random.rand(3))
+                        combined_pcd += pcd
+
+                    save_path = os.path.join(largs.save_dir, 
+                        f"/home2/aneesh.chavan/Change_detection/temp/{i}_after_cons.pcd")
+                    o3d.io.write_point_cloud(save_path, combined_pcd)
+                    print("Memory's pointcloud saved to", save_path)
+
+                    # pdb.set_trace()
+                # end debug
+
             frame_counter += 1
+
+
+    if largs.down_sample_voxel_size > 0:
+        print(f"Downsampling using voxel size as {largs.down_sample_voxel_size}")
+        mem.downsample_all_objects(voxel_size=largs.down_sample_voxel_size)
+
+    end_time = time.time()
+    print(f"Traversal completed in {end_time - start_time} seconds")
 
     # begin debug
     pcd_list = []
@@ -134,24 +196,19 @@ if __name__=="__main__":
         pcd_vec = o3d.utility.Vector3dVector(pcd_np.T)
         pcd = o3d.geometry.PointCloud()
         pcd.points = pcd_vec
+        pcd.paint_uniform_color(np.random.rand(3))
         combined_pcd += pcd
 
     save_path = os.path.join(largs.save_dir, 
-        f"/home2/aneesh.chavan/Change_detection/temp/{i}.pcd")
+        f"/home2/aneesh.chavan/Change_detection/temp/loc_mem{i}.pcd")
     o3d.io.write_point_cloud(save_path, combined_pcd)
     print("Memory's pointcloud saved to", save_path)
 
-    pdb.set_trace()
+    # pdb.set_trace()
     # end debug
 
 
 
-    if largs.down_sample_voxel_size > 0:
-        print(f"Downsampling using voxel size as {largs.down_sample_voxel_size}")
-        mem.downsample_all_objects(voxel_size=largs.down_sample_voxel_size)
-
-    end_time = time.time()
-    print(f"Traversal completed in {end_time - start_time} seconds")
 
     pcd_list = []
     
@@ -263,6 +320,57 @@ if __name__=="__main__":
 
         print("Translation error: ", translation_error)
         print("Rotation_error: ", rotation_error)
+
+        ## DEBUG
+        if detected_pcds is not None:
+            print("DEBUG BEGINS")
+            print(f"Detectec len {len(detected_pcds)}")
+
+            outlier_removal_config = {
+                    "radius_nb_points": 8,
+                    "radius": 0.05,
+                }
+
+            assn = chosen_assignment[0]
+            all_detected_points = []
+            all_memory_points = []
+
+            for pcd in detected_pcds:
+                all_detected_points.append(pcd)
+            for info in mem.memory:
+                all_memory_points.append(info.pcd)
+
+            all_detected_points = np.concatenate(all_detected_points, axis=-1).T
+            all_memory_points = np.concatenate(all_memory_points, axis=-1).T
+
+            all_detected_pcd = o3d.geometry.PointCloud()
+            all_memory_pcd = o3d.geometry.PointCloud()
+
+            all_detected_pcd.points = o3d.utility.Vector3dVector(all_detected_points)
+            all_memory_pcd.points = o3d.utility.Vector3dVector(all_memory_points)
+
+            # all_detected_pcd_filtered, _ = all_detected_pcd.remove_radius_outlier(nb_points=outlier_removal_config["radius_nb_points"],
+            #                                         radius=outlier_removal_config["radius"])
+
+            all_memory_pcd = all_memory_pcd.voxel_down_sample(0.05)
+            all_memory_pcd.paint_uniform_color([0,1,1])
+            all_detected_pcd.paint_uniform_color([1,0,0])
+            
+            print("points: ", all_detected_points)
+
+            o3d.io.write_point_cloud(f"./temp/{str(assn)}-{i}-ISTHISIT.ply", all_detected_pcd)
+
+            transform = np.eye(4)
+            transform[:3,:3] = Rotation.from_quat(estimated_pose[3:]).as_matrix()
+            transform[:3, 3] = estimated_pose[:3]
+
+            print(transform)
+
+            o3d.io.write_point_cloud(f"./temp/{str(assn)}-{i}-full_aligned.ply", all_memory_pcd + 
+                                    all_detected_pcd.transform(transform))
+            o3d.io.write_point_cloud(f"./temp/{str(assn)}-{i}-full_aligned_test.ply", all_detected_pcd.transform(transform))
+            import pdb; pdb.set_trace()
+            ## END DEBUG
 
         pred.append(estimated_pose.tolist())
         trans_errors.append(translation_error)
