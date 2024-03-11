@@ -64,7 +64,7 @@ class SimVolume():
 
         # set unique assignments to 1
         for comb in perm_list:
-            mask[comb] = 1
+            mask[comb] = 0
 
             for j in range(1, 1 << vol_dim):
                 c = list(comb)
@@ -75,7 +75,7 @@ class SimVolume():
                     c[u] = -1
                 # print(c)
 
-                mask[tuple(c)] = 1
+                mask[tuple(c)] = 0
 
         # atlesat one object must be assigned
         mask[list([-1 for i in range(vol_dim+1)])] = -np.inf
@@ -85,7 +85,7 @@ class SimVolume():
         # apply mask, fix all 0 * np.infs
         with warnings.catch_warnings():
             warnings.filterwarnings("ignore", message="invalid value encountered in multiply")
-            rep_volume = volume * mask
+            rep_volume = volume + mask
             # print(f"mask at {time.time() - start}")
             rep_volume[np.isnan(rep_volume)] = -np.inf
             # print(f"fill at {time.time() - start}")
@@ -97,12 +97,16 @@ class SimVolume():
     Calculate nCs subvolumes, store them all in this object
     """
     def fast_construct_volume(self, subvolume_size):
-        assert subvolume_size > 2
+        self.subvolumes = []
+
+        if self.aug.shape[0] == 1:
+            self.subvolumes.append(self.aug[0])
+        
+        subvolume_size = min(2, subvolume_size)
         
         self.chosen_objects = [i for i in itertools.combinations([j for j in range(self.aug.shape[0])], subvolume_size)]
-        self.subvolumes = []
         for chosen in self.chosen_objects:
-            print(chosen)
+            # print(chosen)
 
             sub_aug = self.aug[list(chosen)]    # pick out the rows of self.aug that are in chosen
             
@@ -124,7 +128,7 @@ class SimVolume():
 
             # set unique assignments to 1
             for comb in perm_list:
-                mask[comb] = 1
+                mask[comb] = 0
 
                 for j in range(1, 1 << vol_dim):
                     c = list(comb)
@@ -135,16 +139,15 @@ class SimVolume():
                         c[u] = -1
                     # print(c)
 
-                    mask[tuple(c)] = 1
+                    mask[tuple(c)] = 0
         
             # atlesat one object must be assigned
             mask[list([-1 for i in range(vol_dim+1)])] = -np.inf
-            
 
             # apply mask, fix all 0 * np.infs
             with warnings.catch_warnings():
                 warnings.filterwarnings("ignore", message="invalid value encountered in multiply")
-                rep_volume = volume * mask
+                rep_volume = volume + mask
                 # print(f"mask at {time.time() - start}")
                 rep_volume[np.isnan(rep_volume)] = -np.inf
                 # print(f"fill at {time.time() - start}")
@@ -200,9 +203,7 @@ class SimVolume():
     # convert to assignments after sorting
     def get_top_indices_from_subvolumes(self, k):
         top_k = []
-        assns = []
         for chosen, subvol in zip(self.chosen_objects, self.subvolumes):
-            print("zxcvzxvc: ", chosen)
             for i in range(k):
                 ind = np.unravel_index(
                     np.argmax(subvol, axis=None),
@@ -232,7 +233,8 @@ class SimVolume():
                 filtered_topk.append([filtered, coords[2]])
         
         filtered_topk = sorted(filtered_topk, key= lambda x: x[-1], reverse=True)[:k]
-        assns = [a for a in filtered_topk]
+        assns = [a[0] for a in filtered_topk]
+
         return assns
 
 
@@ -383,30 +385,30 @@ def plot_time_graphs():
 
 if __name__ == "__main__":
 
-    cs = np.array([i for i in range(10)])
-    cs2 = np.array([i for i in range(4)])
-    cs = cs2.reshape(-1,1) + cs.reshape(1,-1)
+    cs = np.array([i for i in range(50)])
+    cs2 = np.array([i for i in range(6)])
+    cs = cs2.reshape(-1,1) + cs2.reshape(1,-1)
 
     r = np.random.rand(*cs.shape)
     print(f"r shape: {r.shape}")
 
-    sv = SimVolume(r)
+    sv = SimVolume(cs)
     tsv = TestSimVolume()
 
     start = time.time()
     
-    _, rep_vol = sv.construct_volume()
-    topk_full = sv.get_top_indices(rep_vol, 10)
-    assns = sv.conv_coords_to_pairs(rep_vol, topk_full)
-    print(f"Full volume: {assns}")
+    # _, rep_vol = sv.construct_volume()
+    # topk_full = sv.get_top_indices(rep_vol, 10)
+    # assns = sv.conv_coords_to_pairs(rep_vol, topk_full)
+    # print(f"Full volume: {assns}")
 
     sv.fast_construct_volume(3)
     topk_sub = sv.get_top_indices_from_subvolumes(10)
     print(f"Sub volumes: {topk_sub}")
     
     print()
-    for i,j in zip(assns, topk_sub):
-        print(f"{i}\t|\t{j}")
+    for i in (topk_sub):
+        print(f"{i}\t")
 
     # time_taken = time.time() - start
     # print(f"in {time_taken} seconds")

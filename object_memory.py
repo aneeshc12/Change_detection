@@ -1283,12 +1283,15 @@ class ObjectMemory:
         print("Getting assignments")
         print(cosine_similarities.shape)
         sv = SimVolume(cosine_similarities)
-        rep_vol, _ = sv.construct_volume()
-        print(rep_vol.shape)
-        best_coords = sv.get_top_indices(rep_vol, 10)
-        assns = sv.conv_coords_to_pairs(rep_vol, best_coords)
+        # rep_vol, _ = sv.construct_volume()
+        # print(rep_vol.shape)
+        # best_coords = sv.get_top_indices(rep_vol, 10)
+        # assns = sv.conv_coords_to_pairs(rep_vol, best_coords)
+        
+        sv.fast_construct_volume(3)
+        assns = sv.get_top_indices_from_subvolumes(10)
         assns_to_consider = assns
-        del sv, rep_vol
+        del sv
 
         # only consider the top K assignments based on net cosine similarity
         # assns_to_consider = [assn[0] for assn in assns[:topK]]
