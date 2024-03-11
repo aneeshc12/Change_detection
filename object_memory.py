@@ -65,6 +65,7 @@ import json
 from dataclasses import dataclass, field
 from jcbb import JCBB
 from fpfh.fpfh_register import register_point_clouds
+from similarity_volume import *
 
 from objectron.dataset import box, iou
 
@@ -1278,16 +1279,21 @@ class ObjectMemory:
         # TODO unseen objects in detected objects are not being dealt with, 
         # assuming that all detected objects can be assigned to mem objs
         # TODO calculate rotation matrices
-        j = JCBB(cosine_similarities, R_matrices)
-        # assns = j.get_candidate_assignments(min_length=max(1, len(detected_embs)-1))
+
         print("Getting assignments")
-        assns = j.get_candidate_assignments(max_length=3)
-        del j
+        print(cosine_similarities.shape)
+        sv = SimVolume(cosine_similarities)
+        rep_vol, _ = sv.construct_volume()
+        print(rep_vol.shape)
+        best_coords = sv.get_top_indices(rep_vol, 10)
+        assns = sv.conv_coords_to_pairs(rep_vol, best_coords)
+        assns_to_consider = assns
+        del sv, rep_vol
 
         # only consider the top K assignments based on net cosine similarity
         # assns_to_consider = [assn[0] for assn in assns[:topK]]
 
-        assns_to_consider = [assn[0] for assn in assns]
+        # assns_to_consider = [assn[0] for assn in assns]
 
         print("Phrases: ", detected_phrases)
         print(cosine_similarities)

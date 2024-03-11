@@ -369,7 +369,7 @@ if __name__=="__main__":
             o3d.io.write_point_cloud(f"./temp/{str(assn)}-{i}-full_aligned.ply", all_memory_pcd + 
                                     all_detected_pcd.transform(transform))
             o3d.io.write_point_cloud(f"./temp/{str(assn)}-{i}-full_aligned_test.ply", all_detected_pcd.transform(transform))
-            import pdb; pdb.set_trace()
+            # import pdb; pdb.set_trace()
             ## END DEBUG
 
         pred.append(estimated_pose.tolist())
