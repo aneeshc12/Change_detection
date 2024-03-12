@@ -1244,6 +1244,10 @@ class ObjectMemory:
         # Extract all objects currently seen, get embeddings, point clouds in the local unknown frame
         detected_phrases, detected_embs, detected_pointclouds = self._get_object_info(image_path, depth_image_path)
 
+        # TODO deal with no objects detected
+        if detected_embs is None:
+            return np.array([0.,0.,0.,0.,0.,0.,1.]), [[],[]]
+ 
         # Correlate embeddings with objects in memory for all seen objects
         # TODO maybe a KNN search will do better?
         for m in self.memory:
@@ -1251,22 +1255,23 @@ class ObjectMemory:
 
         memory_embs = np.array([m.mean_emb for m in self.memory])
 
-        # TODO deal with no objects detected
-        if detected_embs is None:
-            return np.array([0.,0.,0.,0.,0.,0.,1.]), [[],[]]
-
         if len(detected_embs) > len(memory_embs):
             detected_embs = detected_embs[:len(memory_embs)]
 
+        all_memory_embs = [np.array([e/np.linalg.norm(e) for e in m.embeddings]) for m in self.memory]
         detected_embs /= np.linalg.norm(detected_embs, axis=-1, keepdims=True)
         memory_embs /= np.linalg.norm(memory_embs, axis=-1, keepdims=True)
 
         # Detected x Mem x Emb sized
         cosine_similarities = np.dot(detected_embs, memory_embs.T)
 
-        # Run ICP/FPFH loop closure to get an estimated transform for each seen object
-        R_matrices = np.zeros((len(detected_pointclouds), len(memory_embs), 3, 3), dtype=np.float32)
-        t_vectors = np.zeros((len(detected_pointclouds), len(memory_embs), 3), dtype=np.float32)
+        # get the closest similarity from each object
+        closest_similarities = np.zeros_like(cosine_similarities)
+        for i, d in enumerate(detected_embs):
+            row = np.zeros_like(cosine_similarities[0])
+            for j, m in enumerate(all_memory_embs):
+                row[i] = np.max(np.dot(m, d))
+            closest_similarities[i] = row
 
         # Save point clouds
         if save_point_clouds:
@@ -1289,7 +1294,7 @@ class ObjectMemory:
         # assns = sv.conv_coords_to_pairs(rep_vol, best_coords)
         
         sv.fast_construct_volume(3)
-        assns = sv.get_top_indices_from_subvolumes(10)
+        assns = sv.get_top_indices_from_subvolumes()
         assns_to_consider = assns
         del sv
 

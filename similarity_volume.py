@@ -205,8 +205,10 @@ class SimVolume():
 
     # search across all generated subvolumes for their topk costs, sort for the top k costs across all subvolumes
     # convert to assignments after sorting
-    def get_top_indices_from_subvolumes(self, k):
+    def get_top_indices_from_subvolumes(self, num_per_length=3):
         top_k = []
+        # assume the top k is split equally amongst all lengths up to num_detected
+        k = num_per_length * self.aug.shape[0]
         for chosen, subvol in zip(self.chosen_objects, self.subvolumes):
             for i in range(k):
                 ind = np.unravel_index(
@@ -218,7 +220,7 @@ class SimVolume():
                 subvol[ind] = -np.inf
         
         # get global top k assignments and convert to assignments
-        filtered_topk = []
+        all_filtered_topk = []
         assns = []
         unassigned_ind = self.subvolumes[0].shape[0] - 1
         for coords in top_k:
@@ -234,8 +236,14 @@ class SimVolume():
             if filtered not in assns:
                 assns.append(filtered)
 
-                filtered_topk.append([filtered, coords[2]])
+                all_filtered_topk.append([filtered, coords[2]])
         
+        filtered_topk = []
+        for i in range(1, self.aug.shape[0] + 1):
+            correct_length = [f for f in all_filtered_topk if len(f[0]) == i]
+            correct_length = sorted(correct_length, key= lambda x: x[-1], reverse=True)[:num_per_length]
+            filtered_topk += correct_length
+
         filtered_topk = sorted(filtered_topk, key= lambda x: x[-1], reverse=True)[:k]
         assns = [a[0] for a in filtered_topk]
 
