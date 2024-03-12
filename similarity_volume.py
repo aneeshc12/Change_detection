@@ -100,7 +100,11 @@ class SimVolume():
         self.subvolumes = []
 
         if self.aug.shape[0] == 1:
+            self.chosen_objects = [[0]]
+            vol = self.aug[0]
+            vol[-1] = -np.inf
             self.subvolumes.append(self.aug[0])
+            return
         
         subvolume_size = min(2, subvolume_size)
         
@@ -385,12 +389,12 @@ def plot_time_graphs():
 
 if __name__ == "__main__":
 
-    cs = np.array([i for i in range(50)])
-    cs2 = np.array([i for i in range(6)])
-    cs = cs2.reshape(-1,1) + cs2.reshape(1,-1)
+    cs = np.array([[i for i in range(50)]])
+    cs2 = np.array([i for i in range(1)])
+    # cs = cs2.reshape(-1,1) + cs2.reshape(1,-1)
 
-    r = np.random.rand(*cs.shape)
-    print(f"r shape: {r.shape}")
+    # r = np.random.rand(*cs.shape)
+    print(f"cs shape: {cs.shape}")
 
     sv = SimVolume(cs)
     tsv = TestSimVolume()
@@ -403,8 +407,11 @@ if __name__ == "__main__":
     # print(f"Full volume: {assns}")
 
     sv.fast_construct_volume(3)
+    print(sv.subvolumes)
+    print(sv.chosen_objects)
+
     topk_sub = sv.get_top_indices_from_subvolumes(10)
-    print(f"Sub volumes: {topk_sub}")
+    print(f"top: {topk_sub}")
     
     print()
     for i in (topk_sub):

@@ -17,7 +17,7 @@ class LocalArgs:
     downsampling_rate: int = 5 # downsample points every these many frames
     save_dir: str = "/scratch/aneesh.chavan/results/viz2"
     start_file_index: int = 1
-    last_file_index: int = 300
+    last_file_index: int = 250
     rot_correction: float = 0.0 # keep as 30 for 8-room-new 
     look_around_range: int = 0 # number of sucessive frames to consider at every frame
     save_individual_objects: bool = True
@@ -33,6 +33,7 @@ class LocalArgs:
     localise_times: int = 1
 
     loc_results_start_file_index: int = 106
+    # loc_results_last_file_index: int = 500
     loc_results_last_file_index: int = 200
     loc_results_sampling_period: int = 8
 
