@@ -4,3 +4,6 @@
 [submodule "recognize-anything"]
 	path = recognize-anything
 	url = https://github.com/xinyu1205/recognize-anything.git
+[submodule "Objectron"]
+	path = Objectron
+	url = https://github.com/google-research-datasets/Objectron.git
