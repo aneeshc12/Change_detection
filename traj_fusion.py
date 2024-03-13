@@ -228,15 +228,12 @@ if __name__ == "__main__":
         target_pose = np.concatenate([t, q])
         tgt.append(target_pose)
 
-        ret = source_mem.localise(image_path=image_file_path,
+        estimated_pose, [chosen_assignment, moved_objs] = source_mem.localise(image_path=image_file_path,
         depth_image_path=depth_file_path,
         save_point_clouds=False,
         fpfh_global_dist_factor = largs.fpfh_global_dist_factor,
         fpfh_local_dist_factor = largs.fpfh_global_dist_factor,
         fpfh_voxel_size = largs.fpfh_voxel_size)
-
-        print(ret)
-        raise
 
         if estimated_pose is None:
             print("No objects found in image; skipping")
@@ -248,10 +245,12 @@ if __name__ == "__main__":
             adjusted_fits.append(-1e10)
             continue
 
+        fit = 0
         print("Target pose: ", target_pose)
         print("Estimated pose: ", estimated_pose)
         print("Registration fit: ", fit)
         # adj_fit = fit * (len(chosen_assignment) ** 0.25)
+        adj_fit = fit
         print("Adjusted fit: ", adj_fit)
 
         translation_error = np.linalg.norm(target_pose[:3] - estimated_pose[:3])
