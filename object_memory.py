@@ -1403,14 +1403,61 @@ class ObjectMemory:
         all_detected_pcd_filtered.paint_uniform_color([1,0,0])
 
 
-        o3d.io.write_point_cloud(f"./temp/{str(assn)}-{testname}-trns.ply", all_memory_pcd + 
+        o3d.io.write_point_cloud(f"./temp2/{str(assn)}-{testname}-trns.ply", all_memory_pcd + 
                                 all_detected_pcd_filtered.transform(transform))
         # import pdb; pdb.set_trace()
 
 
-        # moved objects will have indices that are not present in the first row of assn
+        # get all moved objs based on iou
+        moved_idx = []
+        for i, det in enumerate(detected_pointclouds):
+            detected_pcd = o3d.geometry.PointCloud()
+            detected_pcd.points = o3d.utility.Vector3dVector(det.T - detected_mean)
+            detected_pcd.transform(transform)
+            detected_pcd = np.array(detected_pcd.points)
 
-        return localised_pose, [assn, moved_objs]
+            moved = True
+
+            for mem in self.memory:
+                memory_pcd = o3d.geometry.PointCloud()
+                memory_pcd.points = o3d.utility.Vector3dVector(mem.pcd.T - memory_mean)
+                memory_pcd = np.array(memory_pcd.points)
+
+                iou = calculate_3d_IoU(detected_pcd.T, memory_pcd.T)
+                if iou > 0.7:
+                    moved = False
+                    break
+            
+            if moved:
+                moved_idx.append(i)
+                print(f"idx {i} detected as moved")
+            else:
+                print(f"idx {i} detected as not moved")
+
+        # sanity check
+        detected_pcd = o3d.geometry.PointCloud()
+        detected_pcd.points = o3d.utility.Vector3dVector(det.T - detected_mean)
+        detected_pcd = np.array(detected_pcd.points)
+
+        moved = True
+
+        for mem in self.memory:
+            memory_pcd = o3d.geometry.PointCloud()
+            memory_pcd.points = o3d.utility.Vector3dVector(mem.pcd.T - memory_mean * 1e5)
+            memory_pcd = np.array(memory_pcd.points)
+
+            iou = calculate_obj_aligned_3d_IoU(detected_pcd.T, memory_pcd.T)
+            if iou > 0.8:
+                moved = False
+                break
+        
+        if moved:
+            print(f"sanity passed")
+        else:
+            print(f"sanity failed")
+
+
+        return localised_pose, [assn, moved_idx]
 
 @dataclass
 class LocalArgs:
@@ -1426,6 +1473,18 @@ class LocalArgs:
     save_point_clouds: bool = True
 
 if __name__ == "__main__":
+
+    p1 = o3d.io.read_point_cloud('/home2/aneesh.chavan/Change_detection/temp/loc_mem596.pcd')
+    p1.paint_uniform_color(np.array([0,1,1]))
+    p2 = o3d.io.read_point_cloud('/home2/aneesh.chavan/Change_detection/temp/[[0, 5], [1, 25]]-122-ISTHISIT.ply')
+
+    Tx,_ = register_point_clouds(p2, p1,  0.15)
+    p2 = p2.transform(Tx)
+
+    p3 = p1 + p2
+    o3d.io.write_point_cloud('./loc_fail.ply', p3)
+
+    exit(0)
     start_time = time.time()
 
     largs = tyro.cli(LocalArgs, description=__doc__)
@@ -1458,7 +1517,7 @@ if __name__ == "__main__":
             num = i+1
 
             # view 6 is our unseen view, skip
-            print(f"Processing img %d" % num)
+            print(f"  img %d" % num)
             q = Rotation.from_euler('zyx', [r for _, r in view["rotation"].items()], degrees=True).as_quat()
             t = np.array([x for _, x in view["position"].items()])
             pose = np.concatenate([t, q])
