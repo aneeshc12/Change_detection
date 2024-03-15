@@ -65,6 +65,7 @@ import json
 from dataclasses import dataclass, field
 from jcbb import JCBB
 from fpfh.fpfh_register import register_point_clouds
+from similarity_volume import *
 
 from objectron.dataset import box, iou
 
@@ -1243,6 +1244,10 @@ class ObjectMemory:
         # Extract all objects currently seen, get embeddings, point clouds in the local unknown frame
         detected_phrases, detected_embs, detected_pointclouds = self._get_object_info(image_path, depth_image_path)
 
+        # TODO deal with no objects detected
+        if detected_embs is None:
+            return np.array([0.,0.,0.,0.,0.,0.,1.]), [[],[]]
+ 
         # Correlate embeddings with objects in memory for all seen objects
         # TODO maybe a KNN search will do better?
         for m in self.memory:
@@ -1250,22 +1255,23 @@ class ObjectMemory:
 
         memory_embs = np.array([m.mean_emb for m in self.memory])
 
-        # TODO deal with no objects detected
-        if detected_embs is None:
-            return np.array([0.,0.,0.,0.,0.,0.,1.]), [[],[]]
-
         if len(detected_embs) > len(memory_embs):
             detected_embs = detected_embs[:len(memory_embs)]
 
+        all_memory_embs = [np.array([e/np.linalg.norm(e) for e in m.embeddings]) for m in self.memory]
         detected_embs /= np.linalg.norm(detected_embs, axis=-1, keepdims=True)
         memory_embs /= np.linalg.norm(memory_embs, axis=-1, keepdims=True)
 
         # Detected x Mem x Emb sized
         cosine_similarities = np.dot(detected_embs, memory_embs.T)
 
-        # Run ICP/FPFH loop closure to get an estimated transform for each seen object
-        R_matrices = np.zeros((len(detected_pointclouds), len(memory_embs), 3, 3), dtype=np.float32)
-        t_vectors = np.zeros((len(detected_pointclouds), len(memory_embs), 3), dtype=np.float32)
+        # get the closest similarity from each object
+        closest_similarities = np.zeros_like(cosine_similarities)
+        for i, d in enumerate(detected_embs):
+            row = np.zeros_like(cosine_similarities[0])
+            for j, m in enumerate(all_memory_embs):
+                row[i] = np.max(np.dot(m, d))
+            closest_similarities[i] = row
 
         # Save point clouds
         if save_point_clouds:
@@ -1278,16 +1284,24 @@ class ObjectMemory:
         # TODO unseen objects in detected objects are not being dealt with, 
         # assuming that all detected objects can be assigned to mem objs
         # TODO calculate rotation matrices
-        j = JCBB(cosine_similarities, R_matrices)
-        # assns = j.get_candidate_assignments(min_length=max(1, len(detected_embs)-1))
+
         print("Getting assignments")
-        assns = j.get_candidate_assignments(max_length=3)
-        del j
+        print(cosine_similarities.shape)
+        sv = SimVolume(cosine_similarities)
+        # rep_vol, _ = sv.construct_volume()
+        # print(rep_vol.shape)
+        # best_coords = sv.get_top_indices(rep_vol, 10)
+        # assns = sv.conv_coords_to_pairs(rep_vol, best_coords)
+        
+        sv.fast_construct_volume(3)
+        assns = sv.get_top_indices_from_subvolumes()
+        assns_to_consider = assns
+        del sv
 
         # only consider the top K assignments based on net cosine similarity
         # assns_to_consider = [assn[0] for assn in assns[:topK]]
 
-        assns_to_consider = [assn[0] for assn in assns]
+        # assns_to_consider = [assn[0] for assn in assns]
 
         print("Phrases: ", detected_phrases)
         print(cosine_similarities)
@@ -1389,14 +1403,61 @@ class ObjectMemory:
         all_detected_pcd_filtered.paint_uniform_color([1,0,0])
 
 
-        o3d.io.write_point_cloud(f"./temp/{str(assn)}-{testname}-trns.ply", all_memory_pcd + 
+        o3d.io.write_point_cloud(f"./temp2/{str(assn)}-{testname}-trns.ply", all_memory_pcd + 
                                 all_detected_pcd_filtered.transform(transform))
         # import pdb; pdb.set_trace()
 
 
-        # moved objects will have indices that are not present in the first row of assn
+        # get all moved objs based on iou
+        moved_idx = []
+        for i, det in enumerate(detected_pointclouds):
+            detected_pcd = o3d.geometry.PointCloud()
+            detected_pcd.points = o3d.utility.Vector3dVector(det.T - detected_mean)
+            detected_pcd.transform(transform)
+            detected_pcd = np.array(detected_pcd.points)
 
-        return localised_pose, [assn, moved_objs]
+            moved = True
+
+            for mem in self.memory:
+                memory_pcd = o3d.geometry.PointCloud()
+                memory_pcd.points = o3d.utility.Vector3dVector(mem.pcd.T - memory_mean)
+                memory_pcd = np.array(memory_pcd.points)
+
+                iou = calculate_3d_IoU(detected_pcd.T, memory_pcd.T)
+                if iou > 0.7:
+                    moved = False
+                    break
+            
+            if moved:
+                moved_idx.append(i)
+                print(f"idx {i} detected as moved")
+            else:
+                print(f"idx {i} detected as not moved")
+
+        # sanity check
+        detected_pcd = o3d.geometry.PointCloud()
+        detected_pcd.points = o3d.utility.Vector3dVector(det.T - detected_mean)
+        detected_pcd = np.array(detected_pcd.points)
+
+        moved = True
+
+        for mem in self.memory:
+            memory_pcd = o3d.geometry.PointCloud()
+            memory_pcd.points = o3d.utility.Vector3dVector(mem.pcd.T - memory_mean * 1e5)
+            memory_pcd = np.array(memory_pcd.points)
+
+            iou = calculate_obj_aligned_3d_IoU(detected_pcd.T, memory_pcd.T)
+            if iou > 0.8:
+                moved = False
+                break
+        
+        if moved:
+            print(f"sanity passed")
+        else:
+            print(f"sanity failed")
+
+
+        return localised_pose, [assn, moved_idx]
 
 @dataclass
 class LocalArgs:
@@ -1412,6 +1473,18 @@ class LocalArgs:
     save_point_clouds: bool = True
 
 if __name__ == "__main__":
+
+    p1 = o3d.io.read_point_cloud('/home2/aneesh.chavan/Change_detection/temp/loc_mem596.pcd')
+    p1.paint_uniform_color(np.array([0,1,1]))
+    p2 = o3d.io.read_point_cloud('/home2/aneesh.chavan/Change_detection/temp/[[0, 5], [1, 25]]-122-ISTHISIT.ply')
+
+    Tx,_ = register_point_clouds(p2, p1,  0.15)
+    p2 = p2.transform(Tx)
+
+    p3 = p1 + p2
+    o3d.io.write_point_cloud('./loc_fail.ply', p3)
+
+    exit(0)
     start_time = time.time()
 
     largs = tyro.cli(LocalArgs, description=__doc__)
@@ -1444,7 +1517,7 @@ if __name__ == "__main__":
             num = i+1
 
             # view 6 is our unseen view, skip
-            print(f"Processing img %d" % num)
+            print(f"  img %d" % num)
             q = Rotation.from_euler('zyx', [r for _, r in view["rotation"].items()], degrees=True).as_quat()
             t = np.array([x for _, x in view["position"].items()])
             pose = np.concatenate([t, q])

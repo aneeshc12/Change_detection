@@ -3,11 +3,13 @@ import torch
 import os, sys, time
 import itertools
 import warnings
+import matplotlib.pyplot as plt
+from numba import jit
 
 class SimVolume():
     def __init__(self, cosine_similarities) -> None:
         # e x m x 1
-        aug = np.ones((cosine_similarities.shape[0], cosine_similarities.shape[1] + 1))
+        aug = np.ones((cosine_similarities.shape[0], cosine_similarities.shape[1] + 1), dtype=np.float16)
         aug[:, :-1] = cosine_similarities
 
         self.aug = aug
@@ -49,39 +51,113 @@ class SimVolume():
 
 
         # disallow repeats
-        e = -np.inf * np.ones_like(volume)
+        mask = -np.inf * np.ones_like(volume)
 
         vol_dim = len(volume.shape)
 
         # unassigned may be repeated
 
         # print(f"e constructed at {time.time() - start}")
+        perm_list = [i for i in itertools.permutations([i for i in range(volume.shape[0] - 1)], vol_dim)]
+        # print(f"perms constructed at {time.time() - start}")
+        # print(f"Len perms: {len(perm_list)}")
 
         # set unique assignments to 1
-        for comb in itertools.permutations([i for i in range(volume.shape[0] - 1)], vol_dim):
-            e[comb] = 1
+        for comb in perm_list:
+            mask[comb] = 0
 
             for j in range(1, 1 << vol_dim):
                 c = list(comb)
+
+                # iterate through all binary choices of assigning or not assinging 
                 unassigned = [k for k in range(vol_dim) if j & 1 << k]
                 for u in unassigned:
                     c[u] = -1
                 # print(c)
 
-                e[tuple(c)] = 1
+                mask[tuple(c)] = 0
+
+        # atlesat one object must be assigned
+        mask[list([-1 for i in range(vol_dim+1)])] = -np.inf
         
         # print(f"unique at {time.time() - start}")
 
         # apply mask, fix all 0 * np.infs
         with warnings.catch_warnings():
             warnings.filterwarnings("ignore", message="invalid value encountered in multiply")
-            rep_volume = volume * e
+            rep_volume = volume + mask
             # print(f"mask at {time.time() - start}")
             rep_volume[np.isnan(rep_volume)] = -np.inf
             # print(f"fill at {time.time() - start}")
 
         return volume, rep_volume
-    
+
+    """
+    Only calculate the edges of an actual volume, filling in some objects as unassigned
+    Calculate nCs subvolumes, store them all in this object
+    """
+    def fast_construct_volume(self, subvolume_size):
+        self.subvolumes = []
+
+        if self.aug.shape[0] == 1:
+            self.chosen_objects = [[0]]
+            vol = self.aug[0]
+            vol[-1] = -np.inf
+            self.subvolumes.append(self.aug[0])
+            return
+        
+        subvolume_size = min(2, subvolume_size)
+        
+        self.chosen_objects = [i for i in itertools.combinations([j for j in range(self.aug.shape[0])], subvolume_size)]
+        for chosen in self.chosen_objects:
+            # print(chosen)
+
+            sub_aug = self.aug[list(chosen)]    # pick out the rows of self.aug that are in chosen
+            
+            volume = np.einsum('i,j', sub_aug[0], sub_aug[1])
+            for i, row in enumerate(sub_aug[2:]):
+                volume = np.einsum('...i,j', volume, row)
+
+            # disallow repeats
+            mask = -np.inf * np.ones_like(volume)
+
+            vol_dim = len(volume.shape)
+
+            # unassigned may be repeated
+
+            # print(f"e constructed at {time.time() - start}")
+            perm_list = [i for i in itertools.permutations([i for i in range(volume.shape[0] - 1)], vol_dim)]
+            # print(f"perms constructed at {time.time() - start}")
+            # print(f"Len perms: {len(perm_list)}")
+
+            # set unique assignments to 1
+            for comb in perm_list:
+                mask[comb] = 0
+
+                for j in range(1, 1 << vol_dim):
+                    c = list(comb)
+
+                    # iterate through all binary choices of assigning or not assinging 
+                    unassigned = [k for k in range(vol_dim) if j & 1 << k]
+                    for u in unassigned:
+                        c[u] = -1
+                    # print(c)
+
+                    mask[tuple(c)] = 0
+        
+            # atlesat one object must be assigned
+            mask[list([-1 for i in range(vol_dim+1)])] = -np.inf
+
+            # apply mask, fix all 0 * np.infs
+            with warnings.catch_warnings():
+                warnings.filterwarnings("ignore", message="invalid value encountered in multiply")
+                rep_volume = volume + mask
+                # print(f"mask at {time.time() - start}")
+                rep_volume[np.isnan(rep_volume)] = -np.inf
+                # print(f"fill at {time.time() - start}")
+
+            self.subvolumes.append(rep_volume)
+
     """
     Simpler volume, no space for rearrangements, all given objects are given an assignment
     """
@@ -98,174 +174,283 @@ class SimVolume():
             # print(f"{vb} -> {volume.shape}\n")
         return volume
     
-    # def get_minimum(self, chosen_e, vol):
+    def get_top_indices(self, vol, k):
+        top_k = []
+        for i in range(k):
+            ind = np.unravel_index(
+                np.argmax(vol, axis=None),
+                vol.shape
+            )
+
+            # print(f"ind: {ind} | val: {vol[ind]}")
+            top_k.append([ind, vol[ind]])
+            # replace with -inf to look for the second highest
+            vol[ind] = -np.inf
+        return top_k
+
+    def conv_coords_to_pairs(self, vol, coords):
+        assns = []
+        unassigned_ind = vol.shape[0] - 1
+        for c, cost in coords:
+            assn = []
+            for i, c_i in enumerate(c):
+                if c_i != unassigned_ind:
+                    assn.append([i, c_i])
+            
+            if len(assn) == 0:
+                continue
+            
+            assns.append([assn, cost])
+        return assns
+
+    # search across all generated subvolumes for their topk costs, sort for the top k costs across all subvolumes
+    # convert to assignments after sorting
+    def get_top_indices_from_subvolumes(self, num_per_length=3):
+        top_k = []
+        # assume the top k is split equally amongst all lengths up to num_detected
+        k = num_per_length * self.aug.shape[0]
+        for chosen, subvol in zip(self.chosen_objects, self.subvolumes):
+            for i in range(k):
+                ind = np.unravel_index(
+                    np.argmax(subvol, axis=None),
+                    subvol.shape
+                )
+
+                top_k.append([chosen, ind, subvol[ind]])
+                subvol[ind] = -np.inf
+        
+        # get global top k assignments and convert to assignments
+        all_filtered_topk = []
+        assns = []
+        unassigned_ind = self.subvolumes[0].shape[0] - 1
+        for coords in top_k:
+            
+            filtered = []
+            for i, c_i in zip(coords[0], coords[1]):
+                if c_i != unassigned_ind:
+                    filtered.append([i, c_i])
+            
+            if len(filtered) == 0:
+                continue
+            
+            if filtered not in assns:
+                assns.append(filtered)
+
+                all_filtered_topk.append([filtered, coords[2]])
+        
+        filtered_topk = []
+        for i in range(1, self.aug.shape[0] + 1):
+            correct_length = [f for f in all_filtered_topk if len(f[0]) == i]
+            correct_length = sorted(correct_length, key= lambda x: x[-1], reverse=True)[:num_per_length]
+            filtered_topk += correct_length
+
+        filtered_topk = sorted(filtered_topk, key= lambda x: x[-1], reverse=True)[:k]
+        assns = [a[0] for a in filtered_topk]
+
+        return assns
 
 
 
-# use to check volume
-def test_vol(vol, cs, verbose=False):
-    num = cs.shape[0]
-    indices = tuple([np.random.randint(0,num) for i in range(num)])
+class TestSimVolume():
+    # use to check volume
+    def test_vol(vol, cs, verbose=False):
+        num = cs.shape[0]
+        indices = tuple([np.random.randint(0,num) for i in range(num)])
 
-    prod = 1
-    for n, i in enumerate(indices):
-        prod *= cs[n,i]
-
-    if verbose:
-        print(f"Indices: {indices}")
-        print(f"Volume says: {vol[indices]}")
-        print(f"Product: {prod}")
-
-    return vol[indices] == prod
-
-# use for volume
-def test_missing(vol, cs, verbose=False):
-    num = cs.shape[0]
-    indices = [np.random.randint(0,num) for i in range(num)]
-
-    random_missing_idx = np.random.randint(0,num)
-    indices[random_missing_idx] = -1
-    indices = tuple(indices)
-
-    prod = 1
-    for n, i in enumerate(indices):
-        if i == -1:
-            continue
-        prod *= cs[n,i]
-
-    if verbose:
-        print(f"Indices: {indices}")
-        print(f"Missing assingment: {random_missing_idx}")
-        print(f"Volume says: {vol[indices]}")
-        print(f"Product should be zero: {prod}")
-
-    return vol[indices] == prod
-
-# use for rep vol
-def test_repeated(rep_vol, cs, verbose=False):
-    num = cs.shape[0]
-    indices = tuple([np.random.randint(0,num) for i in range(num)])
-
-    if len(set(indices)) != len(indices):
-        prod = -np.inf
-    else:
         prod = 1
         for n, i in enumerate(indices):
             prod *= cs[n,i]
 
-    if verbose:
-        print(f"Indices: {indices}")
-        print(f"Volume says: {rep_vol[indices]}")
-        print(f"Product: {prod}")
+        if verbose:
+            print(f"Indices: {indices}")
+            print(f"Volume says: {vol[indices]}")
+            print(f"Product: {prod}")
 
-    return rep_vol[indices] == prod
+        return vol[indices] == prod
 
-# use for rep vol
-def test_repeated_missing(rep_vol, cs, verbose=False):
-    num = cs.shape[0]
-    indices = [np.random.randint(0,num) for i in range(num)]
+    # use for volume
+    def test_missing(vol, cs, verbose=False):
+        num = cs.shape[0]
+        indices = [np.random.randint(0,num) for i in range(num)]
 
-    random_missing_idx = np.random.randint(0,num)
-    indices[random_missing_idx] = -1
-    indices = tuple(indices)
+        random_missing_idx = np.random.randint(0,num)
+        indices[random_missing_idx] = -1
+        indices = tuple(indices)
 
-
-    if len(set(indices)) != len(indices):
-        prod = -np.inf
-    else:
         prod = 1
         for n, i in enumerate(indices):
             if i == -1:
                 continue
             prod *= cs[n,i]
 
-    if verbose:
-        print(f"Indices: {indices}")
-        print(f"Volume says: {rep_vol[indices]}")
-        print(f"Product: {prod}")
+        if verbose:
+            print(f"Indices: {indices}")
+            print(f"Missing assingment: {random_missing_idx}")
+            print(f"Volume says: {vol[indices]}")
+            print(f"Product should be zero: {prod}")
 
-    return rep_vol[indices] == prod
+        return vol[indices] == prod
 
-def test_repeated_multiple_missing(rep_vol, cs, verbose=False):
-    num = cs.shape[0]
-    indices = [np.random.randint(0,num) for i in range(num)]
+    # use for rep vol
+    def test_repeated(rep_vol, cs, verbose=False):
+        num = cs.shape[0]
+        indices = tuple([np.random.randint(0,num) for i in range(num)])
 
-    random_missing_idx1 = np.random.randint(0,num)
-    random_missing_idx2 = np.random.randint(0,num)
-    indices[random_missing_idx1] = -1
-    indices[random_missing_idx2] = -1
-    indices = tuple(indices)
+        if len(set(indices)) != len(indices):
+            prod = -np.inf
+        else:
+            prod = 1
+            for n, i in enumerate(indices):
+                prod *= cs[n,i]
 
-    if len(set(indices))+1 != len(indices) and random_missing_idx1 != random_missing_idx2:
-        prod = -np.inf
-    elif len(set(indices)) != len(indices) and random_missing_idx1 == random_missing_idx2:
-        prod = -np.inf
-    else:
-        prod = 1
-        for n, i in enumerate(indices):
-            if i == -1:
-                continue
-            prod *= cs[n,i]
+        if verbose:
+            print(f"Indices: {indices}")
+            print(f"Volume says: {rep_vol[indices]}")
+            print(f"Product: {prod}")
 
-    if verbose:
-        print(f"Indices: {indices}")
-        print(f"Volume says: {rep_vol[indices]}")
-        print(f"Product: {prod}")
+        return rep_vol[indices] == prod
 
-    return rep_vol[indices] == prod
+    # use for rep vol
+    def test_repeated_missing(rep_vol, cs, verbose=False):
+        num = cs.shape[0]
+        indices = [np.random.randint(0,num) for i in range(num)]
 
-def get_topK_inplace(vol, K):
-    topK = []
-    for i in range(K):
-        ind = np.unravel_index(np.argmax(rep_vol, axis=None), rep_vol.shape)
-        topK.append(ind)
-        vol[ind] = -np.inf
-    return topK
+        random_missing_idx = np.random.randint(0,num)
+        indices[random_missing_idx] = -1
+        indices = tuple(indices)
+
+
+        if len(set(indices)) != len(indices):
+            prod = -np.inf
+        else:
+            prod = 1
+            for n, i in enumerate(indices):
+                if i == -1:
+                    continue
+                prod *= cs[n,i]
+
+        if verbose:
+            print(f"Indices: {indices}")
+            print(f"Volume says: {rep_vol[indices]}")
+            print(f"Product: {prod}")
+
+        return rep_vol[indices] == prod
+
+    def test_repeated_multiple_missing(rep_vol, cs, verbose=False):
+        num = cs.shape[0]
+        indices = [np.random.randint(0,num) for i in range(num)]
+
+        random_missing_idx1 = np.random.randint(0,num)
+        random_missing_idx2 = np.random.randint(0,num)
+        indices[random_missing_idx1] = -1
+        indices[random_missing_idx2] = -1
+        indices = tuple(indices)
+
+        if len(set(indices))+1 != len(indices) and random_missing_idx1 != random_missing_idx2:
+            prod = -np.inf
+        elif len(set(indices)) != len(indices) and random_missing_idx1 == random_missing_idx2:
+            prod = -np.inf
+        else:
+            prod = 1
+            for n, i in enumerate(indices):
+                if i == -1:
+                    continue
+                prod *= cs[n,i]
+
+        if verbose:
+            print(f"Indices: {indices}")
+            print(f"Volume says: {rep_vol[indices]}")
+            print(f"Product: {prod}")
+
+        return rep_vol[indices] == prod
+
+# plot a graph of time vs complexity
+def plot_time_graphs():
+    time_val = []
+    n_k = []
+    for n_i in range(5):
+        row = []
+        for k_j in range(50):
+            r = np.random.rand(n_i, k_j)
+            sv = SimVolume(r)
+
+            start = time.time()
+            fast_construct_volume(sv.aug)
+            time_taken = time.time() - start
+
+            print(f"{n_i} x {k_j} took {time_taken} seconds")
+            row.append(time_taken)
+        time_val.append(row)
+
+        # if n_i >= 4:
+        plt.figure()
+        for row_num, y in enumerate(time_val):
+            plt.plot([i for i in range(50)], np.log10(np.array(y)), label=f"N = {row_num}")
+        plt.legend()
+        plt.savefig(f"./simvol_plots/with_numba_upto_{row_num}")
+        plt.close()
+        times = np.array(time_val)
+        np.save(f"simvol_plots/with_numba_times_upto_{n_i}.npy", times)
+        np.save(f"simvol_plots/with_numba_log10_times_upto_{n_i}.npy", np.log10(times))
+
+        print(n_i, "done!")
 
 if __name__ == "__main__":
 
-    cs = np.array([i for i in range(20)])
-    cs2 = np.array([i for i in range(3)])
-    cs = cs2.reshape(-1,1) + cs.reshape(1,-1)
-    
+    cs = np.array([[i for i in range(50)]])
+    cs2 = np.array([i for i in range(1)])
+    # cs = cs2.reshape(-1,1) + cs2.reshape(1,-1)
+
+    # r = np.random.rand(*cs.shape)
+    print(f"cs shape: {cs.shape}")
+
     sv = SimVolume(cs)
+    tsv = TestSimVolume()
 
     start = time.time()
-    vol, rep_vol = sv.construct_volume()
-    print(f"Volume constructed, dim: {rep_vol.shape}")
+    
+    # _, rep_vol = sv.construct_volume()
+    # topk_full = sv.get_top_indices(rep_vol, 10)
+    # assns = sv.conv_coords_to_pairs(rep_vol, topk_full)
+    # print(f"Full volume: {assns}")
 
-    time_taken = time.time() - start
-    print(f"in {time_taken} seconds")
-    start = time.time()
+    sv.fast_construct_volume(3)
+    print(sv.subvolumes)
+    print(sv.chosen_objects)
 
-    ind = np.unravel_index(np.argmax(rep_vol, axis=None), rep_vol.shape)
-    print(ind, rep_vol[ind])#, rep_vol[49,48,47])
+    topk_sub = sv.get_top_indices_from_subvolumes(10)
+    print(f"top: {topk_sub}")
+    
+    print()
+    for i in (topk_sub):
+        print(f"{i}\t")
 
-    print(get_topK_inplace(rep_vol,10))
+    # time_taken = time.time() - start
+    # print(f"in {time_taken} seconds")
+    # start = time.time()
 
-    # v2 = sv.construct_volume_choose_e([1,2,3])
-    # print(v2.shape)
+    # plot_time_graphs()
 
     exit(0)
 
     for i in range(100):
-        assert(test_vol(vol, cs, False))
+        assert(tsv.test_vol(vol, cs, False))
     print("Basic test passed")
 
     for i in range(100):
-        assert(test_missing(vol, cs, False))
+        assert(tsv.test_missing(vol, cs, False))
     print("Missing assignment test passed")
 
     for i in range(100):
-        assert(test_repeated(rep_vol, cs, False))
+        assert(tsv.test_repeated(rep_vol, cs, False))
     print("Repeated assignment test passed")
 
     for i in range(100):
-        assert(test_repeated_missing(rep_vol, cs, False))
+        assert(tsv.test_repeated_missing(rep_vol, cs, False))
     print("Repeated missing assignment test passed")
 
     for i in range(100):
-        assert(test_repeated_multiple_missing(rep_vol, cs, False))
+        assert(tsv.test_repeated_multiple_missing(rep_vol, cs, False))
     print("Repeated multiple missing assignment test passed")
     
     """
