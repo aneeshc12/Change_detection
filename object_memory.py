@@ -8,6 +8,17 @@ sys.path.append(os.path.join(os.getcwd(), "Grounded-Segment-Anything", "Groundin
 sys.path.append(os.path.join(os.getcwd(), "GroundingDINO"))
 sys.path.append(os.path.join(os.getcwd(), "recognize-anything"))
 sys.path.append(os.path.join(os.getcwd(), "Objectron"))
+sys.path.append(os.path.join(os.getcwd(), "FourDNet-wrapper"))
+sys.path.append(os.path.join(os.getcwd(), "FourDNet-wrapper", "config"))
+sys.path.append(os.path.join(os.getcwd(), "FourDNet-wrapper", "datasets"))
+sys.path.append(os.path.join(os.getcwd(), "FourDNet-wrapper", "loss"))
+sys.path.append(os.path.join(os.getcwd(), "FourDNet-wrapper", "model"))
+sys.path.append(os.path.join(os.getcwd(), "FourDNet-wrapper", "processor"))
+sys.path.append(os.path.join(os.getcwd(), "FourDNet-wrapper", "solver"))
+sys.path.append(os.path.join(os.getcwd(), "FourDNet-wrapper", "utils"))
+
+# fourDNet
+from test_heatmap import load_reid_model, get_reid_emb
 
 import os, sys, time
 import tyro
@@ -68,6 +79,30 @@ from fpfh.fpfh_register import register_point_clouds
 from similarity_volume import *
 
 from objectron.dataset import box, iou
+
+# copy pasted from test_heatmap
+import os
+import torch
+from config import cfg
+import argparse
+# from datasets import make_dataloader
+from model import make_model
+# from processor import do_inference
+# from utils.logger import setup_logger
+import matplotlib.pyplot as plt
+import PIL
+from PIL import Image
+import torchvision.transforms.v2 as T
+import numpy as np
+import cv2
+import os
+import shutil
+import os.path as osp
+from tqdm import tqdm
+import torch.nn.functional as F
+import pickle
+from dataclasses import dataclass
+import tyro
 
 end_time = time.time()
 print(f"Imports completed in {end_time - start_time} seconds")
@@ -683,14 +718,18 @@ def calculate_3d_IoU(pcd1, pcd2):
     Returns:
     - IoU (float): 3D Intersection over Union between the two point clouds.
     """
-    bb1_min = pcd1.min(axis=-1)
-    bb1_max = pcd1.max(axis=-1)
+    try:
+        bb1_min = pcd1.min(axis=-1)
+        bb1_max = pcd1.max(axis=-1)
 
-    bb2_min = pcd2.min(axis=-1)
-    bb2_max = pcd2.max(axis=-1)
+        bb2_min = pcd2.min(axis=-1)
+        bb2_max = pcd2.max(axis=-1)
 
-    overlap_min_corner = np.stack([bb1_min, bb2_min], axis=0).max(axis=0)
-    overlap_max_corner = np.stack([bb1_max, bb2_max], axis=0).min(axis=0)
+        overlap_min_corner = np.stack([bb1_min, bb2_min], axis=0).max(axis=0)
+        overlap_max_corner = np.stack([bb1_max, bb2_max], axis=0).min(axis=0)
+
+    except:
+        return 0
 
     if (overlap_min_corner > overlap_max_corner).any():
         return 0
@@ -719,14 +758,17 @@ def calculate_strict_overlap(pcd1, pcd2):
     Returns:
     - overlap (float): Strict overlap between the two point clouds.
     """
-    bb1_min = pcd1.min(axis=-1)
-    bb1_max = pcd1.max(axis=-1)
+    try:
+        bb1_min = pcd1.min(axis=-1)
+        bb1_max = pcd1.max(axis=-1)
 
-    bb2_min = pcd2.min(axis=-1)
-    bb2_max = pcd2.max(axis=-1)
+        bb2_min = pcd2.min(axis=-1)
+        bb2_max = pcd2.max(axis=-1)
 
-    overlap_min_corner = np.stack([bb1_min, bb2_min], axis=0).max(axis=0)
-    overlap_max_corner = np.stack([bb1_max, bb2_max], axis=0).min(axis=0)
+        overlap_min_corner = np.stack([bb1_min, bb2_min], axis=0).max(axis=0)
+        overlap_max_corner = np.stack([bb1_max, bb2_max], axis=0).min(axis=0)
+    except:
+        return 0
 
     if (overlap_min_corner > overlap_max_corner).any():
         return 0
@@ -762,12 +804,15 @@ def calculate_obj_aligned_3d_IoU(pcd1, pcd2):
         v = sorted(v, key=lambda v: v[0])
         return v
 
-    bb1 = o3d.geometry.OrientedBoundingBox.create_from_points(
-        points=o3d.utility.Vector3dVector(pcd1.T) #, robust=True
-    )
-    bb2 = o3d.geometry.OrientedBoundingBox.create_from_points(
-        points=o3d.utility.Vector3dVector(pcd2.T) #, robust=True
-    )
+    try:
+        bb1 = o3d.geometry.OrientedBoundingBox.create_from_points(
+            points=o3d.utility.Vector3dVector(pcd1.T) #, robust=True
+        )
+        bb2 = o3d.geometry.OrientedBoundingBox.create_from_points(
+            points=o3d.utility.Vector3dVector(pcd2.T) #, robust=True
+        )
+    except:
+        return 0
 
     bb1_vertices = np.zeros((9,3), dtype=np.float32)
     bb1_vertices[0, :] = bb1.get_center()
@@ -951,7 +996,7 @@ class ObjectMemory:
         self.num_objects_stored = 0
         self.memory = []
 
-    def _get_object_info(self, image_path, depth_image_path):
+    def _get_object_info(self, image_path, depth_image_path, useLora):
         """
         Processes an RGB-D image and depth image to obtain object information.
 
@@ -972,7 +1017,10 @@ class ObjectMemory:
             return None, None, None
         
         # get ViT+LoRA embeddings, use bounding boxes and the image to get grounded images
-        embs = np.array(self.loraModule.encode_image(obj_grounded_imgs).cpu())
+        if useLora:
+            embs = np.array(self.loraModule.encode_image(obj_grounded_imgs).cpu())
+        else:
+            raise
         
         # filter out the pointclouds. NOTE: pointclouds are transformed to global pose later.
         obj_pointclouds = self.objectFinder.getDepth(depth_image_path, obj_masks)
@@ -990,7 +1038,7 @@ class ObjectMemory:
     def process_image(self, image_path=None, depth_image_path=None, pose=None, verbose=True, add_noise=True,
                       bounding_box_threshold=0.3,  occlusion_overlap_threshold=0.9, testname="", 
                       outlier_removal_config=None, min_points = 500, pose_noise = {'trans': 0.0005, 'rot': 0.0005},
-                      depth_noise = 0.003, lora_threshold = 0.5):
+                      depth_noise = 0.003, lora_threshold = 0.5, useLora=True):
         """
         Processes an RGB-D image, detects objects within and updates the object memory.
 
@@ -1016,7 +1064,7 @@ class ObjectMemory:
             }
 
         # Detect all objects within the config
-        obj_phrases, embs, obj_pointclouds = self._get_object_info(image_path, depth_image_path)
+        obj_phrases, embs, obj_pointclouds = self._get_object_info(image_path, depth_image_path, useLora)
 
         if obj_phrases is None:
             if verbose:
@@ -1217,7 +1265,7 @@ class ObjectMemory:
     def localise(self, image_path, depth_image_path, testname="", save_point_clouds=False,
                  outlier_removal_config=None, 
                  fpfh_global_dist_factor = 2, fpfh_local_dist_factor = 0.4, 
-                 fpfh_voxel_size = 0.05, topK=5):
+                 fpfh_voxel_size = 0.05, topK=5, save_localised_pcd_path=None, useLora=True):
         """
         Given an image and a corresponding depth image in an unknown frame, consult the stored memory
         and output a pose in the world frame of the point clouds stored in memory.
@@ -1242,7 +1290,7 @@ class ObjectMemory:
             }
 
         # Extract all objects currently seen, get embeddings, point clouds in the local unknown frame
-        detected_phrases, detected_embs, detected_pointclouds = self._get_object_info(image_path, depth_image_path)
+        detected_phrases, detected_embs, detected_pointclouds = self._get_object_info(image_path, depth_image_path, useLora)
 
         # TODO deal with no objects detected
         if detected_embs is None:
@@ -1402,9 +1450,9 @@ class ObjectMemory:
         all_memory_pcd.paint_uniform_color([0,1,0])
         all_detected_pcd_filtered.paint_uniform_color([1,0,0])
 
-
-        o3d.io.write_point_cloud(f"./temp2/{str(assn)}-{testname}-trns.ply", all_memory_pcd + 
-                                all_detected_pcd_filtered.transform(transform))
+        if save_localised_pcd_path is not None:
+            o3d.io.write_point_cloud(os.path.join(save_localised_pcd_path, f"{str(assn)}-{testname}-trns.ply"), all_memory_pcd + 
+                                    all_detected_pcd_filtered.transform(transform))
         # import pdb; pdb.set_trace()
 
 

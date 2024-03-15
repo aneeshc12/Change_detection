@@ -4,7 +4,6 @@ import os, sys, time
 import itertools
 import warnings
 import matplotlib.pyplot as plt
-from numba import jit
 
 class SimVolume():
     def __init__(self, cosine_similarities) -> None:
