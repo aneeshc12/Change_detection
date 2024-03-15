@@ -7,3 +7,6 @@
 [submodule "Objectron"]
 	path = Objectron
 	url = https://github.com/google-research-datasets/Objectron.git
+[submodule "FourDNet-wrapper"]
+	path = FourDNet-wrapper
+	url = git@github.com:FlightVin/FourDNet-wrapper.git
