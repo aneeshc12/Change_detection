@@ -7,21 +7,27 @@ class LocalArgs:
     """
     Class to hold local configuration arguments.
     """
+    testname="fix_localisation"
+
     lora_path: str='models/vit_finegrained_5x40_procthor.pt'
-    test_folder_path: str='/scratch/vineeth.bhat/8-room-new'
-    rearranged_test_folder_path: str='/scratch/vineeth.bhat/8-room-new' # basically the dataset of the stuff ebing localised
+    test_folder_path: str='/scratch/aneesh.chavan/8room/8-room-v1/1/'
+    # rearranged_test_folder_path: str='/scratch/aneesh.chavan/8-room-new' # basically the dataset of the stuff ebing localised
+    rearranged_test_folder_path: str='/scratch/aneesh.chavan/8room/8-room-v1/1/' # basically the dataset of the stuff ebing localised
     device: str='cuda'
-    sam_checkpoint_path: str = '/scratch/vineeth.bhat/sam_vit_h_4b8939.pth'
-    ram_pretrained_path: str = '/scratch/vineeth.bhat/ram_swin_large_14m.pth'
+    sam_checkpoint_path: str = '/scratch/aneesh.chavan/sam_vit_h_4b8939.pth'
+    ram_pretrained_path: str = '/scratch/aneesh.chavan/ram_swin_large_14m.pth'
     downsampling_rate: int = 5 # downsample points every these many frames
 
 
-    save_dir: str = "/scratch/vineeth.bhat/results/8-room-new-FourDNet"
-    sampling_period: int = 20
-    start_file_index: int = 4
-    last_file_index: int = 2000
-    rot_correction: float = 30.0 # keep as 30 for 8-room-new 
+    save_dir: str = "/scratch/aneesh.chavan/results/8-room-new-icp"
+    sampling_period: int = 10
+    start_file_index: int = 200
+    last_file_index: int = 1500
+    # rot_correction: float = 30.0 # keep as 30 for 8-room-new 
+    rot_correction: float = 0.0 
     look_around_range: int = 0 # number of sucessive frames to consider at every frame
+    
+    save_point_clouds: bool = True          # Save ICP results
     save_individual_objects: bool = True
     save_localised_objects: bool = True
 
@@ -29,17 +35,17 @@ class LocalArgs:
 
     down_sample_voxel_size: float = 0.01 # best results
     create_ext_mesh: bool = False
-    save_point_clouds: bool = False
     fpfh_global_dist_factor: float = 1.5
     fpfh_local_dist_factor: float = 0.4
     fpfh_voxel_size: float = 0.05   
     localise_times: int = 1
 
-    loc_results_start_file_index: int = 200
-    loc_results_last_file_index: int = 1800
-    loc_results_sampling_period: int = 40
+    loc_results_start_file_index: int = 210
+    loc_results_last_file_index: int = 1400
+    loc_results_sampling_period: int = 25
 
-    useLora: bool=False
+    useLora: bool=True
+    consider_floor=False
 
 if __name__=="__main__":
     start_time = time.time()
@@ -104,16 +110,17 @@ if __name__=="__main__":
                                 image_path = image_file_path, 
                                 depth_image_path = depth_file_path, 
                                 pose=pose,
-                                verbose=False, add_noise=largs.add_pose_noise, useLora = largs.useLora)
+                                verbose=False, add_noise=largs.add_pose_noise, useLora = largs.useLora,
+                                consider_floor=largs.consider_floor)
             
             pid = psutil.Process()
             memory_info = pid.memory_info()
             memory_info_GBs = memory_info.rss / (1e3 ** 3)
-            print(f"Memory usage: {memory_info_GBs:.3f} GB")
+            # print(f"Memory usage: {memory_info_GBs:.3f} GB")
 
             cuda_memory_stats = torch.cuda.memory_stats()
             max_cuda_memory_GBs = int(cuda_memory_stats["allocated_bytes.all.peak"]) / (1e3 ** 3)
-            print(f"Max GPU memory usage: {max_cuda_memory_GBs:.3f} GB")
+            # print(f"Max GPU memory usage: {max_cuda_memory_GBs:.3f} GB")
 
             print("\t ----------------")
 
@@ -138,7 +145,7 @@ if __name__=="__main__":
                 #         combined_pcd += pcd
 
                 #     save_path = os.path.join(largs.save_dir, 
-                #         f"/home2/vineeth.bhat/Change_detection/temp/{i}_before_cons.pcd")
+                #         f"/home2/aneesh.chavan/Change_detection/temp/{i}_before_cons.pcd")
                 #     o3d.io.write_point_cloud(save_path, combined_pcd)
                 #     print("Memory's pointcloud saved to", save_path)
 
@@ -152,27 +159,27 @@ if __name__=="__main__":
 
 
                 # # begin debug
-                # if i > 60:
-                #     pcd_list = []
+                if i > 60:
+                    pcd_list = []
                     
-                #     for info in mem.memory:
-                #         object_pcd = info.pcd
-                #         pcd_list.append(object_pcd)
+                    for info in mem.memory:
+                        object_pcd = info.pcd
+                        pcd_list.append(object_pcd)
 
-                #     combined_pcd = o3d.geometry.PointCloud()
+                    combined_pcd = o3d.geometry.PointCloud()
 
-                #     for bhencho in range(len(pcd_list)):
-                #         pcd_np = pcd_list[bhencho]
-                #         pcd_vec = o3d.utility.Vector3dVector(pcd_np.T)
-                #         pcd = o3d.geometry.PointCloud()
-                #         pcd.points = pcd_vec
-                #         pcd.paint_uniform_color(np.random.rand(3))
-                #         combined_pcd += pcd
+                    for bhencho in range(len(pcd_list)):
+                        pcd_np = pcd_list[bhencho]
+                        pcd_vec = o3d.utility.Vector3dVector(pcd_np.T)
+                        pcd = o3d.geometry.PointCloud()
+                        pcd.points = pcd_vec
+                        pcd.paint_uniform_color(np.random.rand(3))
+                        combined_pcd += pcd
 
-                #     save_path = os.path.join(largs.save_dir, 
-                #         f"/home2/vineeth.bhat/Change_detection/temp/{i}_after_cons.pcd")
-                #     o3d.io.write_point_cloud(save_path, combined_pcd)
-                #     print("Memory's pointcloud saved to", save_path)
+                    save_path = os.path.join(largs.save_dir, 
+                        f"/home2/aneesh.chavan/Change_detection/temp/{i}_after_cons.pcd")
+                    o3d.io.write_point_cloud(save_path, combined_pcd)
+                    print("Memory's pointcloud saved to", save_path)
 
                     # pdb.set_trace()
                 # end debug
@@ -186,6 +193,7 @@ if __name__=="__main__":
 
     end_time = time.time()
     print(f"Traversal completed in {end_time - start_time} seconds")
+    print(f"{(end_time - start_time)/float(frame_counter)} seconds per image for {frame_counter} images\n")
 
     pcd_list = []
     
@@ -272,21 +280,27 @@ if __name__=="__main__":
         if largs.save_localised_objects:
             estimated_pose, chosen_assignment = mem.localise(image_path=image_file_path, 
                                             depth_image_path=depth_file_path,
+                                            testname=largs.testname,
+                                            subtest_name=f"{i}" ,
                                             save_point_clouds=largs.save_point_clouds,
                                             fpfh_global_dist_factor = largs.fpfh_global_dist_factor, 
                                             fpfh_local_dist_factor = largs.fpfh_global_dist_factor, 
                                             fpfh_voxel_size = largs.fpfh_voxel_size,
-                                            save_localised_pcd_path = localised_mem_save_dir, useLora = largs.useLora)
+                                            save_localised_pcd_path = localised_mem_save_dir, useLora = largs.useLora,
+                                            consider_floor=largs.consider_floor)
         else:
             estimated_pose, chosen_assignment = mem.localise(image_path=image_file_path, 
                                             depth_image_path=depth_file_path,
+                                            testname=largs.testname,
+                                            subtest_name=f"{i}" ,
                                             save_point_clouds=largs.save_point_clouds,
                                             fpfh_global_dist_factor = largs.fpfh_global_dist_factor, 
                                             fpfh_local_dist_factor = largs.fpfh_global_dist_factor, 
-                                            fpfh_voxel_size = largs.fpfh_voxel_size, useLora = largs.useLora)
+                                            fpfh_voxel_size = largs.fpfh_voxel_size, useLora = largs.useLora,
+                                            consider_floor=largs.consider_floor)
 
         # save detected objs
-        _, _, detected_pcds = mem._get_object_info(image_path=image_file_path, depth_image_path=depth_file_path, useLora=largs.useLora)
+        _, _, detected_pcds = mem._get_object_info(image_path=image_file_path, depth_image_path=depth_file_path, useLora=largs.useLora, consider_floor=largs.consider_floor)
         if largs.save_individual_objects and detected_pcds is not None:
             p = o3d.geometry.PointCloud()
             for j, det_pcd in enumerate(detected_pcds):

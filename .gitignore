@@ -10,3 +10,5 @@ large_dataset_trials/
 vin-experiments/
 temp/
 temp2/
+temp*
+.zshrc

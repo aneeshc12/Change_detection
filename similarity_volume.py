@@ -243,8 +243,20 @@ class SimVolume():
             correct_length = sorted(correct_length, key= lambda x: x[-1], reverse=True)[:num_per_length]
             filtered_topk += correct_length
 
-        filtered_topk = sorted(filtered_topk, key= lambda x: x[-1], reverse=True)[:k]
         assns = [a[0] for a in filtered_topk]
+
+        # remove duplicates if any
+        # loop to 
+        no_dupe_assns = []
+        for a in assns:
+            if type(a) == list:
+                  hashable_a = tuple(a)
+            else: hashable_a = a
+
+            if hashable_a not in no_dupe_assns:
+                no_dupe_assns.append(a)
+
+        assns = no_dupe_assns
 
         return assns
 
@@ -396,9 +408,9 @@ def plot_time_graphs():
 
 if __name__ == "__main__":
 
-    cs = np.array([[i for i in range(50)]])
-    cs2 = np.array([i for i in range(1)])
-    # cs = cs2.reshape(-1,1) + cs2.reshape(1,-1)
+    cs = np.array([[i for i in range(10)]])
+    cs2 = np.array([i for i in range(4)])
+    cs = cs.reshape(-1,1) + cs2.reshape(1,-1)
 
     # r = np.random.rand(*cs.shape)
     print(f"cs shape: {cs.shape}")
@@ -417,7 +429,7 @@ if __name__ == "__main__":
     print(sv.subvolumes)
     print(sv.chosen_objects)
 
-    topk_sub = sv.get_top_indices_from_subvolumes(10)
+    topk_sub = sv.get_top_indices_from_subvolumes(3)
     print(f"top: {topk_sub}")
     
     print()

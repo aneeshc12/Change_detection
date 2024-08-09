@@ -5,6 +5,7 @@ start_time = time.time()
 
 sys.path.append(os.path.join(os.getcwd(), "Grounded-Segment-Anything"))
 sys.path.append(os.path.join(os.getcwd(), "Grounded-Segment-Anything", "GroundingDINO"))
+sys.path.append(os.path.join(os.getcwd(), "Grounded-Segment-Anything", "segment_anything"))
 sys.path.append(os.path.join(os.getcwd(), "GroundingDINO"))
 sys.path.append(os.path.join(os.getcwd(), "recognize-anything"))
 sys.path.append(os.path.join(os.getcwd(), "Objectron"))
@@ -16,9 +17,6 @@ sys.path.append(os.path.join(os.getcwd(), "FourDNet-wrapper", "model"))
 sys.path.append(os.path.join(os.getcwd(), "FourDNet-wrapper", "processor"))
 sys.path.append(os.path.join(os.getcwd(), "FourDNet-wrapper", "solver"))
 sys.path.append(os.path.join(os.getcwd(), "FourDNet-wrapper", "utils"))
-
-# fourDNet
-from test_heatmap import load_reid_model, get_reid_emb
 
 import os, sys, time
 import tyro
@@ -70,7 +68,7 @@ from GroundingDINO.groundingdino.util.inference import predict as gd_predict
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy.spatial.transform import Rotation
-from scipy import arctan2
+from numpy import arctan2
 import torch.nn.functional as F
 import json
 from dataclasses import dataclass, field
@@ -92,7 +90,7 @@ from model import make_model
 import matplotlib.pyplot as plt
 import PIL
 from PIL import Image
-import torchvision.transforms.v2 as T
+import torchvision.transforms as T
 import numpy as np
 import cv2
 import os
@@ -426,13 +424,14 @@ class ObjectFinder:
             return boxes_xyxy, masks
 
 
-    def find(self, image_path=None, caption=None):
+    def find(self, image_path=None, caption=None, consider_floor=False):
         """
         Find and ground objects in the given image.
         
         Parameters:
         - image_path (str): Path to the input image.
         - caption (str): Caption for object detection.
+        - consider_floor: search for the floor as an object
         
         Returns:
         - grounded_objects (list): List of grounded object images.
@@ -523,7 +522,8 @@ class ObjectFinder:
                                 "marble",
                                 "pillar",
                                 "dark",
-                                "sea"
+                                "sea",
+                                "door"
             ]
             sub_phrases_to_ignore = [
                                 "room",
@@ -549,6 +549,7 @@ class ObjectFinder:
                                 "window",
                                 "vase",
                                 "bureau",
+                                "door"
             ]
 
 
@@ -560,6 +561,9 @@ class ObjectFinder:
                 return False
 
             filtered_caption = ""
+            if consider_floor:
+                filtered_caption += "floor . "
+
             for c in caption:
                 if c.strip() in words_to_ignore:
                     continue
@@ -570,7 +574,7 @@ class ObjectFinder:
                     filtered_caption += " . "
             filtered_caption = filtered_caption[:-2]
 
-            print("caption post ram: ", filtered_caption)
+            print("caption post ram and filtering: ", filtered_caption)
         
         # ground them, get associated phrases
         cxcy_boxes, phrases = self.getBoxes(image, filtered_caption)
@@ -996,7 +1000,7 @@ class ObjectMemory:
         self.num_objects_stored = 0
         self.memory = []
 
-    def _get_object_info(self, image_path, depth_image_path, useLora):
+    def _get_object_info(self, image_path, depth_image_path, useLora, consider_floor=False):
         """
         Processes an RGB-D image and depth image to obtain object information.
 
@@ -1011,7 +1015,7 @@ class ObjectMemory:
             raise NotImplementedError
 
         # segment objects, get (grounded_image bounding boxes, segmentation mask and label) per box
-        obj_grounded_imgs, obj_bounding_boxes, obj_masks, obj_phrases = self.objectFinder.find(image_path)
+        obj_grounded_imgs, obj_bounding_boxes, obj_masks, obj_phrases = self.objectFinder.find(image_path, consider_floor=consider_floor)
 
         if obj_grounded_imgs is None:
             return None, None, None
@@ -1038,7 +1042,7 @@ class ObjectMemory:
     def process_image(self, image_path=None, depth_image_path=None, pose=None, verbose=True, add_noise=True,
                       bounding_box_threshold=0.3,  occlusion_overlap_threshold=0.9, testname="", 
                       outlier_removal_config=None, min_points = 500, pose_noise = {'trans': 0.0005, 'rot': 0.0005},
-                      depth_noise = 0.003, lora_threshold = 0.5, useLora=True):
+                      depth_noise = 0.003, lora_threshold = 0.5, useLora=True, consider_floor=True):
         """
         Processes an RGB-D image, detects objects within and updates the object memory.
 
@@ -1051,6 +1055,7 @@ class ObjectMemory:
         - testname (str): Test name for saving point clouds. Default is an empty string.
         - outlier_removal_config (dict, optional): Configuration for outlier removal. Default is None.
         - min_points (int): Minimum number of points under which the object is ignored
+        - consider_floor: Consider the floor as a valid object
         """
 
         if image_path == None or depth_image_path == None:
@@ -1064,7 +1069,7 @@ class ObjectMemory:
             }
 
         # Detect all objects within the config
-        obj_phrases, embs, obj_pointclouds = self._get_object_info(image_path, depth_image_path, useLora)
+        obj_phrases, embs, obj_pointclouds = self._get_object_info(image_path, depth_image_path, useLora, consider_floor=consider_floor)
 
         if obj_phrases is None:
             if verbose:
@@ -1187,10 +1192,15 @@ class ObjectMemory:
     def remove_object_floors(self, floor_thickness=0.1):
         floor_height = 1e8
         for info in self.memory:
+            if "floor" in info.names:                           # consider object floors only
+                continue
             low = np.min(info.pcd[1,:])
             floor_height = min(low, floor_height)
 
         for info in self.memory:
+            if "floor" in info.names:                           # only remove floors from NON floor objects
+                continue
+
             info.pcd = (info.pcd.T[(info.pcd[1,:] > floor_height + floor_thickness)]).T
 
             if len(info.pcd) == 0:
@@ -1262,10 +1272,13 @@ class ObjectMemory:
 
 
 
-    def localise(self, image_path, depth_image_path, testname="", save_point_clouds=False,
+    def localise(self, image_path, depth_image_path, testname="", 
+                 subtest_name="",
+                 save_point_clouds=False,
                  outlier_removal_config=None, 
                  fpfh_global_dist_factor = 2, fpfh_local_dist_factor = 0.4, 
-                 fpfh_voxel_size = 0.05, topK=5, save_localised_pcd_path=None, useLora=True):
+                 fpfh_voxel_size = 0.05, topK=5, save_localised_pcd_path=None, useLora=True,
+                 consider_floor=False):
         """
         Given an image and a corresponding depth image in an unknown frame, consult the stored memory
         and output a pose in the world frame of the point clouds stored in memory.
@@ -1290,7 +1303,7 @@ class ObjectMemory:
             }
 
         # Extract all objects currently seen, get embeddings, point clouds in the local unknown frame
-        detected_phrases, detected_embs, detected_pointclouds = self._get_object_info(image_path, depth_image_path, useLora)
+        detected_phrases, detected_embs, detected_pointclouds = self._get_object_info(image_path, depth_image_path, useLora, consider_floor=consider_floor)
 
         # TODO deal with no objects detected
         if detected_embs is None:
@@ -1303,12 +1316,12 @@ class ObjectMemory:
 
         memory_embs = np.array([m.mean_emb for m in self.memory])
 
-        if len(detected_embs) > len(memory_embs):
+        if len(detected_embs) > len(self.memory):
             detected_embs = detected_embs[:len(memory_embs)]
 
-        all_memory_embs = [np.array([e/np.linalg.norm(e) for e in m.embeddings]) for m in self.memory]
+        all_memory_embs = [np.array([e/np.linalg.norm(e) for e in m.embeddings]) for m in self.memory]      # all embeddings per object
         detected_embs /= np.linalg.norm(detected_embs, axis=-1, keepdims=True)
-        memory_embs /= np.linalg.norm(memory_embs, axis=-1, keepdims=True)
+        memory_embs /= np.linalg.norm(memory_embs, axis=-1, keepdims=True)      # mean embedding
 
         # Detected x Mem x Emb sized
         cosine_similarities = np.dot(detected_embs, memory_embs.T)
@@ -1322,16 +1335,32 @@ class ObjectMemory:
             closest_similarities[i] = row
 
         # Save point clouds
+        save_root = f"pcds/{testname}/"
+        subsave_root = os.path.join(save_root, str(subtest_name))
+        if not os.path.exists(save_root):
+            os.makedirs(save_root)
+
         if save_point_clouds:
+            if not os.path.exists(subsave_root):
+                os.makedirs(subsave_root)
+
+            init_pcd = o3d.geometry.PointCloud()
+            temp_pcd = o3d.geometry.PointCloud()
             for i, d in enumerate(detected_pointclouds):
-                np.save("pcds/%s_detected_pcd" % str(testname) + str(i) + ".npy", d)
+                temp_pcd.points = o3d.utility.Vector3dVector(d.T)
+                temp_pcd.paint_uniform_color([0.,1.,0.])
+                init_pcd += temp_pcd            
+
             for j, m in enumerate(self.memory):
-                np.save(f"pcds/%s_memory_pcd" % str(testname) + str(j) + ".npy", m.pcd)
-            print("Point clouds saved")
+                temp_pcd.points = o3d.utility.Vector3dVector(m.pcd.T)
+                temp_pcd.paint_uniform_color([1.,0.,0.])
+                init_pcd += temp_pcd
+
+            o3d.io.write_point_cloud(os.path.join(subsave_root , "_init_pcd_" + str(subtest_name) + ".ply"), init_pcd)
+            print("Initial ICP point clouds saved")
 
         # TODO unseen objects in detected objects are not being dealt with, 
         # assuming that all detected objects can be assigned to mem objs
-        # TODO calculate rotation matrices
 
         print("Getting assignments")
         print(cosine_similarities.shape)
@@ -1342,35 +1371,118 @@ class ObjectMemory:
         # assns = sv.conv_coords_to_pairs(rep_vol, best_coords)
         
         sv.fast_construct_volume(3)
-        assns = sv.get_top_indices_from_subvolumes()
+        assns = sv.get_top_indices_from_subvolumes(num_per_length=6)
         assns_to_consider = assns
         del sv
 
         # only consider the top K assignments based on net cosine similarity
         # assns_to_consider = [assn[0] for assn in assns[:topK]]
-
         # assns_to_consider = [assn[0] for assn in assns]
+        # assns_to_consider = [[0,0]]
 
         print("Phrases: ", detected_phrases)
         print(cosine_similarities)
         print("Assignments being considered: ", assns_to_consider)
 
-        assn_data = [ [assn, None, None] for assn in assns_to_consider ]
+        assn_data = [ assn for assn in assns_to_consider ]
 
         # go through all top K assingments, record ICP costs
-        for assn_num, assn in tqdm(enumerate(assns_to_consider)):
+        for assn_num, assn in tqdm(enumerate(assn_data)):
             # use ALL object pointclouds together
+            chosen_detected_points = []
+            chosen_memory_points = []
+
+            for d_index, m_index in assn:
+                chosen_detected_points.append(detected_pointclouds[d_index])
+                chosen_memory_points.append(self.memory[m_index].pcd)
+
+            # for i in detected_pointclouds:
+            #     chosen_detected_points.append(i)
+            # for i in self.memory:
+            #     all_memory_points.append(i.pcd)
+
+            chosen_detected_points = np.concatenate(chosen_detected_points, axis=-1)
+            chosen_memory_points = np.concatenate(chosen_memory_points, axis=-1)
+
+            # centering all the pointclouds
+            detected_mean = np.mean(chosen_detected_points, axis=-1)
+            memory_mean = np.mean(chosen_memory_points, axis=-1)
+            chosen_detected_pcd = o3d.geometry.PointCloud()
+            chosen_detected_pcd.points = o3d.utility.Vector3dVector(chosen_detected_points.T - detected_mean)
+            chosen_memory_pcd = o3d.geometry.PointCloud()
+            chosen_memory_pcd.points = o3d.utility.Vector3dVector(chosen_memory_points.T - memory_mean)
+            
+            # remove outliers from detected pcds
+            chosen_detected_pcd_filtered, _ = chosen_detected_pcd.remove_radius_outlier(nb_points=outlier_removal_config["radius_nb_points"],
+                                                            radius=outlier_removal_config["radius"])
+
+            chosen_memory_pcd.paint_uniform_color([0,1,0])
+            chosen_detected_pcd_filtered.paint_uniform_color([1,0,0])
+
+            # o3d.io.write_point_cloud(f"./temp/{str(assn)}-{testname}-detmem.ply", chosen_memory_pcd + chosen_detected_pcd_filtered)
+
+            transform, rmse = register_point_clouds(chosen_detected_pcd_filtered, chosen_memory_pcd, 
+                                            voxel_size = fpfh_voxel_size, global_dist_factor = fpfh_global_dist_factor, 
+                                            local_dist_factor = fpfh_local_dist_factor)
+
+            assn_data[assn_num] = [assn, transform, rmse]
+
+            # save transformation pcds
+            if save_point_clouds:              
+                o3d.io.write_point_cloud(os.path.join(subsave_root, f"only_chosen_" + str(assn) + ".ply"), chosen_memory_pcd + chosen_detected_pcd_filtered.transform(transform))
+
+
+        best_assn = sorted(assn_data, key=lambda x: x[-1])
+
+        for a in best_assn:
+            print("Assn: ", a[0], " | RMSE: ", a[-1])
+
+        best_transform = best_assn[0][1]
+        best_assn = best_assn[0][0]
+
+        # USE THE BEST CHOSEN ASSIGNMENT
+        # GET TX/RX error
+        all_detected_points = []
+        all_memory_points = []
+        for d_index, m_index in best_assn:
+            all_detected_points.append(detected_pointclouds[d_index])
+            all_memory_points.append(self.memory[m_index].pcd)
+
+        all_detected_points = np.concatenate(all_detected_points, axis=-1)
+        all_memory_points = np.concatenate(all_memory_points, axis=-1)
+
+        detected_mean = np.mean(all_detected_points, axis=-1)
+        memory_mean = np.mean(all_memory_points, axis=-1)
+
+        moved_objs = [n for n in range(len(detected_pointclouds)) if n not in assn]
+
+        R = copy.copy(best_transform[:3,:3])
+        t = copy.copy(best_transform[:3, 3])
+        
+        tAvg = t + memory_mean - R@detected_mean  
+        # tAvg = t + detected_mean - R@memory_mean #incorrect smh
+        qAvg = Rotation.from_matrix(R).as_quat()
+
+        localised_pose = np.concatenate((tAvg, qAvg))
+        print("Best assn: ", best_assn)
+
+        ## DEBUG
+        print("R: ", R )
+        print("t: ", t)
+
+        # use ALL object pointclouds together, save pcd
+        if save_point_clouds:
+            # transform full memory
             all_detected_points = []
             all_memory_points = []
-            for i,j in assn:
-                all_detected_points.append(detected_pointclouds[i])
-                all_memory_points.append(self.memory[j].pcd)
+            for i in detected_pointclouds:
+                all_detected_points.append(i)
+            for i in self.memory:
+                all_memory_points.append(i.pcd)
             all_detected_points = np.concatenate(all_detected_points, axis=-1)
             all_memory_points = np.concatenate(all_memory_points, axis=-1)
 
-            # centering all the pointclouds
-            detected_mean = np.mean(all_detected_points, axis=-1)
-            memory_mean = np.mean(all_memory_points, axis=-1)
+            # centering all the pointclouds (needed as best_transform is between centered pcds)
             all_detected_pcd = o3d.geometry.PointCloud()
             all_detected_pcd.points = o3d.utility.Vector3dVector(all_detected_points.T - detected_mean)
             all_memory_pcd = o3d.geometry.PointCloud()
@@ -1382,130 +1494,62 @@ class ObjectMemory:
 
             all_memory_pcd.paint_uniform_color([0,1,0])
             all_detected_pcd_filtered.paint_uniform_color([1,0,0])
-            # o3d.io.write_point_cloud(f"./temp/{str(assn)}-{testname}-detmem.ply", all_memory_pcd + all_detected_pcd_filtered)
 
-            transform, rmse = register_point_clouds(all_detected_pcd_filtered, all_memory_pcd, 
-                                            voxel_size = fpfh_voxel_size, global_dist_factor = fpfh_global_dist_factor, 
-                                            local_dist_factor = fpfh_local_dist_factor)
-
-            assn_data[assn_num] = [assn, transform, rmse]
+            o3d.io.write_point_cloud(os.path.join(subsave_root, f"_best_full_pcd" + str(best_assn) + ".ply"), all_memory_pcd + all_detected_pcd_filtered.transform(best_transform))
+        # # import pdb; pdb.set_trace()
 
 
-        best_assn = min(assn_data, key=lambda x: x[-1])
+        # # get all moved objs based on iou
+        # moved_idx = []
+        # for i, det in enumerate(detected_pointclouds):
+        #     detected_pcd = o3d.geometry.PointCloud()
+        #     detected_pcd.points = o3d.utility.Vector3dVector(det.T - detected_mean)
+        #     detected_pcd.transform(transform)
+        #     detected_pcd = np.array(detected_pcd.points)
 
-        assn = best_assn[0]
-        transform = best_assn[1]
+        #     moved = True
 
+        #     for mem in self.memory:
+        #         memory_pcd = o3d.geometry.PointCloud()
+        #         memory_pcd.points = o3d.utility.Vector3dVector(mem.pcd.T - memory_mean)
+        #         memory_pcd = np.array(memory_pcd.points)
 
-        # GET THE CORRECT MEAN
-        all_detected_points = []
-        all_memory_points = []
-        for i,j in assn:
-            all_detected_points.append(detected_pointclouds[i])
-            all_memory_points.append(self.memory[j].pcd)
-        all_detected_points = np.concatenate(all_detected_points, axis=-1)
-        all_memory_points = np.concatenate(all_memory_points, axis=-1)
-
-        detected_mean = np.mean(all_detected_points, axis=-1)
-        memory_mean = np.mean(all_memory_points, axis=-1)
-
-
-        moved_objs = [n for n in range(len(detected_pointclouds)) if n not in assn]
-
-        R = copy.copy(transform[:3,:3])
-        t = copy.copy(transform[:3, 3])
-        
-        tAvg = t + memory_mean - R@detected_mean  
-        # tAvg = t + detected_mean - R@memory_mean #incorrect smh
-        qAvg = Rotation.from_matrix(R).as_quat()
-
-        localised_pose = np.concatenate((tAvg, qAvg))
-        print(best_assn)
-
-        ## DEBUG
-        print("R: ", R )
-        print("t: ", t)
-
-        # use ALL object pointclouds together
-        all_detected_points = []
-        all_memory_points = []
-        for i,j in assn:
-            all_detected_points.append(detected_pointclouds[i])
-            all_memory_points.append(self.memory[j].pcd)
-        all_detected_points = np.concatenate(all_detected_points, axis=-1)
-        all_memory_points = np.concatenate(all_memory_points, axis=-1)
-
-        # centering all the pointclouds
-        detected_mean = np.mean(all_detected_points, axis=-1)
-        memory_mean = np.mean(all_memory_points, axis=-1)
-        all_detected_pcd = o3d.geometry.PointCloud()
-        all_detected_pcd.points = o3d.utility.Vector3dVector(all_detected_points.T - detected_mean)
-        all_memory_pcd = o3d.geometry.PointCloud()
-        all_memory_pcd.points = o3d.utility.Vector3dVector(all_memory_points.T - memory_mean)
-        
-        # remove outliers from detected pcds
-        all_detected_pcd_filtered, _ = all_detected_pcd.remove_radius_outlier(nb_points=outlier_removal_config["radius_nb_points"],
-                                                        radius=outlier_removal_config["radius"])
-
-        all_memory_pcd.paint_uniform_color([0,1,0])
-        all_detected_pcd_filtered.paint_uniform_color([1,0,0])
-
-        if save_localised_pcd_path is not None:
-            o3d.io.write_point_cloud(os.path.join(save_localised_pcd_path, f"{str(assn)}-{testname}-trns.ply"), all_memory_pcd + 
-                                    all_detected_pcd_filtered.transform(transform))
-        # import pdb; pdb.set_trace()
-
-
-        # get all moved objs based on iou
-        moved_idx = []
-        for i, det in enumerate(detected_pointclouds):
-            detected_pcd = o3d.geometry.PointCloud()
-            detected_pcd.points = o3d.utility.Vector3dVector(det.T - detected_mean)
-            detected_pcd.transform(transform)
-            detected_pcd = np.array(detected_pcd.points)
-
-            moved = True
-
-            for mem in self.memory:
-                memory_pcd = o3d.geometry.PointCloud()
-                memory_pcd.points = o3d.utility.Vector3dVector(mem.pcd.T - memory_mean)
-                memory_pcd = np.array(memory_pcd.points)
-
-                iou = calculate_3d_IoU(detected_pcd.T, memory_pcd.T)
-                if iou > 0.7:
-                    moved = False
-                    break
+        #         iou = calculate_3d_IoU(detected_pcd.T, memory_pcd.T)
+        #         if iou > 0.7:
+        #             moved = False
+        #             break
             
-            if moved:
-                moved_idx.append(i)
-                print(f"idx {i} detected as moved")
-            else:
-                print(f"idx {i} detected as not moved")
+        #     if moved:
+        #         moved_idx.append(i)
+        #         print(f"idx {i} detected as moved")
+        #     else:
+        #         print(f"idx {i} detected as not moved")
 
-        # sanity check
-        detected_pcd = o3d.geometry.PointCloud()
-        detected_pcd.points = o3d.utility.Vector3dVector(det.T - detected_mean)
-        detected_pcd = np.array(detected_pcd.points)
+        # # sanity check
+        # detected_pcd = o3d.geometry.PointCloud()
+        # detected_pcd.points = o3d.utility.Vector3dVector(det.T - detected_mean)
+        # detected_pcd = np.array(detected_pcd.points)
 
-        moved = True
+        # moved = True
 
-        for mem in self.memory:
-            memory_pcd = o3d.geometry.PointCloud()
-            memory_pcd.points = o3d.utility.Vector3dVector(mem.pcd.T - memory_mean * 1e5)
-            memory_pcd = np.array(memory_pcd.points)
+        # for mem in self.memory:
+        #     memory_pcd = o3d.geometry.PointCloud()
+        #     memory_pcd.points = o3d.utility.Vector3dVector(mem.pcd.T - memory_mean * 1e5)
+        #     memory_pcd = np.array(memory_pcd.points)
 
-            iou = calculate_obj_aligned_3d_IoU(detected_pcd.T, memory_pcd.T)
-            if iou > 0.8:
-                moved = False
-                break
+        #     iou = calculate_obj_aligned_3d_IoU(detected_pcd.T, memory_pcd.T)
+        #     if iou > 0.8:
+        #         moved = False
+        #         break
         
-        if moved:
-            print(f"sanity passed")
-        else:
-            print(f"sanity failed")
+        # if moved:
+        #     print(f"sanity passed")
+        # else:
+        #     print(f"sanity failed")
 
 
-        return localised_pose, [assn, moved_idx]
+        # return localised_pose, [assn, moved_idx]
+        return localised_pose, [assn, None]
 
 @dataclass
 class LocalArgs:
@@ -1522,17 +1566,17 @@ class LocalArgs:
 
 if __name__ == "__main__":
 
-    p1 = o3d.io.read_point_cloud('/home2/aneesh.chavan/Change_detection/temp/loc_mem596.pcd')
-    p1.paint_uniform_color(np.array([0,1,1]))
-    p2 = o3d.io.read_point_cloud('/home2/aneesh.chavan/Change_detection/temp/[[0, 5], [1, 25]]-122-ISTHISIT.ply')
+    # p1 = o3d.io.read_point_cloud('/home2/aneesh.chavan/Change_detection/temp/loc_mem596.pcd')
+    # p1.paint_uniform_color(np.array([0,1,1]))
+    # p2 = o3d.io.read_point_cloud('/home2/aneesh.chavan/Change_detection/temp/[[0, 5], [1, 25]]-122-ISTHISIT.ply')
 
-    Tx,_ = register_point_clouds(p2, p1,  0.15)
-    p2 = p2.transform(Tx)
+    # Tx,_ = register_point_clouds(p2, p1,  0.15)
+    # p2 = p2.transform(Tx)
 
-    p3 = p1 + p2
-    o3d.io.write_point_cloud('./loc_fail.ply', p3)
+    # p3 = p1 + p2
+    # o3d.io.write_point_cloud('./loc_fail.ply', p3)
 
-    exit(0)
+    # exit(0)
     start_time = time.time()
 
     largs = tyro.cli(LocalArgs, description=__doc__)
