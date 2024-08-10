@@ -42,7 +42,7 @@ class LocalArgs:
 
     loc_results_start_file_index: int = 210
     loc_results_last_file_index: int = 1400
-    loc_results_sampling_period: int = 25
+    loc_results_sampling_period: int = 10
 
     useLora: bool=True
     consider_floor=False
@@ -145,7 +145,7 @@ if __name__=="__main__":
                 #         combined_pcd += pcd
 
                 #     save_path = os.path.join(largs.save_dir, 
-                #         f"/home2/aneesh.chavan/Change_detection/temp/{i}_before_cons.pcd")
+                #         f"/home2/aneesh.chavan/Change_detection/temp/{i}_before_cons.ply")
                 #     o3d.io.write_point_cloud(save_path, combined_pcd)
                 #     print("Memory's pointcloud saved to", save_path)
 
@@ -177,7 +177,7 @@ if __name__=="__main__":
                         combined_pcd += pcd
 
                     save_path = os.path.join(largs.save_dir, 
-                        f"/home2/aneesh.chavan/Change_detection/temp/{i}_after_cons.pcd")
+                        f"/home2/aneesh.chavan/Change_detection/pcds/{largs.testname}_after_cons.ply")
                     o3d.io.write_point_cloud(save_path, combined_pcd)
                     print("Memory's pointcloud saved to", save_path)
 
@@ -221,7 +221,7 @@ if __name__=="__main__":
 
         if largs.save_individual_objects:
             cur_save_path = os.path.join(individual_mem_save_dir, 
-                f"memory_{i}.pcd") 
+                f"memory_{i}.ply") 
 
             o3d.io.write_point_cloud(cur_save_path, pcd)
             print(f"{i} pointcloud saved to", cur_save_path)
@@ -229,7 +229,7 @@ if __name__=="__main__":
         combined_pcd += pcd
 
     save_path = os.path.join(largs.save_dir, 
-        f"mem.pcd")
+        f"mem.ply")
     o3d.io.write_point_cloud(save_path, combined_pcd)
     print("Memory's pointcloud saved to", save_path)
 
@@ -305,7 +305,7 @@ if __name__=="__main__":
             p = o3d.geometry.PointCloud()
             for j, det_pcd in enumerate(detected_pcds):
                 save_path = os.path.join(individual_mem_save_dir,
-                    f"detected_img_{n}_{j}.pcd")
+                    f"detected_img_{n}_{j}.ply")
                 p.points = o3d.utility.Vector3dVector(det_pcd.T)
                 o3d.io.write_point_cloud(save_path, p)
                 print(f"Img {i} obj {j} pointcloud saved to", save_path)

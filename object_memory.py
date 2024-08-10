@@ -131,12 +131,12 @@ class LoraRevolver:
         # self.lora_model is the augmented model (NOTE)
         self.base_model = ViTModel.from_pretrained(
             model_checkpoint,
-            ignore_mismatched_sizes=True
+            ignore_mismatched_sizes=True,
         ).to(self.device)
         self.lora_model = self.base_model
 
         # image preprocessors the ViT needs
-        self.image_processor = AutoImageProcessor.from_pretrained(model_checkpoint)
+        self.image_processor = AutoImageProcessor.from_pretrained(model_checkpoint, use_fast=True)
         self.normalize = Normalize(mean=self.image_processor.image_mean, std=self.image_processor.image_std)
         self.train_transforms = Compose(
             [
@@ -549,7 +549,9 @@ class ObjectFinder:
                                 "window",
                                 "vase",
                                 "bureau",
-                                "door"
+                                "door",
+                                "tile",
+                                "blind"
             ]
 
 
@@ -1277,7 +1279,7 @@ class ObjectMemory:
                  save_point_clouds=False,
                  outlier_removal_config=None, 
                  fpfh_global_dist_factor = 2, fpfh_local_dist_factor = 0.4, 
-                 fpfh_voxel_size = 0.05, topK=5, save_localised_pcd_path=None, useLora=True,
+                 fpfh_voxel_size = 0.05, topK=5, useLora=True,
                  consider_floor=False):
         """
         Given an image and a corresponding depth image in an unknown frame, consult the stored memory
@@ -1659,7 +1661,7 @@ if __name__ == "__main__":
 
             os.makedirs(largs.mem_save_dir, exist_ok=True)
 
-            save_path = f"{largs.mem_save_dir}/mem_{target}.pcd"
+            save_path = f"{largs.mem_save_dir}/mem_{target}.ply"
             o3d.io.write_point_cloud(save_path, combined_pcd)
             print("Pointcloud saved to", save_path)
 
