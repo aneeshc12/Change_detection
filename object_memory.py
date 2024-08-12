@@ -906,6 +906,8 @@ class ObjectInfo:
         self.embeddings += info.embeddings
         self.pcd = np.concatenate([self.pcd, info.pcd], axis=-1)
 
+        return self
+
     def addInfo(self, name, embedding, pcd, align=True, max_iteration=30, max_correspondence_distance=0.01):
         """
         Adds information for the object, including name, embedding, and point cloud data.
@@ -941,6 +943,7 @@ class ObjectInfo:
                 estimation_method=o3d.pipelines.registration.TransformationEstimationPointToPoint(),
                 criteria=o3d.pipelines.registration.ICPConvergenceCriteria(max_iteration=30)
             )
+            raise NotImplementedError
 
 
     def computeMeans(self):
@@ -1133,6 +1136,7 @@ class ObjectMemory:
             obj_exists = False
             count = 0
             for info in self.memory:
+                break       #KEY TO STOP CLUSTERING
 
                 object_pcd = info.pcd
 
@@ -1160,7 +1164,7 @@ class ObjectMemory:
                 lora_cos_sim = np.dot(info.mean_emb, emb)/(np.linalg.norm(info.mean_emb) * np.linalg.norm(emb))
 
                 if (IoU3d > bounding_box_threshold or overlap3d > occlusion_overlap_threshold):
-                    if lora_cos_sim > 0: # NOTE; not using LoRA here
+                    if lora_cos_sim > 0.5: # NOTE; not using LoRA here
                         info.addInfo(obj_phrase ,emb, q_pcd, align=False)
                         obj_exists = True
                         break
@@ -1182,11 +1186,10 @@ class ObjectMemory:
                 if verbose:
                     print('\tObject exists, aggregated to\n', info, '\n')
 
-        for m in self.memory:
-            m.computeMeans()  # Update object info means
+        # TRY disabled for speed (when clusterin via dbscan)
+        # for m in self.memory:
+        #     m.computeMeans()  # Update object info means
         
-        # TODO consider downsampling points (optimisation)
-                    
     def downsample_all_objects(self, voxel_size = 0.001, use_external_mesh = False):
         for info in self.memory:
             info.downsample(voxel_size, use_external_mesh)
@@ -1211,6 +1214,98 @@ class ObjectMemory:
             if len(info.pcd[0]) == 0:
                 self.memory.remove(info)
                 continue
+    
+    """
+    Perform DBscan clustering on ALL points, reorganise seen objects based on these clusters
+    """
+    def recluster_via_dbscan(self, eps=0.2, min_points_per_cluster=300, viz=False):
+        # TODO randomly downscaling  all obj points only for reclustering will be fsater (need to verify accuracy)
+        # (maybe voxel downsample to save on emmory?)
+        
+        # load all points into a single pcd, with a helper array for object index
+        pts = [obj.pcd for obj in self.memory]
+        pts = np.concatenate(pts, axis=-1) .T         # 3xN pcd
+
+        pcd = o3d.geometry.PointCloud()
+        pcd.points = o3d.utility.Vector3dVector(pts)
+
+        print(pts.shape, [obj.pcd for obj in self.memory][0].shape, pcd)
+
+        # cluster via dbscan
+        labels = np.array(pcd.cluster_dbscan(eps=eps,
+                                             min_points=min_points_per_cluster,
+                                             print_progress=viz))
+        
+        print(np.unique(labels), labels.shape)
+
+        def is_point_present(arr1, point):
+            comparison = np.all(arr1 == np.array([point]), axis=1)  # Compare Nx3 and 1x3, check the point exists along the last axis
+            return np.any(comparison)  # Returns True if there is at least one common row
+
+
+        # grab a point from each labelled cluster, create a new object containing its embs
+        # dbscan likely to break up multiple clustered objs,
+        # and doing this only once is ffaster and easier
+
+        # iterate through all seen objects, cluster them if they havent been seen before
+        all_dbscanned_objects = []
+
+        obj_new_assignments = np.array([-1 for i in self.memory])
+        for i, obj in tqdm(enumerate(self.memory), total=len(self.memory)):
+            query_point = obj.pcd[:, 0]        # select a random point, see which dbscan cluster it lies in
+            for label_idx in np.unique(labels):
+                if label_idx == -1:
+                    continue
+
+                cluster_points = pts[labels == label_idx]
+
+                if is_point_present(cluster_points, query_point):
+                    if obj_new_assignments[i] != -1:
+                        print("multiple labels")
+                    
+                    obj_new_assignments[i] = label_idx
+                    
+                    # break
+
+        print(obj_new_assignments, len(np.unique(np.array(obj_new_assignments))))
+
+        # go through new assignments, create objects for each
+        ctr = 0
+        for label_idx in np.unique(labels):
+            if label_idx == -1:
+                continue
+
+            print("Label: ", label_idx)
+
+            to_cluster = []
+            for prev_obj_id, obj in enumerate(self.memory):
+                if obj_new_assignments[prev_obj_id] == label_idx:
+                    to_cluster.append(obj)
+                    print("\tAdded")
+                    ctr+=1
+            print("Arr len: ", len(to_cluster), '\n')
+
+            print("to clusetr: ", to_cluster, '\n')
+            if len(to_cluster) == 0:
+                clustered_object = None
+            else:
+                clustered_object = to_cluster[0]
+                for obj in to_cluster[1:]:
+                    print("\t\t", obj, clustered_object)
+                    clustered_object = clustered_object + obj
+                all_dbscanned_objects.append(clustered_object)
+
+        print("ctr: ", ctr)
+        
+        self.memory = all_dbscanned_objects
+        print("asdf: ", len(all_dbscanned_objects))
+        print("asdf: ", len(self.memory))
+        
+        # update obj ids
+        for i, _ in enumerate(self.memory):
+            self.memory[i].id = i
+
+        return
 
     """
     Runs through all objects stored in memory, consolidates objects that have a sufficient overlap
@@ -1280,6 +1375,7 @@ class ObjectMemory:
                  outlier_removal_config=None, 
                  fpfh_global_dist_factor = 2, fpfh_local_dist_factor = 0.4, 
                  fpfh_voxel_size = 0.05, topK=5, useLora=True,
+                 save_localised_pcd_path=None,
                  consider_floor=False):
         """
         Given an image and a corresponding depth image in an unknown frame, consult the stored memory

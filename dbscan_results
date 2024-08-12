@@ -1,0 +1,34 @@
+Starting imports
+Imports completed in 3.0634372234344482 seconds
+LocalArgs(lora_path='models/vit_finegrained_5x40_procthor.pt', test_folder_path='/scratch/aneesh.chavan/8room/8-room-v1/1/', rearranged_test_folder_path='/scratch/aneesh.chavan/8room/8-room-v1/1/', device='cuda', sam_checkpoint_path='/scratch/aneesh.chavan/sam_vit_h_4b8939.pth', ram_pretrained_path='/scratch/aneesh.chavan/ram_swin_large_14m.pth', downsampling_rate=5, save_dir='/scratch/aneesh.chavan/results/8-room-new-icp', sampling_period=15, start_file_index=200, last_file_index=1500, rot_correction=0.0, look_around_range=0, save_point_clouds=True, save_individual_objects=True, save_localised_objects=True, add_pose_noise=True, down_sample_voxel_size=0.01, create_ext_mesh=False, fpfh_global_dist_factor=1.5, fpfh_local_dist_factor=0.4, fpfh_voxel_size=0.05, localise_times=1, loc_results_start_file_index=210, loc_results_last_file_index=1400, loc_results_sampling_period=10, useLora=True)
+Created save directory /scratch/aneesh.chavan/results/8-room-new-icp
+We have 3315 files
+
+Begin Memory Initialization
+/encoder/layer/0/crossattention/self/query is tied
+/encoder/layer/0/crossattention/self/key is tied
+/encoder/layer/0/crossattention/self/value is tied
+/encoder/layer/0/crossattention/output/dense is tied
+/encoder/layer/0/crossattention/output/LayerNorm is tied
+/encoder/layer/0/intermediate/dense is tied
+/encoder/layer/0/output/dense is tied
+/encoder/layer/0/output/LayerNorm is tied
+/encoder/layer/1/crossattention/self/query is tied
+/encoder/layer/1/crossattention/self/key is tied
+/encoder/layer/1/crossattention/self/value is tied
+/encoder/layer/1/crossattention/output/dense is tied
+/encoder/layer/1/crossattention/output/LayerNorm is tied
+/encoder/layer/1/intermediate/dense is tied
+/encoder/layer/1/output/dense is tied
+/encoder/layer/1/output/LayerNorm is tied
+--------------
+/scratch/aneesh.chavan/ram_swin_large_14m.pth
+--------------
+load checkpoint from /scratch/aneesh.chavan/ram_swin_large_14m.pth
+vit: swin_l
+final text_encoder_type: bert-base-uncased
+Model loaded from /home2/aneesh.chavan/.cache/huggingface/hub/models--ShilongLiu--GroundingDINO/snapshots/a94c9b567a2a374598f05c584e96798a170c56fb/groundingdino_swinb_cogcoor.pth 
+ => _IncompatibleKeys(missing_keys=[], unexpected_keys=['label_enc.weight', 'bert.embeddings.position_ids'])
+SAM loaded
+Memory Init'ed
+
