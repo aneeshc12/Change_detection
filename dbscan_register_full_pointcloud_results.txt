@@ -1,0 +1,933 @@
+Precompute neighbors.[=>                                      ] 2%Precompute neighbors.[==>                                     ] 5%Precompute neighbors.[===>                                    ] 7%Precompute neighbors.[====>                                   ] 10%Precompute neighbors.[=====>                                  ] 12%Precompute neighbors.[======>                                 ] 15%Precompute neighbors.[=======>                                ] 17%Precompute neighbors.[========>                               ] 20%Precompute neighbors.[=========>                              ] 22%Precompute neighbors.[==========>                             ] 25%Precompute neighbors.[===========>                            ] 27%Precompute neighbors.[============>                           ] 30%Precompute neighbors.[=============>                          ] 32%Precompute neighbors.[==============>                         ] 35%Precompute neighbors.[===============>                        ] 37%Precompute neighbors.[================>                       ] 40%Precompute neighbors.[=================>                      ] 42%Precompute neighbors.[==================>                     ] 45%Precompute neighbors.[===================>                    ] 47%Precompute neighbors.[====================>                   ] 50%Precompute neighbors.[=====================>                  ] 52%Precompute neighbors.[======================>                 ] 55%Precompute neighbors.[=======================>                ] 57%Precompute neighbors.[========================>               ] 60%Precompute neighbors.[=========================>              ] 62%Precompute neighbors.[==========================>             ] 65%Precompute neighbors.[===========================>            ] 67%Precompute neighbors.[============================>           ] 70%Precompute neighbors.[=============================>          ] 72%Precompute neighbors.[==============================>         ] 75%Precompute neighbors.[===============================>        ] 77%Precompute neighbors.[================================>       ] 80%Precompute neighbors.[=================================>      ] 82%Precompute neighbors.[==================================>     ] 85%Precompute neighbors.[===================================>    ] 87%Precompute neighbors.[====================================>   ] 90%Precompute neighbors.[=====================================>  ] 92%Precompute neighbors.[======================================> ] 95%Precompute neighbors.[=======================================>] 97%Precompute neighbors.[========================================] 100%
+Clustering[=>                                      ] 2%Clustering[==>                                     ] 5%Clustering[===>                                    ] 7%Clustering[====>                                   ] 10%Clustering[=====>                                  ] 12%Clustering[======>                                 ] 15%Clustering[=======>                                ] 17%Clustering[========>                               ] 20%Clustering[=========>                              ] 22%Clustering[==========>                             ] 25%Clustering[===========>                            ] 27%Clustering[============>                           ] 30%Clustering[=============>                          ] 32%Clustering[==============>                         ] 35%Clustering[===============>                        ] 37%Clustering[================>                       ] 40%Clustering[=================>                      ] 42%Clustering[==================>                     ] 45%Clustering[===================>                    ] 47%Clustering[====================>                   ] 50%Clustering[=====================>                  ] 52%Clustering[======================>                 ] 55%Clustering[=======================>                ] 57%Clustering[========================>               ] 60%Clustering[=========================>              ] 62%Clustering[==========================>             ] 65%Clustering[===========================>            ] 67%Clustering[============================>           ] 70%Clustering[=============================>          ] 72%Clustering[==============================>         ] 75%Clustering[===============================>        ] 77%Clustering[================================>       ] 80%Clustering[=================================>      ] 82%Clustering[==================================>     ] 85%Clustering[===================================>    ] 87%Clustering[====================================>   ] 90%Clustering[=====================================>  ] 92%Clustering[======================================> ] 95%Clustering[=======================================>] 97%Starting imports
+Imports completed in 3.205820322036743 seconds
+LocalArgs(lora_path='models/vit_finegrained_5x40_procthor.pt', test_folder_path='/scratch/aneesh.chavan/8room/8-room-v1/1/', rearranged_test_folder_path='/scratch/aneesh.chavan/8room/8-room-v1/1/', device='cuda', sam_checkpoint_path='/scratch/aneesh.chavan/sam_vit_h_4b8939.pth', ram_pretrained_path='/scratch/aneesh.chavan/ram_swin_large_14m.pth', downsampling_rate=5, save_dir='/scratch/aneesh.chavan/results/8-room-new-icp', sampling_period=15, start_file_index=200, last_file_index=1500, rot_correction=0.0, look_around_range=0, save_point_clouds=True, save_individual_objects=True, save_localised_objects=True, add_pose_noise=True, down_sample_voxel_size=0.01, create_ext_mesh=False, fpfh_global_dist_factor=1.5, fpfh_local_dist_factor=0.4, fpfh_voxel_size=0.05, localise_times=1, loc_results_start_file_index=210, loc_results_last_file_index=1400, loc_results_sampling_period=10, useLora=True)
+Created save directory /scratch/aneesh.chavan/results/8-room-new-icp
+We have 3315 files
+
+Begin Memory Initialization
+/encoder/layer/0/crossattention/self/query is tied
+/encoder/layer/0/crossattention/self/key is tied
+/encoder/layer/0/crossattention/self/value is tied
+/encoder/layer/0/crossattention/output/dense is tied
+/encoder/layer/0/crossattention/output/LayerNorm is tied
+/encoder/layer/0/intermediate/dense is tied
+/encoder/layer/0/output/dense is tied
+/encoder/layer/0/output/LayerNorm is tied
+/encoder/layer/1/crossattention/self/query is tied
+/encoder/layer/1/crossattention/self/key is tied
+/encoder/layer/1/crossattention/self/value is tied
+/encoder/layer/1/crossattention/output/dense is tied
+/encoder/layer/1/crossattention/output/LayerNorm is tied
+/encoder/layer/1/intermediate/dense is tied
+/encoder/layer/1/output/dense is tied
+/encoder/layer/1/output/LayerNorm is tied
+--------------
+/scratch/aneesh.chavan/ram_swin_large_14m.pth
+--------------
+load checkpoint from /scratch/aneesh.chavan/ram_swin_large_14m.pth
+vit: swin_l
+final text_encoder_type: bert-base-uncased
+Model loaded from /home2/aneesh.chavan/.cache/huggingface/hub/models--ShilongLiu--GroundingDINO/snapshots/a94c9b567a2a374598f05c584e96798a170c56fb/groundingdino_swinb_cogcoor.pth 
+ => _IncompatibleKeys(missing_keys=[], unexpected_keys=['label_enc.weight', 'bert.embeddings.position_ids'])
+SAM loaded
+Memory Init'ed
+
+(1662221, 3) (3, 16543) PointCloud with 1662221 points.
+[-1  0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19 20 21 22
+ 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46
+ 47 48 49 50 51 52 53 54 55 56 57 58 59] (1662221,)
+[ 0  0  1  2  3  0  4  0  0  2  0  5  6  7  9 10  7 10  9 11 11  5  5  5
+  6 12 12 13  6 12 14 15  6 13 13  6 14 12 15 13 13 13 17 19 17 20 21 17
+ 22 18 17 17 24 17 17 24 17 17 18 17 17 17 17 25 25 22 26 25 30 32 26 32
+ 30 26 33 32 30 34 25 25 35 27 30 36 26 33 30 32 26 33 37 38 39 41 38 42
+ 41 44 42 37 38 40 39 42 45 46 40 37 38 40 39 37 40 39 37 40 42 41 40 38
+ 39 42 37 40 39 46 52 37 46 40 39 38 37 45 40 39 38 45 42 37 40 39 38 44
+ 37 45 40 37 40 37 37 44 37 37 44 40 39 40 39 38 37 44 40 39 37 44 40 37
+ 26 40 39 26 33 34 25 25 35 25 36 30 54 25 54 28 34 25 25 25 36 34 25 25
+ 35 28 36 34 25 25 35 25 36 34 25 25 35 36 25 25 54 25 25 25 25 25 34 25
+ 25 35 25 42 42 37 38 43 46 55 56 55 55 57 55 58  7  9 55 55 56 55 55 56
+ 56 59] 49
+Label:  0
+	Added
+	Added
+	Added
+	Added
+	Added
+	Added
+Arr len:  6 
+
+to clusetr:  [ID: 0 | Names: [table] |  Num embs: 1 | Pcd size: (3, 16543), ID: 1 | Names: [stool] |  Num embs: 1 | Pcd size: (3, 1563), ID: 5 | Names: [armchair] |  Num embs: 1 | Pcd size: (3, 1529), ID: 7 | Names: [stool] |  Num embs: 1 | Pcd size: (3, 1693), ID: 8 | Names: [stool] |  Num embs: 1 | Pcd size: (3, 3703), ID: 10 | Names: [stool] |  Num embs: 1 | Pcd size: (3, 5206)] 
+
+		 ID: 1 | Names: [stool] |  Num embs: 1 | Pcd size: (3, 1563) ID: 0 | Names: [table] |  Num embs: 1 | Pcd size: (3, 16543)
+		 ID: 5 | Names: [armchair] |  Num embs: 1 | Pcd size: (3, 1529) ID: 0 | Names: [table ,stool] |  Num embs: 2 | Pcd size: (3, 18106)
+		 ID: 7 | Names: [stool] |  Num embs: 1 | Pcd size: (3, 1693) ID: 0 | Names: [table ,stool ,armchair] |  Num embs: 3 | Pcd size: (3, 19635)
+		 ID: 8 | Names: [stool] |  Num embs: 1 | Pcd size: (3, 3703) ID: 0 | Names: [table ,stool ,armchair ,stool] |  Num embs: 4 | Pcd size: (3, 21328)
+		 ID: 10 | Names: [stool] |  Num embs: 1 | Pcd size: (3, 5206) ID: 0 | Names: [table ,stool ,armchair ,stool ,stool] |  Num embs: 5 | Pcd size: (3, 25031)
+Label:  1
+	Added
+Arr len:  1 
+
+to clusetr:  [ID: 2 | Names: [armchair] |  Num embs: 1 | Pcd size: (3, 17440)] 
+
+Label:  2
+	Added
+	Added
+Arr len:  2 
+
+to clusetr:  [ID: 3 | Names: [armchair] |  Num embs: 1 | Pcd size: (3, 2988), ID: 9 | Names: [stool] |  Num embs: 1 | Pcd size: (3, 3064)] 
+
+		 ID: 9 | Names: [stool] |  Num embs: 1 | Pcd size: (3, 3064) ID: 3 | Names: [armchair] |  Num embs: 1 | Pcd size: (3, 2988)
+Label:  3
+	Added
+Arr len:  1 
+
+to clusetr:  [ID: 4 | Names: [armchair] |  Num embs: 1 | Pcd size: (3, 1562)] 
+
+Label:  4
+	Added
+Arr len:  1 
+
+to clusetr:  [ID: 6 | Names: [handcart] |  Num embs: 1 | Pcd size: (3, 8084)] 
+
+Label:  5
+	Added
+	Added
+	Added
+	Added
+Arr len:  4 
+
+to clusetr:  [ID: 11 | Names: [chair] |  Num embs: 1 | Pcd size: (3, 1230), ID: 21 | Names: [armchair] |  Num embs: 1 | Pcd size: (3, 2166), ID: 22 | Names: [armchair] |  Num embs: 1 | Pcd size: (3, 1306), ID: 23 | Names: [chair] |  Num embs: 1 | Pcd size: (3, 1150)] 
+
+		 ID: 21 | Names: [armchair] |  Num embs: 1 | Pcd size: (3, 2166) ID: 11 | Names: [chair] |  Num embs: 1 | Pcd size: (3, 1230)
+		 ID: 22 | Names: [armchair] |  Num embs: 1 | Pcd size: (3, 1306) ID: 11 | Names: [chair ,armchair] |  Num embs: 2 | Pcd size: (3, 3396)
+		 ID: 23 | Names: [chair] |  Num embs: 1 | Pcd size: (3, 1150) ID: 11 | Names: [chair ,armchair ,armchair] |  Num embs: 3 | Pcd size: (3, 4702)
+Label:  6
+	Added
+	Added
+	Added
+	Added
+	Added
+Arr len:  5 
+
+to clusetr:  [ID: 12 | Names: [food] |  Num embs: 1 | Pcd size: (3, 2686), ID: 24 | Names: [chair] |  Num embs: 1 | Pcd size: (3, 2543), ID: 28 | Names: [stool] |  Num embs: 1 | Pcd size: (3, 1251), ID: 32 | Names: [beverage] |  Num embs: 1 | Pcd size: (3, 670), ID: 35 | Names: [stool] |  Num embs: 1 | Pcd size: (3, 1953)] 
+
+		 ID: 24 | Names: [chair] |  Num embs: 1 | Pcd size: (3, 2543) ID: 12 | Names: [food] |  Num embs: 1 | Pcd size: (3, 2686)
+		 ID: 28 | Names: [stool] |  Num embs: 1 | Pcd size: (3, 1251) ID: 12 | Names: [food ,chair] |  Num embs: 2 | Pcd size: (3, 5229)
+		 ID: 32 | Names: [beverage] |  Num embs: 1 | Pcd size: (3, 670) ID: 12 | Names: [food ,chair ,stool] |  Num embs: 3 | Pcd size: (3, 6480)
+		 ID: 35 | Names: [stool] |  Num embs: 1 | Pcd size: (3, 1953) ID: 12 | Names: [food ,chair ,stool ,beverage] |  Num embs: 4 | Pcd size: (3, 7150)
+Label:  7
+	Added
+	Added
+	Added
+Arr len:  3 
+
+to clusetr:  [ID: 13 | Names: [armchair] |  Num embs: 1 | Pcd size: (3, 3679), ID: 16 | Names: [armchair] |  Num embs: 1 | Pcd size: (3, 5279), ID: 232 | Names: [armchair] |  Num embs: 1 | Pcd size: (3, 7145)] 
+
+		 ID: 16 | Names: [armchair] |  Num embs: 1 | Pcd size: (3, 5279) ID: 13 | Names: [armchair] |  Num embs: 1 | Pcd size: (3, 3679)
+		 ID: 232 | Names: [armchair] |  Num embs: 1 | Pcd size: (3, 7145) ID: 13 | Names: [armchair ,armchair] |  Num embs: 2 | Pcd size: (3, 8958)
+Label:  8
+Arr len:  0 
+
+to clusetr:  [] 
+
+Label:  9
+	Added
+	Added
+	Added
+Arr len:  3 
+
+to clusetr:  [ID: 14 | Names: [cage] |  Num embs: 1 | Pcd size: (3, 15707), ID: 18 | Names: [cage] |  Num embs: 1 | Pcd size: (3, 17247), ID: 233 | Names: [table] |  Num embs: 1 | Pcd size: (3, 33079)] 
+
+		 ID: 18 | Names: [cage] |  Num embs: 1 | Pcd size: (3, 17247) ID: 14 | Names: [cage] |  Num embs: 1 | Pcd size: (3, 15707)
+		 ID: 233 | Names: [table] |  Num embs: 1 | Pcd size: (3, 33079) ID: 14 | Names: [cage ,cage] |  Num embs: 2 | Pcd size: (3, 32954)
+Label:  10
+	Added
+	Added
+Arr len:  2 
+
+to clusetr:  [ID: 15 | Names: [cage] |  Num embs: 1 | Pcd size: (3, 14277), ID: 17 | Names: [cage] |  Num embs: 1 | Pcd size: (3, 18340)] 
+
+		 ID: 17 | Names: [cage] |  Num embs: 1 | Pcd size: (3, 18340) ID: 15 | Names: [cage] |  Num embs: 1 | Pcd size: (3, 14277)
+Label:  11
+	Added
+	Added
+Arr len:  2 
+
+to clusetr:  [ID: 19 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 5523), ID: 20 | Names: [plaster bandage] |  Num embs: 1 | Pcd size: (3, 81251)] 
+
+		 ID: 20 | Names: [plaster bandage] |  Num embs: 1 | Pcd size: (3, 81251) ID: 19 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 5523)
+Label:  12
+	Added
+	Added
+	Added
+	Added
+Arr len:  4 
+
+to clusetr:  [ID: 25 | Names: [armchair] |  Num embs: 1 | Pcd size: (3, 10763), ID: 26 | Names: [armchair] |  Num embs: 1 | Pcd size: (3, 14671), ID: 29 | Names: [armchair] |  Num embs: 1 | Pcd size: (3, 8671), ID: 37 | Names: [armchair] |  Num embs: 1 | Pcd size: (3, 5862)] 
+
+		 ID: 26 | Names: [armchair] |  Num embs: 1 | Pcd size: (3, 14671) ID: 25 | Names: [armchair] |  Num embs: 1 | Pcd size: (3, 10763)
+		 ID: 29 | Names: [armchair] |  Num embs: 1 | Pcd size: (3, 8671) ID: 25 | Names: [armchair ,armchair] |  Num embs: 2 | Pcd size: (3, 25434)
+		 ID: 37 | Names: [armchair] |  Num embs: 1 | Pcd size: (3, 5862) ID: 25 | Names: [armchair ,armchair ,armchair] |  Num embs: 3 | Pcd size: (3, 34105)
+Label:  13
+	Added
+	Added
+	Added
+	Added
+	Added
+	Added
+Arr len:  6 
+
+to clusetr:  [ID: 27 | Names: [table] |  Num embs: 1 | Pcd size: (3, 3240), ID: 33 | Names: [chair] |  Num embs: 1 | Pcd size: (3, 1902), ID: 34 | Names: [stool] |  Num embs: 1 | Pcd size: (3, 922), ID: 39 | Names: [table] |  Num embs: 1 | Pcd size: (3, 1712), ID: 40 | Names: [chair] |  Num embs: 1 | Pcd size: (3, 7450), ID: 41 | Names: [table] |  Num embs: 1 | Pcd size: (3, 3200)] 
+
+		 ID: 33 | Names: [chair] |  Num embs: 1 | Pcd size: (3, 1902) ID: 27 | Names: [table] |  Num embs: 1 | Pcd size: (3, 3240)
+		 ID: 34 | Names: [stool] |  Num embs: 1 | Pcd size: (3, 922) ID: 27 | Names: [table ,chair] |  Num embs: 2 | Pcd size: (3, 5142)
+		 ID: 39 | Names: [table] |  Num embs: 1 | Pcd size: (3, 1712) ID: 27 | Names: [table ,chair ,stool] |  Num embs: 3 | Pcd size: (3, 6064)
+		 ID: 40 | Names: [chair] |  Num embs: 1 | Pcd size: (3, 7450) ID: 27 | Names: [table ,chair ,stool ,table] |  Num embs: 4 | Pcd size: (3, 7776)
+		 ID: 41 | Names: [table] |  Num embs: 1 | Pcd size: (3, 3200) ID: 27 | Names: [table ,chair ,stool ,table ,chair] |  Num embs: 5 | Pcd size: (3, 15226)
+Label:  14
+	Added
+	Added
+Arr len:  2 
+
+to clusetr:  [ID: 30 | Names: [armchair] |  Num embs: 1 | Pcd size: (3, 3053), ID: 36 | Names: [armchair] |  Num embs: 1 | Pcd size: (3, 4214)] 
+
+		 ID: 36 | Names: [armchair] |  Num embs: 1 | Pcd size: (3, 4214) ID: 30 | Names: [armchair] |  Num embs: 1 | Pcd size: (3, 3053)
+Label:  15
+	Added
+	Added
+Arr len:  2 
+
+to clusetr:  [ID: 31 | Names: [armchair] |  Num embs: 1 | Pcd size: (3, 916), ID: 38 | Names: [table] |  Num embs: 1 | Pcd size: (3, 2917)] 
+
+		 ID: 38 | Names: [table] |  Num embs: 1 | Pcd size: (3, 2917) ID: 31 | Names: [armchair] |  Num embs: 1 | Pcd size: (3, 916)
+Label:  16
+Arr len:  0 
+
+to clusetr:  [] 
+
+Label:  17
+	Added
+	Added
+	Added
+	Added
+	Added
+	Added
+	Added
+	Added
+	Added
+	Added
+	Added
+	Added
+	Added
+Arr len:  13 
+
+to clusetr:  [ID: 42 | Names: [armchair] |  Num embs: 1 | Pcd size: (3, 1396), ID: 44 | Names: [stool] |  Num embs: 1 | Pcd size: (3, 983), ID: 47 | Names: [armchair] |  Num embs: 1 | Pcd size: (3, 866), ID: 50 | Names: [stool] |  Num embs: 1 | Pcd size: (3, 747), ID: 51 | Names: [armchair] |  Num embs: 1 | Pcd size: (3, 2261), ID: 53 | Names: [stool] |  Num embs: 1 | Pcd size: (3, 1717), ID: 54 | Names: [armchair] |  Num embs: 1 | Pcd size: (3, 6625), ID: 56 | Names: [table] |  Num embs: 1 | Pcd size: (3, 4438), ID: 57 | Names: [chair] |  Num embs: 1 | Pcd size: (3, 4824), ID: 59 | Names: [chair] |  Num embs: 1 | Pcd size: (3, 2686), ID: 60 | Names: [stool] |  Num embs: 1 | Pcd size: (3, 2223), ID: 61 | Names: [chair] |  Num embs: 1 | Pcd size: (3, 2328), ID: 62 | Names: [stool] |  Num embs: 1 | Pcd size: (3, 1689)] 
+
+		 ID: 44 | Names: [stool] |  Num embs: 1 | Pcd size: (3, 983) ID: 42 | Names: [armchair] |  Num embs: 1 | Pcd size: (3, 1396)
+		 ID: 47 | Names: [armchair] |  Num embs: 1 | Pcd size: (3, 866) ID: 42 | Names: [armchair ,stool] |  Num embs: 2 | Pcd size: (3, 2379)
+		 ID: 50 | Names: [stool] |  Num embs: 1 | Pcd size: (3, 747) ID: 42 | Names: [armchair ,stool ,armchair] |  Num embs: 3 | Pcd size: (3, 3245)
+		 ID: 51 | Names: [armchair] |  Num embs: 1 | Pcd size: (3, 2261) ID: 42 | Names: [armchair ,stool ,armchair ,stool] |  Num embs: 4 | Pcd size: (3, 3992)
+		 ID: 53 | Names: [stool] |  Num embs: 1 | Pcd size: (3, 1717) ID: 42 | Names: [armchair ,stool ,armchair ,stool ,armchair] |  Num embs: 5 | Pcd size: (3, 6253)
+		 ID: 54 | Names: [armchair] |  Num embs: 1 | Pcd size: (3, 6625) ID: 42 | Names: [armchair ,stool ,armchair ,stool ,armchair ,stool] |  Num embs: 6 | Pcd size: (3, 7970)
+		 ID: 56 | Names: [table] |  Num embs: 1 | Pcd size: (3, 4438) ID: 42 | Names: [armchair ,stool ,armchair ,stool ,armchair ,stool ,armchair] |  Num embs: 7 | Pcd size: (3, 14595)
+		 ID: 57 | Names: [chair] |  Num embs: 1 | Pcd size: (3, 4824) ID: 42 | Names: [armchair ,stool ,armchair ,stool ,armchair ,stool ,armchair ,table] |  Num embs: 8 | Pcd size: (3, 19033)
+		 ID: 59 | Names: [chair] |  Num embs: 1 | Pcd size: (3, 2686) ID: 42 | Names: [armchair ,stool ,armchair ,stool ,armchair ,stool ,armchair ,table ,chair] |  Num embs: 9 | Pcd size: (3, 23857)
+		 ID: 60 | Names: [stool] |  Num embs: 1 | Pcd size: (3, 2223) ID: 42 | Names: [armchair ,stool ,armchair ,stool ,armchair ,stool ,armchair ,table ,chair ,chair] |  Num embs: 10 | Pcd size: (3, 26543)
+		 ID: 61 | Names: [chair] |  Num embs: 1 | Pcd size: (3, 2328) ID: 42 | Names: [armchair ,stool ,armchair ,stool ,armchair ,stool ,armchair ,table ,chair ,chair ,stool] |  Num embs: 11 | Pcd size: (3, 28766)
+		 ID: 62 | Names: [stool] |  Num embs: 1 | Pcd size: (3, 1689) ID: 42 | Names: [armchair ,stool ,armchair ,stool ,armchair ,stool ,armchair ,table ,chair ,chair ,stool ,chair] |  Num embs: 12 | Pcd size: (3, 31094)
+Label:  18
+	Added
+	Added
+Arr len:  2 
+
+to clusetr:  [ID: 49 | Names: [couch] |  Num embs: 1 | Pcd size: (3, 4028), ID: 58 | Names: [spiral] |  Num embs: 1 | Pcd size: (3, 16802)] 
+
+		 ID: 58 | Names: [spiral] |  Num embs: 1 | Pcd size: (3, 16802) ID: 49 | Names: [couch] |  Num embs: 1 | Pcd size: (3, 4028)
+Label:  19
+	Added
+Arr len:  1 
+
+to clusetr:  [ID: 43 | Names: [box] |  Num embs: 1 | Pcd size: (3, 19932)] 
+
+Label:  20
+	Added
+Arr len:  1 
+
+to clusetr:  [ID: 45 | Names: [armchair] |  Num embs: 1 | Pcd size: (3, 21532)] 
+
+Label:  21
+	Added
+Arr len:  1 
+
+to clusetr:  [ID: 46 | Names: [armchair] |  Num embs: 1 | Pcd size: (3, 16859)] 
+
+Label:  22
+	Added
+	Added
+Arr len:  2 
+
+to clusetr:  [ID: 48 | Names: [armchair] |  Num embs: 1 | Pcd size: (3, 2150), ID: 65 | Names: [handcart] |  Num embs: 1 | Pcd size: (3, 5170)] 
+
+		 ID: 65 | Names: [handcart] |  Num embs: 1 | Pcd size: (3, 5170) ID: 48 | Names: [armchair] |  Num embs: 1 | Pcd size: (3, 2150)
+Label:  23
+Arr len:  0 
+
+to clusetr:  [] 
+
+Label:  24
+	Added
+	Added
+Arr len:  2 
+
+to clusetr:  [ID: 52 | Names: [stool] |  Num embs: 1 | Pcd size: (3, 675), ID: 55 | Names: [table] |  Num embs: 1 | Pcd size: (3, 2781)] 
+
+		 ID: 55 | Names: [table] |  Num embs: 1 | Pcd size: (3, 2781) ID: 52 | Names: [stool] |  Num embs: 1 | Pcd size: (3, 675)
+Label:  25
+	Added
+	Added
+	Added
+	Added
+	Added
+	Added
+	Added
+	Added
+	Added
+	Added
+	Added
+	Added
+	Added
+	Added
+	Added
+	Added
+	Added
+	Added
+	Added
+	Added
+	Added
+	Added
+	Added
+	Added
+	Added
+	Added
+	Added
+	Added
+	Added
+Arr len:  29 
+
+to clusetr:  [ID: 63 | Names: [bed] |  Num embs: 1 | Pcd size: (3, 84414), ID: 64 | Names: [bed] |  Num embs: 1 | Pcd size: (3, 61737), ID: 67 | Names: [chair] |  Num embs: 1 | Pcd size: (3, 612), ID: 78 | Names: [chair] |  Num embs: 1 | Pcd size: (3, 1308), ID: 79 | Names: [chair] |  Num embs: 1 | Pcd size: (3, 865), ID: 174 | Names: [chair] |  Num embs: 1 | Pcd size: (3, 2491), ID: 175 | Names: [chair] |  Num embs: 1 | Pcd size: (3, 1129), ID: 177 | Names: [table] |  Num embs: 1 | Pcd size: (3, 701), ID: 181 | Names: [chair] |  Num embs: 1 | Pcd size: (3, 3110), ID: 185 | Names: [chair] |  Num embs: 1 | Pcd size: (3, 3381), ID: 186 | Names: [chair] |  Num embs: 1 | Pcd size: (3, 1377), ID: 187 | Names: [table] |  Num embs: 1 | Pcd size: (3, 1941), ID: 190 | Names: [chair] |  Num embs: 1 | Pcd size: (3, 1230), ID: 191 | Names: [chair] |  Num embs: 1 | Pcd size: (3, 1207), ID: 196 | Names: [chair] |  Num embs: 1 | Pcd size: (3, 2447), ID: 197 | Names: [chair] |  Num embs: 1 | Pcd size: (3, 1502), ID: 199 | Names: [table] |  Num embs: 1 | Pcd size: (3, 2792), ID: 202 | Names: [chair] |  Num embs: 1 | Pcd size: (3, 1719), ID: 203 | Names: [chair] |  Num embs: 1 | Pcd size: (3, 1531), ID: 206 | Names: [stool] |  Num embs: 1 | Pcd size: (3, 2347), ID: 207 | Names: [chair] |  Num embs: 1 | Pcd size: (3, 2438), ID: 209 | Names: [pole] |  Num embs: 1 | Pcd size: (3, 92345), ID: 210 | Names: [chair] |  Num embs: 1 | Pcd size: (3, 1974), ID: 211 | Names: [chair] |  Num embs: 1 | Pcd size: (3, 3921), ID: 212 | Names: [chair] |  Num embs: 1 | Pcd size: (3, 2101), ID: 213 | Names: [table] |  Num embs: 1 | Pcd size: (3, 45355), ID: 215 | Names: [chair] |  Num embs: 1 | Pcd size: (3, 2163), ID: 216 | Names: [chair] |  Num embs: 1 | Pcd size: (3, 3937), ID: 218 | Names: [stool] |  Num embs: 1 | Pcd size: (3, 6235)] 
+
+		 ID: 64 | Names: [bed] |  Num embs: 1 | Pcd size: (3, 61737) ID: 63 | Names: [bed] |  Num embs: 1 | Pcd size: (3, 84414)
+		 ID: 67 | Names: [chair] |  Num embs: 1 | Pcd size: (3, 612) ID: 63 | Names: [bed ,bed] |  Num embs: 2 | Pcd size: (3, 146151)
+		 ID: 78 | Names: [chair] |  Num embs: 1 | Pcd size: (3, 1308) ID: 63 | Names: [bed ,bed ,chair] |  Num embs: 3 | Pcd size: (3, 146763)
+		 ID: 79 | Names: [chair] |  Num embs: 1 | Pcd size: (3, 865) ID: 63 | Names: [bed ,bed ,chair ,chair] |  Num embs: 4 | Pcd size: (3, 148071)
+		 ID: 174 | Names: [chair] |  Num embs: 1 | Pcd size: (3, 2491) ID: 63 | Names: [bed ,bed ,chair ,chair ,chair] |  Num embs: 5 | Pcd size: (3, 148936)
+		 ID: 175 | Names: [chair] |  Num embs: 1 | Pcd size: (3, 1129) ID: 63 | Names: [bed ,bed ,chair ,chair ,chair ,chair] |  Num embs: 6 | Pcd size: (3, 151427)
+		 ID: 177 | Names: [table] |  Num embs: 1 | Pcd size: (3, 701) ID: 63 | Names: [bed ,bed ,chair ,chair ,chair ,chair ,chair] |  Num embs: 7 | Pcd size: (3, 152556)
+		 ID: 181 | Names: [chair] |  Num embs: 1 | Pcd size: (3, 3110) ID: 63 | Names: [bed ,bed ,chair ,chair ,chair ,chair ,chair ,table] |  Num embs: 8 | Pcd size: (3, 153257)
+		 ID: 185 | Names: [chair] |  Num embs: 1 | Pcd size: (3, 3381) ID: 63 | Names: [bed ,bed ,chair ,chair ,chair ,chair ,chair ,table ,chair] |  Num embs: 9 | Pcd size: (3, 156367)
+		 ID: 186 | Names: [chair] |  Num embs: 1 | Pcd size: (3, 1377) ID: 63 | Names: [bed ,bed ,chair ,chair ,chair ,chair ,chair ,table ,chair ,chair] |  Num embs: 10 | Pcd size: (3, 159748)
+		 ID: 187 | Names: [table] |  Num embs: 1 | Pcd size: (3, 1941) ID: 63 | Names: [bed ,bed ,chair ,chair ,chair ,chair ,chair ,table ,chair ,chair ,chair] |  Num embs: 11 | Pcd size: (3, 161125)
+		 ID: 190 | Names: [chair] |  Num embs: 1 | Pcd size: (3, 1230) ID: 63 | Names: [bed ,bed ,chair ,chair ,chair ,chair ,chair ,table ,chair ,chair ,chair ,table] |  Num embs: 12 | Pcd size: (3, 163066)
+		 ID: 191 | Names: [chair] |  Num embs: 1 | Pcd size: (3, 1207) ID: 63 | Names: [bed ,bed ,chair ,chair ,chair ,chair ,chair ,table ,chair ,chair ,chair ,table ,chair] |  Num embs: 13 | Pcd size: (3, 164296)
+		 ID: 196 | Names: [chair] |  Num embs: 1 | Pcd size: (3, 2447) ID: 63 | Names: [bed ,bed ,chair ,chair ,chair ,chair ,chair ,table ,chair ,chair ,chair ,table ,chair ,chair] |  Num embs: 14 | Pcd size: (3, 165503)
+		 ID: 197 | Names: [chair] |  Num embs: 1 | Pcd size: (3, 1502) ID: 63 | Names: [bed ,bed ,chair ,chair ,chair ,chair ,chair ,table ,chair ,chair ,chair ,table ,chair ,chair ,chair] |  Num embs: 15 | Pcd size: (3, 167950)
+		 ID: 199 | Names: [table] |  Num embs: 1 | Pcd size: (3, 2792) ID: 63 | Names: [bed ,bed ,chair ,chair ,chair ,chair ,chair ,table ,chair ,chair ,chair ,table ,chair ,chair ,chair ,chair] |  Num embs: 16 | Pcd size: (3, 169452)
+		 ID: 202 | Names: [chair] |  Num embs: 1 | Pcd size: (3, 1719) ID: 63 | Names: [bed ,bed ,chair ,chair ,chair ,chair ,chair ,table ,chair ,chair ,chair ,table ,chair ,chair ,chair ,chair ,table] |  Num embs: 17 | Pcd size: (3, 172244)
+		 ID: 203 | Names: [chair] |  Num embs: 1 | Pcd size: (3, 1531) ID: 63 | Names: [bed ,bed ,chair ,chair ,chair ,chair ,chair ,table ,chair ,chair ,chair ,table ,chair ,chair ,chair ,chair ,table ,chair] |  Num embs: 18 | Pcd size: (3, 173963)
+		 ID: 206 | Names: [stool] |  Num embs: 1 | Pcd size: (3, 2347) ID: 63 | Names: [bed ,bed ,chair ,chair ,chair ,chair ,chair ,table ,chair ,chair ,chair ,table ,chair ,chair ,chair ,chair ,table ,chair ,chair] |  Num embs: 19 | Pcd size: (3, 175494)
+		 ID: 207 | Names: [chair] |  Num embs: 1 | Pcd size: (3, 2438) ID: 63 | Names: [bed ,bed ,chair ,chair ,chair ,chair ,chair ,table ,chair ,chair ,chair ,table ,chair ,chair ,chair ,chair ,table ,chair ,chair ,stool] |  Num embs: 20 | Pcd size: (3, 177841)
+		 ID: 209 | Names: [pole] |  Num embs: 1 | Pcd size: (3, 92345) ID: 63 | Names: [bed ,bed ,chair ,chair ,chair ,chair ,chair ,table ,chair ,chair ,chair ,table ,chair ,chair ,chair ,chair ,table ,chair ,chair ,stool ,chair] |  Num embs: 21 | Pcd size: (3, 180279)
+		 ID: 210 | Names: [chair] |  Num embs: 1 | Pcd size: (3, 1974) ID: 63 | Names: [bed ,bed ,chair ,chair ,chair ,chair ,chair ,table ,chair ,chair ,chair ,table ,chair ,chair ,chair ,chair ,table ,chair ,chair ,stool ,chair ,pole] |  Num embs: 22 | Pcd size: (3, 272624)
+		 ID: 211 | Names: [chair] |  Num embs: 1 | Pcd size: (3, 3921) ID: 63 | Names: [bed ,bed ,chair ,chair ,chair ,chair ,chair ,table ,chair ,chair ,chair ,table ,chair ,chair ,chair ,chair ,table ,chair ,chair ,stool ,chair ,pole ,chair] |  Num embs: 23 | Pcd size: (3, 274598)
+		 ID: 212 | Names: [chair] |  Num embs: 1 | Pcd size: (3, 2101) ID: 63 | Names: [bed ,bed ,chair ,chair ,chair ,chair ,chair ,table ,chair ,chair ,chair ,table ,chair ,chair ,chair ,chair ,table ,chair ,chair ,stool ,chair ,pole ,chair ,chair] |  Num embs: 24 | Pcd size: (3, 278519)
+		 ID: 213 | Names: [table] |  Num embs: 1 | Pcd size: (3, 45355) ID: 63 | Names: [bed ,bed ,chair ,chair ,chair ,chair ,chair ,table ,chair ,chair ,chair ,table ,chair ,chair ,chair ,chair ,table ,chair ,chair ,stool ,chair ,pole ,chair ,chair ,chair] |  Num embs: 25 | Pcd size: (3, 280620)
+		 ID: 215 | Names: [chair] |  Num embs: 1 | Pcd size: (3, 2163) ID: 63 | Names: [bed ,bed ,chair ,chair ,chair ,chair ,chair ,table ,chair ,chair ,chair ,table ,chair ,chair ,chair ,chair ,table ,chair ,chair ,stool ,chair ,pole ,chair ,chair ,chair ,table] |  Num embs: 26 | Pcd size: (3, 325975)
+		 ID: 216 | Names: [chair] |  Num embs: 1 | Pcd size: (3, 3937) ID: 63 | Names: [bed ,bed ,chair ,chair ,chair ,chair ,chair ,table ,chair ,chair ,chair ,table ,chair ,chair ,chair ,chair ,table ,chair ,chair ,stool ,chair ,pole ,chair ,chair ,chair ,table ,chair] |  Num embs: 27 | Pcd size: (3, 328138)
+		 ID: 218 | Names: [stool] |  Num embs: 1 | Pcd size: (3, 6235) ID: 63 | Names: [bed ,bed ,chair ,chair ,chair ,chair ,chair ,table ,chair ,chair ,chair ,table ,chair ,chair ,chair ,chair ,table ,chair ,chair ,stool ,chair ,pole ,chair ,chair ,chair ,table ,chair ,chair] |  Num embs: 28 | Pcd size: (3, 332075)
+Label:  26
+	Added
+	Added
+	Added
+	Added
+	Added
+	Added
+	Added
+Arr len:  7 
+
+to clusetr:  [ID: 66 | Names: [armchair] |  Num embs: 1 | Pcd size: (3, 10998), ID: 70 | Names: [armchair] |  Num embs: 1 | Pcd size: (3, 12209), ID: 73 | Names: [armchair] |  Num embs: 1 | Pcd size: (3, 21559), ID: 84 | Names: [armchair] |  Num embs: 1 | Pcd size: (3, 15968), ID: 88 | Names: [armchair] |  Num embs: 1 | Pcd size: (3, 6269), ID: 168 | Names: [armchair] |  Num embs: 1 | Pcd size: (3, 2021), ID: 171 | Names: [armchair] |  Num embs: 1 | Pcd size: (3, 21441)] 
+
+		 ID: 70 | Names: [armchair] |  Num embs: 1 | Pcd size: (3, 12209) ID: 66 | Names: [armchair] |  Num embs: 1 | Pcd size: (3, 10998)
+		 ID: 73 | Names: [armchair] |  Num embs: 1 | Pcd size: (3, 21559) ID: 66 | Names: [armchair ,armchair] |  Num embs: 2 | Pcd size: (3, 23207)
+		 ID: 84 | Names: [armchair] |  Num embs: 1 | Pcd size: (3, 15968) ID: 66 | Names: [armchair ,armchair ,armchair] |  Num embs: 3 | Pcd size: (3, 44766)
+		 ID: 88 | Names: [armchair] |  Num embs: 1 | Pcd size: (3, 6269) ID: 66 | Names: [armchair ,armchair ,armchair ,armchair] |  Num embs: 4 | Pcd size: (3, 60734)
+		 ID: 168 | Names: [armchair] |  Num embs: 1 | Pcd size: (3, 2021) ID: 66 | Names: [armchair ,armchair ,armchair ,armchair ,armchair] |  Num embs: 5 | Pcd size: (3, 67003)
+		 ID: 171 | Names: [armchair] |  Num embs: 1 | Pcd size: (3, 21441) ID: 66 | Names: [armchair ,armchair ,armchair ,armchair ,armchair ,armchair] |  Num embs: 6 | Pcd size: (3, 69024)
+Label:  27
+	Added
+Arr len:  1 
+
+to clusetr:  [ID: 81 | Names: [table] |  Num embs: 1 | Pcd size: (3, 674)] 
+
+Label:  28
+	Added
+	Added
+Arr len:  2 
+
+to clusetr:  [ID: 183 | Names: [table] |  Num embs: 1 | Pcd size: (3, 4210), ID: 193 | Names: [table] |  Num embs: 1 | Pcd size: (3, 1882)] 
+
+		 ID: 193 | Names: [table] |  Num embs: 1 | Pcd size: (3, 1882) ID: 183 | Names: [table] |  Num embs: 1 | Pcd size: (3, 4210)
+Label:  29
+Arr len:  0 
+
+to clusetr:  [] 
+
+Label:  30
+	Added
+	Added
+	Added
+	Added
+	Added
+	Added
+Arr len:  6 
+
+to clusetr:  [ID: 68 | Names: [table] |  Num embs: 1 | Pcd size: (3, 6160), ID: 72 | Names: [table] |  Num embs: 1 | Pcd size: (3, 4275), ID: 76 | Names: [table] |  Num embs: 1 | Pcd size: (3, 1967), ID: 82 | Names: [table] |  Num embs: 1 | Pcd size: (3, 1430), ID: 86 | Names: [table] |  Num embs: 1 | Pcd size: (3, 1635), ID: 179 | Names: [table] |  Num embs: 1 | Pcd size: (3, 359)] 
+
+		 ID: 72 | Names: [table] |  Num embs: 1 | Pcd size: (3, 4275) ID: 68 | Names: [table] |  Num embs: 1 | Pcd size: (3, 6160)
+		 ID: 76 | Names: [table] |  Num embs: 1 | Pcd size: (3, 1967) ID: 68 | Names: [table ,table] |  Num embs: 2 | Pcd size: (3, 10435)
+		 ID: 82 | Names: [table] |  Num embs: 1 | Pcd size: (3, 1430) ID: 68 | Names: [table ,table ,table] |  Num embs: 3 | Pcd size: (3, 12402)
+		 ID: 86 | Names: [table] |  Num embs: 1 | Pcd size: (3, 1635) ID: 68 | Names: [table ,table ,table ,table] |  Num embs: 4 | Pcd size: (3, 13832)
+		 ID: 179 | Names: [table] |  Num embs: 1 | Pcd size: (3, 359) ID: 68 | Names: [table ,table ,table ,table ,table] |  Num embs: 5 | Pcd size: (3, 15467)
+Label:  31
+Arr len:  0 
+
+to clusetr:  [] 
+
+Label:  32
+	Added
+	Added
+	Added
+	Added
+Arr len:  4 
+
+to clusetr:  [ID: 69 | Names: [hassock] |  Num embs: 1 | Pcd size: (3, 9288), ID: 71 | Names: [armchair] |  Num embs: 1 | Pcd size: (3, 8335), ID: 75 | Names: [chair] |  Num embs: 1 | Pcd size: (3, 8508), ID: 87 | Names: [stool] |  Num embs: 1 | Pcd size: (3, 3551)] 
+
+		 ID: 71 | Names: [armchair] |  Num embs: 1 | Pcd size: (3, 8335) ID: 69 | Names: [hassock] |  Num embs: 1 | Pcd size: (3, 9288)
+		 ID: 75 | Names: [chair] |  Num embs: 1 | Pcd size: (3, 8508) ID: 69 | Names: [hassock ,armchair] |  Num embs: 2 | Pcd size: (3, 17623)
+		 ID: 87 | Names: [stool] |  Num embs: 1 | Pcd size: (3, 3551) ID: 69 | Names: [hassock ,armchair ,chair] |  Num embs: 3 | Pcd size: (3, 26131)
+Label:  33
+	Added
+	Added
+	Added
+	Added
+Arr len:  4 
+
+to clusetr:  [ID: 74 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 2737), ID: 85 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 1964), ID: 89 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 548), ID: 172 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 4294)] 
+
+		 ID: 85 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 1964) ID: 74 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 2737)
+		 ID: 89 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 548) ID: 74 | Names: [lamp ,lamp] |  Num embs: 2 | Pcd size: (3, 4701)
+		 ID: 172 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 4294) ID: 74 | Names: [lamp ,lamp ,lamp] |  Num embs: 3 | Pcd size: (3, 5249)
+Label:  34
+	Added
+	Added
+	Added
+	Added
+	Added
+	Added
+	Added
+Arr len:  7 
+
+to clusetr:  [ID: 77 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 709), ID: 173 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 1367), ID: 184 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 1974), ID: 189 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 1379), ID: 195 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 2004), ID: 201 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 1777), ID: 214 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 995)] 
+
+		 ID: 173 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 1367) ID: 77 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 709)
+		 ID: 184 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 1974) ID: 77 | Names: [lamp ,lamp] |  Num embs: 2 | Pcd size: (3, 2076)
+		 ID: 189 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 1379) ID: 77 | Names: [lamp ,lamp ,lamp] |  Num embs: 3 | Pcd size: (3, 4050)
+		 ID: 195 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 2004) ID: 77 | Names: [lamp ,lamp ,lamp ,lamp] |  Num embs: 4 | Pcd size: (3, 5429)
+		 ID: 201 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 1777) ID: 77 | Names: [lamp ,lamp ,lamp ,lamp ,lamp] |  Num embs: 5 | Pcd size: (3, 7433)
+		 ID: 214 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 995) ID: 77 | Names: [lamp ,lamp ,lamp ,lamp ,lamp ,lamp] |  Num embs: 6 | Pcd size: (3, 9210)
+Label:  35
+	Added
+	Added
+	Added
+	Added
+	Added
+	Added
+Arr len:  6 
+
+to clusetr:  [ID: 80 | Names: [table] |  Num embs: 1 | Pcd size: (3, 2703), ID: 176 | Names: [table] |  Num embs: 1 | Pcd size: (3, 7420), ID: 192 | Names: [table] |  Num embs: 1 | Pcd size: (3, 8903), ID: 198 | Names: [table] |  Num embs: 1 | Pcd size: (3, 23092), ID: 204 | Names: [table] |  Num embs: 1 | Pcd size: (3, 16189), ID: 217 | Names: [table] |  Num embs: 1 | Pcd size: (3, 19530)] 
+
+		 ID: 176 | Names: [table] |  Num embs: 1 | Pcd size: (3, 7420) ID: 80 | Names: [table] |  Num embs: 1 | Pcd size: (3, 2703)
+		 ID: 192 | Names: [table] |  Num embs: 1 | Pcd size: (3, 8903) ID: 80 | Names: [table ,table] |  Num embs: 2 | Pcd size: (3, 10123)
+		 ID: 198 | Names: [table] |  Num embs: 1 | Pcd size: (3, 23092) ID: 80 | Names: [table ,table ,table] |  Num embs: 3 | Pcd size: (3, 19026)
+		 ID: 204 | Names: [table] |  Num embs: 1 | Pcd size: (3, 16189) ID: 80 | Names: [table ,table ,table ,table] |  Num embs: 4 | Pcd size: (3, 42118)
+		 ID: 217 | Names: [table] |  Num embs: 1 | Pcd size: (3, 19530) ID: 80 | Names: [table ,table ,table ,table ,table] |  Num embs: 5 | Pcd size: (3, 58307)
+Label:  36
+	Added
+	Added
+	Added
+	Added
+	Added
+	Added
+Arr len:  6 
+
+to clusetr:  [ID: 83 | Names: [table] |  Num embs: 1 | Pcd size: (3, 3591), ID: 178 | Names: [table] |  Num embs: 1 | Pcd size: (3, 7458), ID: 188 | Names: [dinning table] |  Num embs: 1 | Pcd size: (3, 8095), ID: 194 | Names: [table] |  Num embs: 1 | Pcd size: (3, 3773), ID: 200 | Names: [table] |  Num embs: 1 | Pcd size: (3, 4549), ID: 205 | Names: [stool] |  Num embs: 1 | Pcd size: (3, 1029)] 
+
+		 ID: 178 | Names: [table] |  Num embs: 1 | Pcd size: (3, 7458) ID: 83 | Names: [table] |  Num embs: 1 | Pcd size: (3, 3591)
+		 ID: 188 | Names: [dinning table] |  Num embs: 1 | Pcd size: (3, 8095) ID: 83 | Names: [table ,table] |  Num embs: 2 | Pcd size: (3, 11049)
+		 ID: 194 | Names: [table] |  Num embs: 1 | Pcd size: (3, 3773) ID: 83 | Names: [table ,table ,dinning table] |  Num embs: 3 | Pcd size: (3, 19144)
+		 ID: 200 | Names: [table] |  Num embs: 1 | Pcd size: (3, 4549) ID: 83 | Names: [table ,table ,dinning table ,table] |  Num embs: 4 | Pcd size: (3, 22917)
+		 ID: 205 | Names: [stool] |  Num embs: 1 | Pcd size: (3, 1029) ID: 83 | Names: [table ,table ,dinning table ,table ,table] |  Num embs: 5 | Pcd size: (3, 27466)
+Label:  37
+	Added
+	Added
+	Added
+	Added
+	Added
+	Added
+	Added
+	Added
+	Added
+	Added
+	Added
+	Added
+	Added
+	Added
+	Added
+	Added
+	Added
+	Added
+	Added
+Arr len:  19 
+
+to clusetr:  [ID: 90 | Names: [armchair] |  Num embs: 1 | Pcd size: (3, 3200), ID: 99 | Names: [armchair] |  Num embs: 1 | Pcd size: (3, 1073), ID: 107 | Names: [chair] |  Num embs: 1 | Pcd size: (3, 816), ID: 111 | Names: [chair] |  Num embs: 1 | Pcd size: (3, 926), ID: 114 | Names: [armchair] |  Num embs: 1 | Pcd size: (3, 3216), ID: 122 | Names: [armchair] |  Num embs: 1 | Pcd size: (3, 659), ID: 127 | Names: [armchair] |  Num embs: 1 | Pcd size: (3, 1260), ID: 132 | Names: [armchair] |  Num embs: 1 | Pcd size: (3, 1196), ID: 139 | Names: [armchair] |  Num embs: 1 | Pcd size: (3, 1224), ID: 144 | Names: [armchair] |  Num embs: 1 | Pcd size: (3, 1765), ID: 147 | Names: [chair] |  Num embs: 1 | Pcd size: (3, 2511), ID: 149 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 37912), ID: 150 | Names: [stair] |  Num embs: 1 | Pcd size: (3, 4289), ID: 152 | Names: [chair] |  Num embs: 1 | Pcd size: (3, 912), ID: 153 | Names: [chair] |  Num embs: 1 | Pcd size: (3, 928), ID: 160 | Names: [chair] |  Num embs: 1 | Pcd size: (3, 1071), ID: 164 | Names: [armchair] |  Num embs: 1 | Pcd size: (3, 1857), ID: 167 | Names: [armchair] |  Num embs: 1 | Pcd size: (3, 625), ID: 221 | Names: [armchair] |  Num embs: 1 | Pcd size: (3, 682)] 
+
+		 ID: 99 | Names: [armchair] |  Num embs: 1 | Pcd size: (3, 1073) ID: 90 | Names: [armchair] |  Num embs: 1 | Pcd size: (3, 3200)
+		 ID: 107 | Names: [chair] |  Num embs: 1 | Pcd size: (3, 816) ID: 90 | Names: [armchair ,armchair] |  Num embs: 2 | Pcd size: (3, 4273)
+		 ID: 111 | Names: [chair] |  Num embs: 1 | Pcd size: (3, 926) ID: 90 | Names: [armchair ,armchair ,chair] |  Num embs: 3 | Pcd size: (3, 5089)
+		 ID: 114 | Names: [armchair] |  Num embs: 1 | Pcd size: (3, 3216) ID: 90 | Names: [armchair ,armchair ,chair ,chair] |  Num embs: 4 | Pcd size: (3, 6015)
+		 ID: 122 | Names: [armchair] |  Num embs: 1 | Pcd size: (3, 659) ID: 90 | Names: [armchair ,armchair ,chair ,chair ,armchair] |  Num embs: 5 | Pcd size: (3, 9231)
+		 ID: 127 | Names: [armchair] |  Num embs: 1 | Pcd size: (3, 1260) ID: 90 | Names: [armchair ,armchair ,chair ,chair ,armchair ,armchair] |  Num embs: 6 | Pcd size: (3, 9890)
+		 ID: 132 | Names: [armchair] |  Num embs: 1 | Pcd size: (3, 1196) ID: 90 | Names: [armchair ,armchair ,chair ,chair ,armchair ,armchair ,armchair] |  Num embs: 7 | Pcd size: (3, 11150)
+		 ID: 139 | Names: [armchair] |  Num embs: 1 | Pcd size: (3, 1224) ID: 90 | Names: [armchair ,armchair ,chair ,chair ,armchair ,armchair ,armchair ,armchair] |  Num embs: 8 | Pcd size: (3, 12346)
+		 ID: 144 | Names: [armchair] |  Num embs: 1 | Pcd size: (3, 1765) ID: 90 | Names: [armchair ,armchair ,chair ,chair ,armchair ,armchair ,armchair ,armchair ,armchair] |  Num embs: 9 | Pcd size: (3, 13570)
+		 ID: 147 | Names: [chair] |  Num embs: 1 | Pcd size: (3, 2511) ID: 90 | Names: [armchair ,armchair ,chair ,chair ,armchair ,armchair ,armchair ,armchair ,armchair ,armchair] |  Num embs: 10 | Pcd size: (3, 15335)
+		 ID: 149 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 37912) ID: 90 | Names: [armchair ,armchair ,chair ,chair ,armchair ,armchair ,armchair ,armchair ,armchair ,armchair ,chair] |  Num embs: 11 | Pcd size: (3, 17846)
+		 ID: 150 | Names: [stair] |  Num embs: 1 | Pcd size: (3, 4289) ID: 90 | Names: [armchair ,armchair ,chair ,chair ,armchair ,armchair ,armchair ,armchair ,armchair ,armchair ,chair ,lamp] |  Num embs: 12 | Pcd size: (3, 55758)
+		 ID: 152 | Names: [chair] |  Num embs: 1 | Pcd size: (3, 912) ID: 90 | Names: [armchair ,armchair ,chair ,chair ,armchair ,armchair ,armchair ,armchair ,armchair ,armchair ,chair ,lamp ,stair] |  Num embs: 13 | Pcd size: (3, 60047)
+		 ID: 153 | Names: [chair] |  Num embs: 1 | Pcd size: (3, 928) ID: 90 | Names: [armchair ,armchair ,chair ,chair ,armchair ,armchair ,armchair ,armchair ,armchair ,armchair ,chair ,lamp ,stair ,chair] |  Num embs: 14 | Pcd size: (3, 60959)
+		 ID: 160 | Names: [chair] |  Num embs: 1 | Pcd size: (3, 1071) ID: 90 | Names: [armchair ,armchair ,chair ,chair ,armchair ,armchair ,armchair ,armchair ,armchair ,armchair ,chair ,lamp ,stair ,chair ,chair] |  Num embs: 15 | Pcd size: (3, 61887)
+		 ID: 164 | Names: [armchair] |  Num embs: 1 | Pcd size: (3, 1857) ID: 90 | Names: [armchair ,armchair ,chair ,chair ,armchair ,armchair ,armchair ,armchair ,armchair ,armchair ,chair ,lamp ,stair ,chair ,chair ,chair] |  Num embs: 16 | Pcd size: (3, 62958)
+		 ID: 167 | Names: [armchair] |  Num embs: 1 | Pcd size: (3, 625) ID: 90 | Names: [armchair ,armchair ,chair ,chair ,armchair ,armchair ,armchair ,armchair ,armchair ,armchair ,chair ,lamp ,stair ,chair ,chair ,chair ,armchair] |  Num embs: 17 | Pcd size: (3, 64815)
+		 ID: 221 | Names: [armchair] |  Num embs: 1 | Pcd size: (3, 682) ID: 90 | Names: [armchair ,armchair ,chair ,chair ,armchair ,armchair ,armchair ,armchair ,armchair ,armchair ,chair ,lamp ,stair ,chair ,chair ,chair ,armchair ,armchair] |  Num embs: 18 | Pcd size: (3, 65440)
+Label:  38
+	Added
+	Added
+	Added
+	Added
+	Added
+	Added
+	Added
+	Added
+	Added
+	Added
+Arr len:  10 
+
+to clusetr:  [ID: 91 | Names: [stool] |  Num embs: 1 | Pcd size: (3, 2269), ID: 94 | Names: [table] |  Num embs: 1 | Pcd size: (3, 4616), ID: 100 | Names: [billiard table] |  Num embs: 1 | Pcd size: (3, 17279), ID: 108 | Names: [chair] |  Num embs: 1 | Pcd size: (3, 3417), ID: 119 | Names: [table] |  Num embs: 1 | Pcd size: (3, 5895), ID: 131 | Names: [table] |  Num embs: 1 | Pcd size: (3, 6963), ID: 136 | Names: [table] |  Num embs: 1 | Pcd size: (3, 14512), ID: 142 | Names: [table] |  Num embs: 1 | Pcd size: (3, 22641), ID: 159 | Names: [table] |  Num embs: 1 | Pcd size: (3, 2833), ID: 222 | Names: [billiard table] |  Num embs: 1 | Pcd size: (3, 11080)] 
+
+		 ID: 94 | Names: [table] |  Num embs: 1 | Pcd size: (3, 4616) ID: 91 | Names: [stool] |  Num embs: 1 | Pcd size: (3, 2269)
+		 ID: 100 | Names: [billiard table] |  Num embs: 1 | Pcd size: (3, 17279) ID: 91 | Names: [stool ,table] |  Num embs: 2 | Pcd size: (3, 6885)
+		 ID: 108 | Names: [chair] |  Num embs: 1 | Pcd size: (3, 3417) ID: 91 | Names: [stool ,table ,billiard table] |  Num embs: 3 | Pcd size: (3, 24164)
+		 ID: 119 | Names: [table] |  Num embs: 1 | Pcd size: (3, 5895) ID: 91 | Names: [stool ,table ,billiard table ,chair] |  Num embs: 4 | Pcd size: (3, 27581)
+		 ID: 131 | Names: [table] |  Num embs: 1 | Pcd size: (3, 6963) ID: 91 | Names: [stool ,table ,billiard table ,chair ,table] |  Num embs: 5 | Pcd size: (3, 33476)
+		 ID: 136 | Names: [table] |  Num embs: 1 | Pcd size: (3, 14512) ID: 91 | Names: [stool ,table ,billiard table ,chair ,table ,table] |  Num embs: 6 | Pcd size: (3, 40439)
+		 ID: 142 | Names: [table] |  Num embs: 1 | Pcd size: (3, 22641) ID: 91 | Names: [stool ,table ,billiard table ,chair ,table ,table ,table] |  Num embs: 7 | Pcd size: (3, 54951)
+		 ID: 159 | Names: [table] |  Num embs: 1 | Pcd size: (3, 2833) ID: 91 | Names: [stool ,table ,billiard table ,chair ,table ,table ,table ,table] |  Num embs: 8 | Pcd size: (3, 77592)
+		 ID: 222 | Names: [billiard table] |  Num embs: 1 | Pcd size: (3, 11080) ID: 91 | Names: [stool ,table ,billiard table ,chair ,table ,table ,table ,table ,table] |  Num embs: 9 | Pcd size: (3, 80425)
+Label:  39
+	Added
+	Added
+	Added
+	Added
+	Added
+	Added
+	Added
+	Added
+	Added
+	Added
+	Added
+	Added
+	Added
+Arr len:  13 
+
+to clusetr:  [ID: 92 | Names: [stool] |  Num embs: 1 | Pcd size: (3, 713), ID: 102 | Names: [table] |  Num embs: 1 | Pcd size: (3, 796), ID: 110 | Names: [table] |  Num embs: 1 | Pcd size: (3, 23382), ID: 113 | Names: [table] |  Num embs: 1 | Pcd size: (3, 29127), ID: 120 | Names: [table] |  Num embs: 1 | Pcd size: (3, 3241), ID: 124 | Names: [table] |  Num embs: 1 | Pcd size: (3, 12215), ID: 130 | Names: [table] |  Num embs: 1 | Pcd size: (3, 11917), ID: 135 | Names: [table] |  Num embs: 1 | Pcd size: (3, 6576), ID: 141 | Names: [table] |  Num embs: 1 | Pcd size: (3, 3209), ID: 156 | Names: [table] |  Num embs: 1 | Pcd size: (3, 6635), ID: 158 | Names: [table] |  Num embs: 1 | Pcd size: (3, 4922), ID: 163 | Names: [table] |  Num embs: 1 | Pcd size: (3, 837), ID: 170 | Names: [table] |  Num embs: 1 | Pcd size: (3, 483)] 
+
+		 ID: 102 | Names: [table] |  Num embs: 1 | Pcd size: (3, 796) ID: 92 | Names: [stool] |  Num embs: 1 | Pcd size: (3, 713)
+		 ID: 110 | Names: [table] |  Num embs: 1 | Pcd size: (3, 23382) ID: 92 | Names: [stool ,table] |  Num embs: 2 | Pcd size: (3, 1509)
+		 ID: 113 | Names: [table] |  Num embs: 1 | Pcd size: (3, 29127) ID: 92 | Names: [stool ,table ,table] |  Num embs: 3 | Pcd size: (3, 24891)
+		 ID: 120 | Names: [table] |  Num embs: 1 | Pcd size: (3, 3241) ID: 92 | Names: [stool ,table ,table ,table] |  Num embs: 4 | Pcd size: (3, 54018)
+		 ID: 124 | Names: [table] |  Num embs: 1 | Pcd size: (3, 12215) ID: 92 | Names: [stool ,table ,table ,table ,table] |  Num embs: 5 | Pcd size: (3, 57259)
+		 ID: 130 | Names: [table] |  Num embs: 1 | Pcd size: (3, 11917) ID: 92 | Names: [stool ,table ,table ,table ,table ,table] |  Num embs: 6 | Pcd size: (3, 69474)
+		 ID: 135 | Names: [table] |  Num embs: 1 | Pcd size: (3, 6576) ID: 92 | Names: [stool ,table ,table ,table ,table ,table ,table] |  Num embs: 7 | Pcd size: (3, 81391)
+		 ID: 141 | Names: [table] |  Num embs: 1 | Pcd size: (3, 3209) ID: 92 | Names: [stool ,table ,table ,table ,table ,table ,table ,table] |  Num embs: 8 | Pcd size: (3, 87967)
+		 ID: 156 | Names: [table] |  Num embs: 1 | Pcd size: (3, 6635) ID: 92 | Names: [stool ,table ,table ,table ,table ,table ,table ,table ,table] |  Num embs: 9 | Pcd size: (3, 91176)
+		 ID: 158 | Names: [table] |  Num embs: 1 | Pcd size: (3, 4922) ID: 92 | Names: [stool ,table ,table ,table ,table ,table ,table ,table ,table ,table] |  Num embs: 10 | Pcd size: (3, 97811)
+		 ID: 163 | Names: [table] |  Num embs: 1 | Pcd size: (3, 837) ID: 92 | Names: [stool ,table ,table ,table ,table ,table ,table ,table ,table ,table ,table] |  Num embs: 11 | Pcd size: (3, 102733)
+		 ID: 170 | Names: [table] |  Num embs: 1 | Pcd size: (3, 483) ID: 92 | Names: [stool ,table ,table ,table ,table ,table ,table ,table ,table ,table ,table ,table] |  Num embs: 12 | Pcd size: (3, 103570)
+Label:  40
+	Added
+	Added
+	Added
+	Added
+	Added
+	Added
+	Added
+	Added
+	Added
+	Added
+	Added
+	Added
+	Added
+	Added
+	Added
+	Added
+	Added
+Arr len:  17 
+
+to clusetr:  [ID: 101 | Names: [table] |  Num embs: 1 | Pcd size: (3, 576), ID: 106 | Names: [stool] |  Num embs: 1 | Pcd size: (3, 720), ID: 109 | Names: [table] |  Num embs: 1 | Pcd size: (3, 2884), ID: 112 | Names: [table] |  Num embs: 1 | Pcd size: (3, 7379), ID: 115 | Names: [table] |  Num embs: 1 | Pcd size: (3, 4724), ID: 118 | Names: [table] |  Num embs: 1 | Pcd size: (3, 2431), ID: 123 | Names: [table] |  Num embs: 1 | Pcd size: (3, 5858), ID: 129 | Names: [table] |  Num embs: 1 | Pcd size: (3, 1295), ID: 134 | Names: [table] |  Num embs: 1 | Pcd size: (3, 900), ID: 140 | Names: [table] |  Num embs: 1 | Pcd size: (3, 650), ID: 146 | Names: [table] |  Num embs: 1 | Pcd size: (3, 3174), ID: 148 | Names: [table] |  Num embs: 1 | Pcd size: (3, 6778), ID: 155 | Names: [table] |  Num embs: 1 | Pcd size: (3, 16818), ID: 157 | Names: [table] |  Num embs: 1 | Pcd size: (3, 8342), ID: 162 | Names: [table] |  Num embs: 1 | Pcd size: (3, 17723), ID: 166 | Names: [table] |  Num embs: 1 | Pcd size: (3, 6910), ID: 169 | Names: [table] |  Num embs: 1 | Pcd size: (3, 4703)] 
+
+		 ID: 106 | Names: [stool] |  Num embs: 1 | Pcd size: (3, 720) ID: 101 | Names: [table] |  Num embs: 1 | Pcd size: (3, 576)
+		 ID: 109 | Names: [table] |  Num embs: 1 | Pcd size: (3, 2884) ID: 101 | Names: [table ,stool] |  Num embs: 2 | Pcd size: (3, 1296)
+		 ID: 112 | Names: [table] |  Num embs: 1 | Pcd size: (3, 7379) ID: 101 | Names: [table ,stool ,table] |  Num embs: 3 | Pcd size: (3, 4180)
+		 ID: 115 | Names: [table] |  Num embs: 1 | Pcd size: (3, 4724) ID: 101 | Names: [table ,stool ,table ,table] |  Num embs: 4 | Pcd size: (3, 11559)
+		 ID: 118 | Names: [table] |  Num embs: 1 | Pcd size: (3, 2431) ID: 101 | Names: [table ,stool ,table ,table ,table] |  Num embs: 5 | Pcd size: (3, 16283)
+		 ID: 123 | Names: [table] |  Num embs: 1 | Pcd size: (3, 5858) ID: 101 | Names: [table ,stool ,table ,table ,table ,table] |  Num embs: 6 | Pcd size: (3, 18714)
+		 ID: 129 | Names: [table] |  Num embs: 1 | Pcd size: (3, 1295) ID: 101 | Names: [table ,stool ,table ,table ,table ,table ,table] |  Num embs: 7 | Pcd size: (3, 24572)
+		 ID: 134 | Names: [table] |  Num embs: 1 | Pcd size: (3, 900) ID: 101 | Names: [table ,stool ,table ,table ,table ,table ,table ,table] |  Num embs: 8 | Pcd size: (3, 25867)
+		 ID: 140 | Names: [table] |  Num embs: 1 | Pcd size: (3, 650) ID: 101 | Names: [table ,stool ,table ,table ,table ,table ,table ,table ,table] |  Num embs: 9 | Pcd size: (3, 26767)
+		 ID: 146 | Names: [table] |  Num embs: 1 | Pcd size: (3, 3174) ID: 101 | Names: [table ,stool ,table ,table ,table ,table ,table ,table ,table ,table] |  Num embs: 10 | Pcd size: (3, 27417)
+		 ID: 148 | Names: [table] |  Num embs: 1 | Pcd size: (3, 6778) ID: 101 | Names: [table ,stool ,table ,table ,table ,table ,table ,table ,table ,table ,table] |  Num embs: 11 | Pcd size: (3, 30591)
+		 ID: 155 | Names: [table] |  Num embs: 1 | Pcd size: (3, 16818) ID: 101 | Names: [table ,stool ,table ,table ,table ,table ,table ,table ,table ,table ,table ,table] |  Num embs: 12 | Pcd size: (3, 37369)
+		 ID: 157 | Names: [table] |  Num embs: 1 | Pcd size: (3, 8342) ID: 101 | Names: [table ,stool ,table ,table ,table ,table ,table ,table ,table ,table ,table ,table ,table] |  Num embs: 13 | Pcd size: (3, 54187)
+		 ID: 162 | Names: [table] |  Num embs: 1 | Pcd size: (3, 17723) ID: 101 | Names: [table ,stool ,table ,table ,table ,table ,table ,table ,table ,table ,table ,table ,table ,table] |  Num embs: 14 | Pcd size: (3, 62529)
+		 ID: 166 | Names: [table] |  Num embs: 1 | Pcd size: (3, 6910) ID: 101 | Names: [table ,stool ,table ,table ,table ,table ,table ,table ,table ,table ,table ,table ,table ,table ,table] |  Num embs: 15 | Pcd size: (3, 80252)
+		 ID: 169 | Names: [table] |  Num embs: 1 | Pcd size: (3, 4703) ID: 101 | Names: [table ,stool ,table ,table ,table ,table ,table ,table ,table ,table ,table ,table ,table ,table ,table ,table] |  Num embs: 16 | Pcd size: (3, 87162)
+Label:  41
+	Added
+	Added
+	Added
+Arr len:  3 
+
+to clusetr:  [ID: 93 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 9764), ID: 96 | Names: [armchair] |  Num embs: 1 | Pcd size: (3, 6420), ID: 117 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 1179)] 
+
+		 ID: 96 | Names: [armchair] |  Num embs: 1 | Pcd size: (3, 6420) ID: 93 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 9764)
+		 ID: 117 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 1179) ID: 93 | Names: [lamp ,armchair] |  Num embs: 2 | Pcd size: (3, 16184)
+Label:  42
+	Added
+	Added
+	Added
+	Added
+	Added
+	Added
+	Added
+	Added
+Arr len:  8 
+
+to clusetr:  [ID: 95 | Names: [armchair] |  Num embs: 1 | Pcd size: (3, 6318), ID: 98 | Names: [armchair] |  Num embs: 1 | Pcd size: (3, 15968), ID: 103 | Names: [armchair] |  Num embs: 1 | Pcd size: (3, 17449), ID: 116 | Names: [armchair] |  Num embs: 1 | Pcd size: (3, 11050), ID: 121 | Names: [pillow] |  Num embs: 1 | Pcd size: (3, 4035), ID: 138 | Names: [armchair] |  Num embs: 1 | Pcd size: (3, 3508), ID: 219 | Names: [armchair] |  Num embs: 1 | Pcd size: (3, 5346), ID: 220 | Names: [armchair] |  Num embs: 1 | Pcd size: (3, 14939)] 
+
+		 ID: 98 | Names: [armchair] |  Num embs: 1 | Pcd size: (3, 15968) ID: 95 | Names: [armchair] |  Num embs: 1 | Pcd size: (3, 6318)
+		 ID: 103 | Names: [armchair] |  Num embs: 1 | Pcd size: (3, 17449) ID: 95 | Names: [armchair ,armchair] |  Num embs: 2 | Pcd size: (3, 22286)
+		 ID: 116 | Names: [armchair] |  Num embs: 1 | Pcd size: (3, 11050) ID: 95 | Names: [armchair ,armchair ,armchair] |  Num embs: 3 | Pcd size: (3, 39735)
+		 ID: 121 | Names: [pillow] |  Num embs: 1 | Pcd size: (3, 4035) ID: 95 | Names: [armchair ,armchair ,armchair ,armchair] |  Num embs: 4 | Pcd size: (3, 50785)
+		 ID: 138 | Names: [armchair] |  Num embs: 1 | Pcd size: (3, 3508) ID: 95 | Names: [armchair ,armchair ,armchair ,armchair ,pillow] |  Num embs: 5 | Pcd size: (3, 54820)
+		 ID: 219 | Names: [armchair] |  Num embs: 1 | Pcd size: (3, 5346) ID: 95 | Names: [armchair ,armchair ,armchair ,armchair ,pillow ,armchair] |  Num embs: 6 | Pcd size: (3, 58328)
+		 ID: 220 | Names: [armchair] |  Num embs: 1 | Pcd size: (3, 14939) ID: 95 | Names: [armchair ,armchair ,armchair ,armchair ,pillow ,armchair ,armchair] |  Num embs: 7 | Pcd size: (3, 63674)
+Label:  43
+	Added
+Arr len:  1 
+
+to clusetr:  [ID: 223 | Names: [billiard table] |  Num embs: 1 | Pcd size: (3, 23666)] 
+
+Label:  44
+	Added
+	Added
+	Added
+	Added
+	Added
+	Added
+Arr len:  6 
+
+to clusetr:  [ID: 97 | Names: [stool] |  Num embs: 1 | Pcd size: (3, 1934), ID: 143 | Names: [hassock] |  Num embs: 1 | Pcd size: (3, 7685), ID: 151 | Names: [chair] |  Num embs: 1 | Pcd size: (3, 1347), ID: 154 | Names: [computer] |  Num embs: 1 | Pcd size: (3, 1102), ID: 161 | Names: [computer] |  Num embs: 1 | Pcd size: (3, 1106), ID: 165 | Names: [computer] |  Num embs: 1 | Pcd size: (3, 865)] 
+
+		 ID: 143 | Names: [hassock] |  Num embs: 1 | Pcd size: (3, 7685) ID: 97 | Names: [stool] |  Num embs: 1 | Pcd size: (3, 1934)
+		 ID: 151 | Names: [chair] |  Num embs: 1 | Pcd size: (3, 1347) ID: 97 | Names: [stool ,hassock] |  Num embs: 2 | Pcd size: (3, 9619)
+		 ID: 154 | Names: [computer] |  Num embs: 1 | Pcd size: (3, 1102) ID: 97 | Names: [stool ,hassock ,chair] |  Num embs: 3 | Pcd size: (3, 10966)
+		 ID: 161 | Names: [computer] |  Num embs: 1 | Pcd size: (3, 1106) ID: 97 | Names: [stool ,hassock ,chair ,computer] |  Num embs: 4 | Pcd size: (3, 12068)
+		 ID: 165 | Names: [computer] |  Num embs: 1 | Pcd size: (3, 865) ID: 97 | Names: [stool ,hassock ,chair ,computer ,computer] |  Num embs: 5 | Pcd size: (3, 13174)
+Label:  45
+	Added
+	Added
+	Added
+	Added
+Arr len:  4 
+
+to clusetr:  [ID: 104 | Names: [armchair] |  Num embs: 1 | Pcd size: (3, 1752), ID: 133 | Names: [armchair] |  Num embs: 1 | Pcd size: (3, 1462), ID: 137 | Names: [armchair] |  Num embs: 1 | Pcd size: (3, 923), ID: 145 | Names: [armchair] |  Num embs: 1 | Pcd size: (3, 3337)] 
+
+		 ID: 133 | Names: [armchair] |  Num embs: 1 | Pcd size: (3, 1462) ID: 104 | Names: [armchair] |  Num embs: 1 | Pcd size: (3, 1752)
+		 ID: 137 | Names: [armchair] |  Num embs: 1 | Pcd size: (3, 923) ID: 104 | Names: [armchair ,armchair] |  Num embs: 2 | Pcd size: (3, 3214)
+		 ID: 145 | Names: [armchair] |  Num embs: 1 | Pcd size: (3, 3337) ID: 104 | Names: [armchair ,armchair ,armchair] |  Num embs: 3 | Pcd size: (3, 4137)
+Label:  46
+	Added
+	Added
+	Added
+	Added
+Arr len:  4 
+
+to clusetr:  [ID: 105 | Names: [stool] |  Num embs: 1 | Pcd size: (3, 6280), ID: 125 | Names: [stool] |  Num embs: 1 | Pcd size: (3, 2369), ID: 128 | Names: [armchair] |  Num embs: 1 | Pcd size: (3, 3526), ID: 224 | Names: [stool] |  Num embs: 1 | Pcd size: (3, 1618)] 
+
+		 ID: 125 | Names: [stool] |  Num embs: 1 | Pcd size: (3, 2369) ID: 105 | Names: [stool] |  Num embs: 1 | Pcd size: (3, 6280)
+		 ID: 128 | Names: [armchair] |  Num embs: 1 | Pcd size: (3, 3526) ID: 105 | Names: [stool ,stool] |  Num embs: 2 | Pcd size: (3, 8649)
+		 ID: 224 | Names: [stool] |  Num embs: 1 | Pcd size: (3, 1618) ID: 105 | Names: [stool ,stool ,armchair] |  Num embs: 3 | Pcd size: (3, 12175)
+Label:  47
+Arr len:  0 
+
+to clusetr:  [] 
+
+Label:  48
+Arr len:  0 
+
+to clusetr:  [] 
+
+Label:  49
+Arr len:  0 
+
+to clusetr:  [] 
+
+Label:  50
+Arr len:  0 
+
+to clusetr:  [] 
+
+Label:  51
+Arr len:  0 
+
+to clusetr:  [] 
+
+Label:  52
+	Added
+Arr len:  1 
+
+to clusetr:  [ID: 126 | Names: [armchair] |  Num embs: 1 | Pcd size: (3, 2225)] 
+
+Label:  53
+Arr len:  0 
+
+to clusetr:  [] 
+
+Label:  54
+	Added
+	Added
+	Added
+Arr len:  3 
+
+to clusetr:  [ID: 180 | Names: [table] |  Num embs: 1 | Pcd size: (3, 1714), ID: 182 | Names: [table] |  Num embs: 1 | Pcd size: (3, 10242), ID: 208 | Names: [stool] |  Num embs: 1 | Pcd size: (3, 648)] 
+
+		 ID: 182 | Names: [table] |  Num embs: 1 | Pcd size: (3, 10242) ID: 180 | Names: [table] |  Num embs: 1 | Pcd size: (3, 1714)
+		 ID: 208 | Names: [stool] |  Num embs: 1 | Pcd size: (3, 648) ID: 180 | Names: [table ,table] |  Num embs: 2 | Pcd size: (3, 11956)
+Label:  55
+	Added
+	Added
+	Added
+	Added
+	Added
+	Added
+	Added
+	Added
+Arr len:  8 
+
+to clusetr:  [ID: 225 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 8479), ID: 227 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 4343), ID: 228 | Names: [chair] |  Num embs: 1 | Pcd size: (3, 1327), ID: 230 | Names: [stool] |  Num embs: 1 | Pcd size: (3, 1208), ID: 234 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 12566), ID: 235 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 8877), ID: 237 | Names: [stool] |  Num embs: 1 | Pcd size: (3, 5558), ID: 238 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 4359)] 
+
+		 ID: 227 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 4343) ID: 225 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 8479)
+		 ID: 228 | Names: [chair] |  Num embs: 1 | Pcd size: (3, 1327) ID: 225 | Names: [lamp ,lamp] |  Num embs: 2 | Pcd size: (3, 12822)
+		 ID: 230 | Names: [stool] |  Num embs: 1 | Pcd size: (3, 1208) ID: 225 | Names: [lamp ,lamp ,chair] |  Num embs: 3 | Pcd size: (3, 14149)
+		 ID: 234 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 12566) ID: 225 | Names: [lamp ,lamp ,chair ,stool] |  Num embs: 4 | Pcd size: (3, 15357)
+		 ID: 235 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 8877) ID: 225 | Names: [lamp ,lamp ,chair ,stool ,lamp] |  Num embs: 5 | Pcd size: (3, 27923)
+		 ID: 237 | Names: [stool] |  Num embs: 1 | Pcd size: (3, 5558) ID: 225 | Names: [lamp ,lamp ,chair ,stool ,lamp ,lamp] |  Num embs: 6 | Pcd size: (3, 36800)
+		 ID: 238 | Names: [lamp] |  Num embs: 1 | Pcd size: (3, 4359) ID: 225 | Names: [lamp ,lamp ,chair ,stool ,lamp ,lamp ,stool] |  Num embs: 7 | Pcd size: (3, 42358)
+Label:  56
+	Added
+	Added
+	Added
+	Added
+Arr len:  4 
+
+to clusetr:  [ID: 226 | Names: [chair] |  Num embs: 1 | Pcd size: (3, 3694), ID: 236 | Names: [chair] |  Num embs: 1 | Pcd size: (3, 2345), ID: 239 | Names: [chair] |  Num embs: 1 | Pcd size: (3, 1974), ID: 240 | Names: [stool] |  Num embs: 1 | Pcd size: (3, 1249)] 
+
+		 ID: 236 | Names: [chair] |  Num embs: 1 | Pcd size: (3, 2345) ID: 226 | Names: [chair] |  Num embs: 1 | Pcd size: (3, 3694)
+		 ID: 239 | Names: [chair] |  Num embs: 1 | Pcd size: (3, 1974) ID: 226 | Names: [chair ,chair] |  Num embs: 2 | Pcd size: (3, 6039)
+		 ID: 240 | Names: [stool] |  Num embs: 1 | Pcd size: (3, 1249) ID: 226 | Names: [chair ,chair ,chair] |  Num embs: 3 | Pcd size: (3, 8013)
+Label:  57
+	Added
+Arr len:  1 
+
+to clusetr:  [ID: 229 | Names: [stool] |  Num embs: 1 | Pcd size: (3, 912)] 
+
+Label:  58
+	Added
+Arr len:  1 
+
+to clusetr:  [ID: 231 | Names: [stool] |  Num embs: 1 | Pcd size: (3, 2254)] 
+
+Label:  59
+	Added
+Arr len:  1 
+
+to clusetr:  [ID: 241 | Names: [stool] |  Num embs: 1 | Pcd size: (3, 563)] 
+
+ctr:  242
+asdf:  49
+asdf:  49
+Traversal completed in 158.30537390708923 seconds
+158.30537390708923 seconds per image for 1 images
+
+0 pointcloud saved to /scratch/aneesh.chavan/results/8-room-new-icp/ind_mems/memory_0.ply
+1 pointcloud saved to /scratch/aneesh.chavan/results/8-room-new-icp/ind_mems/memory_1.ply
+2 pointcloud saved to /scratch/aneesh.chavan/results/8-room-new-icp/ind_mems/memory_2.ply
+3 pointcloud saved to /scratch/aneesh.chavan/results/8-room-new-icp/ind_mems/memory_3.ply
+4 pointcloud saved to /scratch/aneesh.chavan/results/8-room-new-icp/ind_mems/memory_4.ply
+5 pointcloud saved to /scratch/aneesh.chavan/results/8-room-new-icp/ind_mems/memory_5.ply
+6 pointcloud saved to /scratch/aneesh.chavan/results/8-room-new-icp/ind_mems/memory_6.ply
+7 pointcloud saved to /scratch/aneesh.chavan/results/8-room-new-icp/ind_mems/memory_7.ply
+8 pointcloud saved to /scratch/aneesh.chavan/results/8-room-new-icp/ind_mems/memory_8.ply
+9 pointcloud saved to /scratch/aneesh.chavan/results/8-room-new-icp/ind_mems/memory_9.ply
+10 pointcloud saved to /scratch/aneesh.chavan/results/8-room-new-icp/ind_mems/memory_10.ply
+11 pointcloud saved to /scratch/aneesh.chavan/results/8-room-new-icp/ind_mems/memory_11.ply
+12 pointcloud saved to /scratch/aneesh.chavan/results/8-room-new-icp/ind_mems/memory_12.ply
+13 pointcloud saved to /scratch/aneesh.chavan/results/8-room-new-icp/ind_mems/memory_13.ply
+14 pointcloud saved to /scratch/aneesh.chavan/results/8-room-new-icp/ind_mems/memory_14.ply
+15 pointcloud saved to /scratch/aneesh.chavan/results/8-room-new-icp/ind_mems/memory_15.ply
+16 pointcloud saved to /scratch/aneesh.chavan/results/8-room-new-icp/ind_mems/memory_16.ply
+17 pointcloud saved to /scratch/aneesh.chavan/results/8-room-new-icp/ind_mems/memory_17.ply
+18 pointcloud saved to /scratch/aneesh.chavan/results/8-room-new-icp/ind_mems/memory_18.ply
+19 pointcloud saved to /scratch/aneesh.chavan/results/8-room-new-icp/ind_mems/memory_19.ply
+20 pointcloud saved to /scratch/aneesh.chavan/results/8-room-new-icp/ind_mems/memory_20.ply
+21 pointcloud saved to /scratch/aneesh.chavan/results/8-room-new-icp/ind_mems/memory_21.ply
+22 pointcloud saved to /scratch/aneesh.chavan/results/8-room-new-icp/ind_mems/memory_22.ply
+23 pointcloud saved to /scratch/aneesh.chavan/results/8-room-new-icp/ind_mems/memory_23.ply
+24 pointcloud saved to /scratch/aneesh.chavan/results/8-room-new-icp/ind_mems/memory_24.ply
+25 pointcloud saved to /scratch/aneesh.chavan/results/8-room-new-icp/ind_mems/memory_25.ply
+26 pointcloud saved to /scratch/aneesh.chavan/results/8-room-new-icp/ind_mems/memory_26.ply
+27 pointcloud saved to /scratch/aneesh.chavan/results/8-room-new-icp/ind_mems/memory_27.ply
+28 pointcloud saved to /scratch/aneesh.chavan/results/8-room-new-icp/ind_mems/memory_28.ply
+29 pointcloud saved to /scratch/aneesh.chavan/results/8-room-new-icp/ind_mems/memory_29.ply
+30 pointcloud saved to /scratch/aneesh.chavan/results/8-room-new-icp/ind_mems/memory_30.ply
+31 pointcloud saved to /scratch/aneesh.chavan/results/8-room-new-icp/ind_mems/memory_31.ply
+32 pointcloud saved to /scratch/aneesh.chavan/results/8-room-new-icp/ind_mems/memory_32.ply
+33 pointcloud saved to /scratch/aneesh.chavan/results/8-room-new-icp/ind_mems/memory_33.ply
+34 pointcloud saved to /scratch/aneesh.chavan/results/8-room-new-icp/ind_mems/memory_34.ply
+35 pointcloud saved to /scratch/aneesh.chavan/results/8-room-new-icp/ind_mems/memory_35.ply
+36 pointcloud saved to /scratch/aneesh.chavan/results/8-room-new-icp/ind_mems/memory_36.ply
+37 pointcloud saved to /scratch/aneesh.chavan/results/8-room-new-icp/ind_mems/memory_37.ply
+38 pointcloud saved to /scratch/aneesh.chavan/results/8-room-new-icp/ind_mems/memory_38.ply
+39 pointcloud saved to /scratch/aneesh.chavan/results/8-room-new-icp/ind_mems/memory_39.ply
+40 pointcloud saved to /scratch/aneesh.chavan/results/8-room-new-icp/ind_mems/memory_40.ply
+41 pointcloud saved to /scratch/aneesh.chavan/results/8-room-new-icp/ind_mems/memory_41.ply
+42 pointcloud saved to /scratch/aneesh.chavan/results/8-room-new-icp/ind_mems/memory_42.ply
+43 pointcloud saved to /scratch/aneesh.chavan/results/8-room-new-icp/ind_mems/memory_43.ply
+44 pointcloud saved to /scratch/aneesh.chavan/results/8-room-new-icp/ind_mems/memory_44.ply
+45 pointcloud saved to /scratch/aneesh.chavan/results/8-room-new-icp/ind_mems/memory_45.ply
+46 pointcloud saved to /scratch/aneesh.chavan/results/8-room-new-icp/ind_mems/memory_46.ply
+47 pointcloud saved to /scratch/aneesh.chavan/results/8-room-new-icp/ind_mems/memory_47.ply
+Memory's pointcloud saved to /home2/aneesh.chavan/Change_detection/pcds/dbscan_register_full_pointcloud_after_cons.ply
+
+
+	---------------------
+Objects stored in memory:
+ID: 0 | Names: [table ,stool ,armchair ,stool ,stool ,stool] |  Num embs: 6 | Pcd size: (3, 11474)
+ID: 1 | Names: [armchair] |  Num embs: 1 | Pcd size: (3, 17209)
+ID: 2 | Names: [armchair ,stool] |  Num embs: 2 | Pcd size: (3, 5907)
+ID: 3 | Names: [armchair] |  Num embs: 1 | Pcd size: (3, 1562)
+ID: 4 | Names: [handcart] |  Num embs: 1 | Pcd size: (3, 8072)
+ID: 5 | Names: [chair ,armchair ,armchair ,chair] |  Num embs: 4 | Pcd size: (3, 5789)
+ID: 6 | Names: [food ,chair ,stool ,beverage ,stool] |  Num embs: 5 | Pcd size: (3, 9098)
+ID: 7 | Names: [armchair ,armchair ,armchair] |  Num embs: 3 | Pcd size: (3, 16081)
+ID: 8 | Names: [cage ,cage ,table] |  Num embs: 3 | Pcd size: (3, 13734)
+ID: 9 | Names: [cage ,cage] |  Num embs: 2 | Pcd size: (3, 31795)
+ID: 11 | Names: [armchair ,armchair ,armchair ,armchair] |  Num embs: 4 | Pcd size: (3, 39967)
+ID: 12 | Names: [table ,chair ,stool ,table ,chair ,table] |  Num embs: 6 | Pcd size: (3, 17977)
+ID: 13 | Names: [armchair ,armchair] |  Num embs: 2 | Pcd size: (3, 7133)
+ID: 14 | Names: [armchair ,table] |  Num embs: 2 | Pcd size: (3, 3535)
+ID: 15 | Names: [armchair ,stool ,armchair ,stool ,armchair ,stool ,armchair ,table ,chair ,chair ,stool ,chair ,stool] |  Num embs: 13 | Pcd size: (3, 28416)
+ID: 16 | Names: [couch ,spiral] |  Num embs: 2 | Pcd size: (3, 19704)
+ID: 17 | Names: [box] |  Num embs: 1 | Pcd size: (3, 18965)
+ID: 18 | Names: [armchair] |  Num embs: 1 | Pcd size: (3, 21427)
+ID: 19 | Names: [armchair] |  Num embs: 1 | Pcd size: (3, 16859)
+ID: 20 | Names: [armchair ,handcart] |  Num embs: 2 | Pcd size: (3, 6628)
+ID: 21 | Names: [stool ,table] |  Num embs: 2 | Pcd size: (3, 3171)
+ID: 22 | Names: [bed ,bed ,chair ,chair ,chair ,chair ,chair ,table ,chair ,chair ,chair ,table ,chair ,chair ,chair ,chair ,table ,chair ,chair ,stool ,chair ,pole ,chair ,chair ,chair ,table ,chair ,chair ,stool] |  Num embs: 29 | Pcd size: (3, 133530)
+ID: 23 | Names: [armchair ,armchair ,armchair ,armchair ,armchair ,armchair ,armchair] |  Num embs: 7 | Pcd size: (3, 89752)
+ID: 24 | Names: [table] |  Num embs: 1 | Pcd size: (3, 431)
+ID: 25 | Names: [table ,table] |  Num embs: 2 | Pcd size: (3, 2407)
+ID: 26 | Names: [table ,table ,table ,table ,table ,table] |  Num embs: 6 | Pcd size: (3, 15613)
+ID: 27 | Names: [hassock ,armchair ,chair ,stool] |  Num embs: 4 | Pcd size: (3, 8302)
+ID: 28 | Names: [lamp ,lamp ,lamp ,lamp] |  Num embs: 4 | Pcd size: (3, 9412)
+ID: 29 | Names: [lamp ,lamp ,lamp ,lamp ,lamp ,lamp ,lamp] |  Num embs: 7 | Pcd size: (3, 7570)
+ID: 30 | Names: [table ,table ,table ,table ,table ,table] |  Num embs: 6 | Pcd size: (3, 77252)
+ID: 31 | Names: [table ,table ,dinning table ,table ,table ,stool] |  Num embs: 6 | Pcd size: (3, 28275)
+ID: 32 | Names: [armchair ,armchair ,chair ,chair ,armchair ,armchair ,armchair ,armchair ,armchair ,armchair ,chair ,lamp ,stair ,chair ,chair ,chair ,armchair ,armchair ,armchair] |  Num embs: 19 | Pcd size: (3, 21951)
+ID: 33 | Names: [stool ,table ,billiard table ,chair ,table ,table ,table ,table ,table ,billiard table] |  Num embs: 10 | Pcd size: (3, 90821)
+ID: 34 | Names: [stool ,table ,table ,table ,table ,table ,table ,table ,table ,table ,table ,table ,table] |  Num embs: 13 | Pcd size: (3, 92705)
+ID: 35 | Names: [table ,stool ,table ,table ,table ,table ,table ,table ,table ,table ,table ,table ,table ,table ,table ,table ,table] |  Num embs: 17 | Pcd size: (3, 89770)
+ID: 36 | Names: [lamp ,armchair ,lamp] |  Num embs: 3 | Pcd size: (3, 14978)
+ID: 37 | Names: [armchair ,armchair ,armchair ,armchair ,pillow ,armchair ,armchair ,armchair] |  Num embs: 8 | Pcd size: (3, 78139)
+ID: 38 | Names: [billiard table] |  Num embs: 1 | Pcd size: (3, 23105)
+ID: 39 | Names: [stool ,hassock ,chair ,computer ,computer ,computer] |  Num embs: 6 | Pcd size: (3, 13979)
+ID: 40 | Names: [armchair ,armchair ,armchair ,armchair] |  Num embs: 4 | Pcd size: (3, 7434)
+ID: 41 | Names: [stool ,stool ,armchair ,stool] |  Num embs: 4 | Pcd size: (3, 12864)
+ID: 42 | Names: [armchair] |  Num embs: 1 | Pcd size: (3, 2188)
+ID: 43 | Names: [table ,table ,stool] |  Num embs: 3 | Pcd size: (3, 12459)
+ID: 44 | Names: [lamp ,lamp ,chair ,stool ,lamp ,lamp ,stool ,lamp] |  Num embs: 8 | Pcd size: (3, 41324)
+ID: 45 | Names: [chair ,chair ,chair ,stool] |  Num embs: 4 | Pcd size: (3, 8976)
+ID: 46 | Names: [stool] |  Num embs: 1 | Pcd size: (3, 895)
+ID: 47 | Names: [stool] |  Num embs: 1 | Pcd size: (3, 2088)
+ID: 48 | Names: [stool] |  Num embs: 1 | Pcd size: (3, 563)
+
+
+	Localizing image 210 currently
+caption post ram and filtering:  armchair  .  lamp  .  chair  .  couch  .  hassock  .  stool  
+Initial ICP point clouds saved
+Getting assignments
+(4, 48)
+Phrases:  ['armchair', 'armchair', 'lamp', 'stool']
+[[ 0.38197023  0.85093105  0.5934044   0.44422054  0.6947431   0.6108099
+   0.5099927   0.3744015   0.17175299  0.4300304   0.07832548  0.42543608
+   0.07650241  0.48901734 -0.09459285  0.16613004 -0.21334246 -0.13935772
+   0.28478006 -0.11311284 -0.15007837  0.22282378  0.19083539 -0.1314986
+  -0.15024425  0.03723523  0.05629325 -0.02355238  0.18094666  0.7445572
+   0.02560664 -0.05171213  0.46576533  0.45258448  0.36387992  0.38762987
+   0.45858395  0.07923011 -0.29569817  0.11596918 -0.04345161  0.11671762
+  -0.06693298  0.1929981   0.02661678 -0.09192233 -0.36622313  0.30529526]
+ [ 0.7055187   0.82408834  0.91233706  0.45394856  0.5736862   0.44135788
+   0.37644878  0.47585598  0.394042    0.65101844  0.12457794  0.5366336
+   0.28568     0.3254075   0.166835    0.01978671  0.11813404  0.15727289
+   0.39920977  0.16773283 -0.06746937  0.4746807   0.2386908   0.1164597
+   0.20350134  0.16706693  0.0282113   0.2759354   0.51649165  0.77699155
+   0.14144276  0.09058359  0.35817918  0.478392    0.31682616  0.53363717
+   0.6315619   0.4530059  -0.01129919  0.2838436   0.35937202  0.25098377
+   0.11484745  0.13904351  0.02277957  0.26422402 -0.03828235  0.32795638]
+ [ 0.2762053   0.4505887   0.5725518   0.41976333  0.5544108   0.3185841
+   0.20582344  0.50198835  0.29079372  0.42739305 -0.00474206  0.12512566
+   0.21553767  0.16963369 -0.16977242  0.17244212  0.13943933  0.12214038
+   0.49755275 -0.05222259  0.03591098  0.34227958  0.46718627 -0.09627081
+   0.15723678  0.04390219 -0.11788337 -0.1489259   0.27020624  0.40742272
+   0.2657007  -0.03869972  0.45691586  0.2968075   0.27676678  0.22318783
+   0.20808747  0.12026928 -0.21089426  0.3750294   0.23382321  0.34890997
+   0.02248926  0.14549921  0.21498398 -0.19752365 -0.24262941  0.19640085]
+ [ 0.7879233   0.4912093   0.7019158   0.34723768  0.33423483  0.2944906
+   0.2728029   0.37614477  0.66310227  0.39749885  0.11869928  0.4341735
+   0.37580502  0.2018893   0.55871874 -0.0906184   0.28290996  0.36200157
+   0.3254044   0.49846315  0.349158    0.7521666   0.22792542  0.61246043
+   0.60408455  0.3452434   0.3343387   0.61491436  0.83754444  0.49701625
+   0.3679421   0.4394831   0.42911437  0.6505791   0.43764037  0.6470538
+   0.4219798   0.58926547  0.45689955  0.51396734  0.5228561   0.43511477
+   0.5398341   0.15301335  0.28987804  0.6076919   0.39061934  0.44534126]]
+Assignments being considered:  [[[1, 2]], [[0, 1]], [[1, 1]], [[1, 29]], [[0, 29]], [[1, 0]], [[0, 1], [1, 2]], [[1, 2], [3, 28]], [[1, 2], [3, 0]], [[0, 1], [3, 28]], [[1, 1], [3, 28]], [[1, 2], [3, 21]]]

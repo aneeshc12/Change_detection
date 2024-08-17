@@ -73,8 +73,10 @@ import torch.nn.functional as F
 import json
 from dataclasses import dataclass, field
 from jcbb import JCBB
-from fpfh.fpfh_register import register_point_clouds
+from fpfh.fpfh_register import register_point_clouds, evaluate_transform
 from similarity_volume import *
+
+from simple_semantic_icp import semantic_icp
 
 from objectron.dataset import box, iou
 
@@ -1484,6 +1486,34 @@ class ObjectMemory:
 
         assn_data = [ assn for assn in assns_to_consider ]
 
+        # clean up outliers from detected pcds before registration
+        cleaned_detected_pcds = []
+        tmp_pcd = o3d.geometry.PointCloud()
+        for obj in detected_pointclouds:
+            tmp_pcd.points = o3d.utility.Vector3dVector(obj)
+                    # remove outliers from detected pcds
+            tmp_pcd_filtered, _ = tmp_pcd.remove_radius_outlier(nb_points=outlier_removal_config["radius_nb_points"],
+                                                            radius=outlier_removal_config["radius"])
+            cleaned_detected_pcds.append(np.asarray(tmp_pcd_filtered.points))
+        detected_pointclouds = cleaned_detected_pcds
+
+        # prepare a full memory and detected pcd
+        all_memory_points = []
+        for obj in self.memory:
+            all_memory_points.append(obj.pcd)
+        all_memory_points = np.concatenate(all_memory_points, axis=-1)
+        
+        all_memory_pcd = o3d.geometry.PointCloud()
+        all_memory_pcd.points = o3d.utility.Vector3dVector(all_memory_points.T)
+
+        all_detected_points = []
+        for obj in detected_pointclouds:
+            all_detected_points.append(obj)
+        all_detected_points = np.concatenate(all_detected_points, axis=-1)
+        
+        all_detected_pcd = o3d.geometry.PointCloud()
+        all_detected_pcd.points = o3d.utility.Vector3dVector(all_detected_points.T)
+
         # go through all top K assingments, record ICP costs
         for assn_num, assn in tqdm(enumerate(assn_data)):
             # use ALL object pointclouds together
@@ -1510,30 +1540,65 @@ class ObjectMemory:
             chosen_memory_pcd = o3d.geometry.PointCloud()
             chosen_memory_pcd.points = o3d.utility.Vector3dVector(chosen_memory_points.T - memory_mean)
             
-            # remove outliers from detected pcds
-            chosen_detected_pcd_filtered, _ = chosen_detected_pcd.remove_radius_outlier(nb_points=outlier_removal_config["radius_nb_points"],
-                                                            radius=outlier_removal_config["radius"])
-
             chosen_memory_pcd.paint_uniform_color([0,1,0])
-            chosen_detected_pcd_filtered.paint_uniform_color([1,0,0])
+            chosen_detected_pcd.paint_uniform_color([1,0,0])
 
-            # o3d.io.write_point_cloud(f"./temp/{str(assn)}-{testname}-detmem.ply", chosen_memory_pcd + chosen_detected_pcd_filtered)
+            # generate labels that match objects
+            chosen_detected_labels = np.zeros(len(chosen_detected_pcd))
+            chosen_memory_labels = np.zeros(len(chosen_memory_pcd))
 
-            transform, rmse = register_point_clouds(chosen_detected_pcd_filtered, chosen_memory_pcd, 
-                                            voxel_size = fpfh_voxel_size, global_dist_factor = fpfh_global_dist_factor, 
-                                            local_dist_factor = fpfh_local_dist_factor)
+            det_ptr = 0
+            mem_ptr = 0
+            for d_index, m_index in assn:
+                chosen_detected_labels[det_ptr:] = d_index
+                chosen_memory_labels[mem_ptr:] = d_index
 
-            assn_data[assn_num] = [assn, transform, rmse]
+                # update ptrs
+                det_ptr += len(detected_pointclouds[d_index])
+                mem_ptr += len(self.memory[m_index])
+
+            # o3d.io.write_point_cloud(f"./temp/{str(assn)}-{testname}-detmem.ply", chosen_memory_pcd + chosen_detected_pcd)
+
+            # calculate initial coarse alignment based on semantic matching (better init?)
+            semantic_icp_transform = None
+            semantic_icp_transform = semantic_icp(chosen_detected_pcd, )
+
+            if semantic_icp_transform == None:
+                transform, rmse, fitness = register_point_clouds(chosen_detected_pcd, chosen_memory_pcd, 
+                                                voxel_size = fpfh_voxel_size, global_dist_factor = fpfh_global_dist_factor, 
+                                                local_dist_factor = fpfh_local_dist_factor)
+            else:
+                chosen_detected_pcd = chosen_detected_pcd.transform(semantic_icp_transform)    
+                transform, rmse, fitness = register_point_clouds(chosen_detected_pcd, chosen_memory_pcd, 
+                                                voxel_size = fpfh_voxel_size, global_dist_factor = fpfh_global_dist_factor, 
+                                                local_dist_factor = fpfh_local_dist_factor)
+                
+                transform = transform @ semantic_icp_transform
 
             # save transformation pcds
             if save_point_clouds:              
-                o3d.io.write_point_cloud(os.path.join(subsave_root, f"only_chosen_" + str(assn) + ".ply"), chosen_memory_pcd + chosen_detected_pcd_filtered.transform(transform))
+                o3d.io.write_point_cloud(os.path.join(subsave_root, f"only_chosen_" + str(assn) + ".ply"), chosen_memory_pcd + chosen_detected_pcd.transform(transform))
 
+            # get transforms in the global frame, account for mean centering
+            global_frame_transform = copy.deepcopy(transform)
+            R = copy.copy(transform[:3, :3])
+            tx = copy.copy(transform[:3, 3])
 
-        best_assn = sorted(assn_data, key=lambda x: x[-1])
+            global_frame_transform[:3, :3] = R
+            global_frame_transform[:3,  3] = tx + memory_mean - R@detected_mean
+
+            # apply candidate transform to ALL pcds, check rmse            
+            full_memory_rmse, full_memory_fitness = evaluate_transform(all_detected_pcd, all_memory_pcd, trans_init=global_frame_transform)
+
+            assn_data[assn_num] = [assn, transform, rmse, fitness, full_memory_rmse, full_memory_fitness]       # fitness
+
+        best_assn_acc_to_fitness = sorted(assn_data, key=lambda x: x[-1], reverse=True)    # reverse required for fitness
+        best_assn_acc_to_rmse = sorted(assn_data, key=lambda x: x[-2])
+
+        best_assn = best_assn_acc_to_fitness
 
         for a in best_assn:
-            print("Assn: ", a[0], " | RMSE: ", a[-1])
+            print("Assn: ", a[0], " | chosen RMSE: ", a[3] , " | full RMSE: ", a[5] , " | chosen fitness: ", a[4] , " | full memory fitness: ", a[-1])
 
         best_transform = best_assn[0][1]
         best_assn = best_assn[0][0]
@@ -1595,6 +1660,10 @@ class ObjectMemory:
 
             o3d.io.write_point_cloud(os.path.join(subsave_root, f"_best_full_pcd" + str(best_assn) + ".ply"), all_memory_pcd + all_detected_pcd_filtered.transform(best_transform))
         # # import pdb; pdb.set_trace()
+
+        # save rgb image
+        if save_point_clouds:
+            os.system(f"cp {image_path} {os.path.join(subsave_root, 'rgb_image.' + image_path.split('.')[-1])}")
 
 
         # # get all moved objs based on iou

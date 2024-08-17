@@ -7,7 +7,7 @@ class LocalArgs:
     """
     Class to hold local configuration arguments.
     """
-    testname="dbsacn_full"
+    testname="simvol_test"
 
     lora_path: str='models/vit_finegrained_5x40_procthor.pt'
     test_folder_path: str='/scratch/aneesh.chavan/8room/8-room-v1/1/'
@@ -41,17 +41,17 @@ class LocalArgs:
     localise_times: int = 1
 
     loc_results_start_file_index: int = 210
+    # loc_results_last_file_index: int = 280
     loc_results_last_file_index: int = 1400
-    loc_results_sampling_period: int = 10
+    loc_results_sampling_period: int = 21
 
     useLora: bool=True
     consider_floor=False
 
-    load_mem_from_mem=False
+    load_mem_from_mem=True
 
 if __name__=="__main__":
     start_time = time.time()
-
     largs = tyro.cli(LocalArgs, description=__doc__)
     print(largs)
 
@@ -175,7 +175,6 @@ if __name__=="__main__":
             print(f"Downsampling using voxel size as {largs.down_sample_voxel_size}")
             mem.downsample_all_objects(voxel_size=largs.down_sample_voxel_size)
 
-        import pickle
         pickle.dump(mem, open('cached_memories/dbscan_mem.pkl', 'wb'))
     else:
         mem = pickle.load(open('cached_memories/dbscan_mem.pkl', 'rb'))
@@ -422,12 +421,19 @@ if __name__=="__main__":
         #         print("Assignment: ", chosen_assignments[ii][0])
         #         print("Moved objects: ", chosen_assignments[ii][1])
 
-    for i in range(len(trans_errors)):
-        print(f"Pose {i + 1}")
+    for i, n in enumerate(range(largs.loc_results_start_file_index, 
+                   largs.loc_results_last_file_index + 1, 
+                   largs.loc_results_sampling_period)):
+        print(f"Pose {i + 1}, image {n}")
         print("Translation error", trans_errors[i])
         print("Rotation errors", rot_errors[i])
         print("Assignment: ", chosen_assignments[i][0])
         print("Moved objects: ", chosen_assignments[i][1])
+        if trans_errors[i] < 0.6 and rot_errors[i] < 0.3:
+            print("SUCCESS")
+        else:
+            print("MISALIGNED")
+        print()
 
     results = {
         "translation_errors": trans_errors,
