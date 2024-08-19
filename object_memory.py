@@ -568,6 +568,8 @@ class ObjectFinder:
             if consider_floor:
                 filtered_caption += "floor . "
 
+            print("caption before filtering: ", caption)
+
             for c in caption:
                 if c.strip() in words_to_ignore:
                     continue
@@ -1378,7 +1380,8 @@ class ObjectMemory:
                  fpfh_global_dist_factor = 2, fpfh_local_dist_factor = 0.4, 
                  fpfh_voxel_size = 0.05, topK=5, useLora=True,
                  save_localised_pcd_path=None,
-                 consider_floor=False):
+                 consider_floor=False,
+                 perform_semantic_icp=True):
         """
         Given an image and a corresponding depth image in an unknown frame, consult the stored memory
         and output a pose in the world frame of the point clouds stored in memory.
@@ -1388,7 +1391,8 @@ class ObjectMemory:
         - depth_image_path (str): Path to the depth image file in .npy format.
         - icp_threshold (float): Threshold for ICP (Iterative Closest Point) algorithm.
         - testname (str): Name for test-specific files.
-
+        - perform_semantic_icp(bool): Initialise transformation by performing a simple p2p semantic ICP first
+        
         Returns:
         - np.ndarray: Localized pose in the world frame as [x, y, z, qw, qx, qy, qz].
         """
@@ -1429,10 +1433,16 @@ class ObjectMemory:
         # get the closest similarity from each object
         closest_similarities = np.zeros_like(cosine_similarities)
         for i, d in enumerate(detected_embs):
+            for j, m in enumerate(all_memory_embs):
+                closest_similarities[i][j] = np.max(np.dot(m, d))
+
+        # closest L2-norm similarities
+        L2_closest_similarities = np.zeros_like(cosine_similarities)
+        for i, d in enumerate(detected_embs):
             row = np.zeros_like(cosine_similarities[0])
             for j, m in enumerate(all_memory_embs):
-                row[i] = np.max(np.dot(m, d))
-            closest_similarities[i] = row
+                row[i] = np.max(np.linalg.norm(m - d))
+            L2_closest_similarities[i] = row
 
         # Save point clouds
         save_root = f"pcds/{testname}/"
@@ -1463,25 +1473,24 @@ class ObjectMemory:
         # assuming that all detected objects can be assigned to mem objs
 
         print("Getting assignments")
-        print(cosine_similarities.shape)
-        sv = SimVolume(cosine_similarities)
+        print(closest_similarities.shape)
+        # sv = SimVolume(closest_similarities)
+        sv = SimVolume(closest_similarities)
         # rep_vol, _ = sv.construct_volume()
         # print(rep_vol.shape)
         # best_coords = sv.get_top_indices(rep_vol, 10)
         # assns = sv.conv_coords_to_pairs(rep_vol, best_coords)
         
-        sv.fast_construct_volume(3)
-        assns = sv.get_top_indices_from_subvolumes(num_per_length=6)
+        subvolume_size = min(len(detected_pointclouds), 3)      # 3 represents the dimensionality of the subvolumes constructed
+        sv.fast_construct_volume(subvolume_size)
+        assns = sv.get_top_indices_from_subvolumes(num_per_length=4)
         assns_to_consider = assns
         del sv
 
-        # only consider the top K assignments based on net cosine similarity
-        # assns_to_consider = [assn[0] for assn in assns[:topK]]
-        # assns_to_consider = [assn[0] for assn in assns]
-        # assns_to_consider = [[0,0]]
-
         print("Phrases: ", detected_phrases)
         print(cosine_similarities)
+        print("                 V?")
+        print(closest_similarities)
         print("Assignments being considered: ", assns_to_consider)
 
         assn_data = [ assn for assn in assns_to_consider ]
@@ -1490,11 +1499,11 @@ class ObjectMemory:
         cleaned_detected_pcds = []
         tmp_pcd = o3d.geometry.PointCloud()
         for obj in detected_pointclouds:
-            tmp_pcd.points = o3d.utility.Vector3dVector(obj)
+            tmp_pcd.points = o3d.utility.Vector3dVector(obj.T)
                     # remove outliers from detected pcds
             tmp_pcd_filtered, _ = tmp_pcd.remove_radius_outlier(nb_points=outlier_removal_config["radius_nb_points"],
                                                             radius=outlier_removal_config["radius"])
-            cleaned_detected_pcds.append(np.asarray(tmp_pcd_filtered.points))
+            cleaned_detected_pcds.append(np.asarray(tmp_pcd_filtered.points).T)
         detected_pointclouds = cleaned_detected_pcds
 
         # prepare a full memory and detected pcd
@@ -1543,37 +1552,57 @@ class ObjectMemory:
             chosen_memory_pcd.paint_uniform_color([0,1,0])
             chosen_detected_pcd.paint_uniform_color([1,0,0])
 
-            # generate labels that match objects
-            chosen_detected_labels = np.zeros(len(chosen_detected_pcd))
-            chosen_memory_labels = np.zeros(len(chosen_memory_pcd))
 
-            det_ptr = 0
-            mem_ptr = 0
-            for d_index, m_index in assn:
-                chosen_detected_labels[det_ptr:] = d_index
-                chosen_memory_labels[mem_ptr:] = d_index
+            if perform_semantic_icp:            
+                # generate labels that match objects
+                chosen_detected_labels = np.zeros(len(chosen_detected_pcd.points))
+                chosen_memory_labels = np.zeros(len(chosen_memory_pcd.points))
 
-                # update ptrs
-                det_ptr += len(detected_pointclouds[d_index])
-                mem_ptr += len(self.memory[m_index])
+                det_ptr = 0
+                mem_ptr = 0
+                for d_index, m_index in assn:
+                    chosen_detected_labels[det_ptr:] = d_index
+                    chosen_memory_labels[mem_ptr:] = d_index
 
-            # o3d.io.write_point_cloud(f"./temp/{str(assn)}-{testname}-detmem.ply", chosen_memory_pcd + chosen_detected_pcd)
+                    # update ptrs
+                    det_ptr += len(detected_pointclouds[d_index])
+                    mem_ptr += len(self.memory[m_index].pcd)
 
-            # calculate initial coarse alignment based on semantic matching (better init?)
-            semantic_icp_transform = None
-            semantic_icp_transform = semantic_icp(chosen_detected_pcd, )
+                # heavy downsample
+                ideal_num_points = 25*len(assn)
+                det_skip = len(chosen_detected_labels) // ideal_num_points
+                mem_skip = len(chosen_memory_labels) // ideal_num_points
 
-            if semantic_icp_transform == None:
-                transform, rmse, fitness = register_point_clouds(chosen_detected_pcd, chosen_memory_pcd, 
-                                                voxel_size = fpfh_voxel_size, global_dist_factor = fpfh_global_dist_factor, 
-                                                local_dist_factor = fpfh_local_dist_factor)
-            else:
+                # det_indices = np.random.choice(len(chosen_detected_labels), size=25*len(assn), replace=False)
+                # mem_indices = np.random.choice(len(chosen_memory_labels), size=25*len(assn), replace=False)
+
+                ds_detected_points = np.asarray(chosen_detected_pcd.points)[::det_skip]
+                ds_memory_points = np.asarray(chosen_memory_pcd.points)[::mem_skip]
+
+                chosen_detected_labels = chosen_detected_labels[::det_skip]
+                chosen_memory_labels = chosen_memory_labels[::mem_skip]
+
+                # o3d.io.write_point_cloud(f"./temp/{str(assn)}-{testname}-detmem.ply", chosen_memory_pcd + chosen_detected_pcd)
+
+                # calculate initial coarse alignment based on semantic matching (better init?)
+                semantic_icp_transform = semantic_icp(torch.tensor(ds_detected_points), 
+                                                      torch.tensor(ds_memory_points),
+                                                    chosen_detected_labels, chosen_memory_labels,
+                                                    max_iterations=2,
+                                                    tolerance=0.001)
                 chosen_detected_pcd = chosen_detected_pcd.transform(semantic_icp_transform)    
+                
                 transform, rmse, fitness = register_point_clouds(chosen_detected_pcd, chosen_memory_pcd, 
                                                 voxel_size = fpfh_voxel_size, global_dist_factor = fpfh_global_dist_factor, 
                                                 local_dist_factor = fpfh_local_dist_factor)
                 
                 transform = transform @ semantic_icp_transform
+
+            # no semantics
+            else:
+                transform, rmse, fitness = register_point_clouds(chosen_detected_pcd, chosen_memory_pcd, 
+                                                voxel_size = fpfh_voxel_size, global_dist_factor = fpfh_global_dist_factor, 
+                                                local_dist_factor = fpfh_local_dist_factor)
 
             # save transformation pcds
             if save_point_clouds:              

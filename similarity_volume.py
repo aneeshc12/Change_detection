@@ -105,8 +105,8 @@ class SimVolume():
             self.subvolumes.append(self.aug[0])
             return
         
-        subvolume_size = min(2, subvolume_size)
-        
+        assert self.aug.shape[0] >= subvolume_size
+
         self.chosen_objects = [i for i in itertools.combinations([j for j in range(self.aug.shape[0])], subvolume_size)]
         for chosen in self.chosen_objects:
             # print(chosen)
@@ -207,7 +207,7 @@ class SimVolume():
     def get_top_indices_from_subvolumes(self, num_per_length=3):
         top_k = []
         # assume the top k is split equally amongst all lengths up to num_detected
-        k = num_per_length * self.aug.shape[0]
+        k = num_per_length * self.aug.shape[0] * 4      # take 4 times more assns just in case the above 
         for chosen, subvol in zip(self.chosen_objects, self.subvolumes):
             for i in range(k):
                 ind = np.unravel_index(
@@ -221,6 +221,12 @@ class SimVolume():
         # get global top k assignments and convert to assignments
         all_filtered_topk = []
         assns = []
+
+        print("\nshapes")
+        for v in self.subvolumes:
+            print(v.shape)
+        print()
+
         unassigned_ind = self.subvolumes[0].shape[0] - 1
         for coords in top_k:
             
@@ -239,6 +245,7 @@ class SimVolume():
         
         filtered_topk = []
         for i in range(1, self.aug.shape[0] + 1):
+            print("Length: ", i)
             correct_length = [f for f in all_filtered_topk if len(f[0]) == i]
             correct_length = sorted(correct_length, key= lambda x: x[-1], reverse=True)[:num_per_length]
             filtered_topk += correct_length

@@ -166,7 +166,7 @@ def semantic_icp(A, B, labels_A, labels_B, init_pose=None, max_iterations=20, to
 
     assert A.shape[0] == labels_A.shape[0]
     assert B.shape[0] == labels_B.shape[0]
-    assert len(np.unique(labels_A)) == len(np.unique(labels_B))
+    # assert len(np.unique(labels_A)) == len(np.unique(labels_B))
 
     # get number of dimensions
     m = A.shape[1]
@@ -204,7 +204,7 @@ def semantic_icp(A, B, labels_A, labels_B, init_pose=None, max_iterations=20, to
         prev_error = mean_error
 
     # calculate final transformation
-    T,_,_ = best_fit_transform(A, src[:m,:].T)
+    T,_,_ = best_fit_transform(np.asarray(A), src[:m,:].T)
 
     return T
 

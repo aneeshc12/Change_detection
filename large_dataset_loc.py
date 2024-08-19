@@ -7,7 +7,7 @@ class LocalArgs:
     """
     Class to hold local configuration arguments.
     """
-    testname="simvol_test"
+    testname="subvolume_fix"
 
     lora_path: str='models/vit_finegrained_5x40_procthor.pt'
     test_folder_path: str='/scratch/aneesh.chavan/8room/8-room-v1/1/'
@@ -40,15 +40,21 @@ class LocalArgs:
     fpfh_voxel_size: float = 0.05   
     localise_times: int = 1
 
+
     loc_results_start_file_index: int = 210
     # loc_results_last_file_index: int = 280
+    # loc_results_last_file_index: int = 600
+    # loc_results_start_file_index: int = 1289
+    # loc_results_last_file_index: int = 938
     loc_results_last_file_index: int = 1400
-    loc_results_sampling_period: int = 21
+    loc_results_sampling_period: int = 13
 
     useLora: bool=True
     consider_floor=False
 
     load_mem_from_mem=True
+
+    perform_semantic_icp=False
 
 if __name__=="__main__":
     start_time = time.time()
@@ -175,42 +181,44 @@ if __name__=="__main__":
             print(f"Downsampling using voxel size as {largs.down_sample_voxel_size}")
             mem.downsample_all_objects(voxel_size=largs.down_sample_voxel_size)
 
-        pickle.dump(mem, open('cached_memories/dbscan_mem.pkl', 'wb'))
+    #######
+        # save memory point cloud
+        pcd_list = []
+        
+        for info in mem.memory:
+            object_pcd = info.pcd
+            pcd_list.append(object_pcd)
+
+        combined_pcd = o3d.geometry.PointCloud()
+
+        for bhencho in range(len(pcd_list)):
+            pcd_np = pcd_list[bhencho]
+            pcd_vec = o3d.utility.Vector3dVector(pcd_np.T)
+            pcd = o3d.geometry.PointCloud()
+            pcd.points = pcd_vec
+            pcd.paint_uniform_color(np.random.rand(3))
+            combined_pcd += pcd
+
+        save_path = os.path.join(largs.save_dir, 
+            f"/home2/aneesh.chavan/Change_detection/pcds/cached_{largs.testname}_after_cons.ply")
+        o3d.io.write_point_cloud(save_path, combined_pcd)
+    #######
+
+
+        # dbscan all objects and cluster them
+        mem.recluster_via_dbscan(viz=True)
+        mem.remove_object_floors()
+
+        end_time = time.time()
+        print(f"Traversal completed in {end_time - start_time} seconds")
+        frame_counter += 1
+        print(f"{(end_time - start_time)/float(frame_counter)} seconds per image for {frame_counter} images\n")
+
     else:
-        mem = pickle.load(open('cached_memories/dbscan_mem.pkl', 'rb'))
+        mem = pickle.load(open('cached_memories/clustered_mem.pkl', 'rb'))
+        print("Memory loaded")
 
-#######
-    # save memory point cloud
-    pcd_list = []
-    
-    for info in mem.memory:
-        object_pcd = info.pcd
-        pcd_list.append(object_pcd)
-
-    combined_pcd = o3d.geometry.PointCloud()
-
-    for bhencho in range(len(pcd_list)):
-        pcd_np = pcd_list[bhencho]
-        pcd_vec = o3d.utility.Vector3dVector(pcd_np.T)
-        pcd = o3d.geometry.PointCloud()
-        pcd.points = pcd_vec
-        pcd.paint_uniform_color(np.random.rand(3))
-        combined_pcd += pcd
-
-    save_path = os.path.join(largs.save_dir, 
-        f"/home2/aneesh.chavan/Change_detection/pcds/cached_{largs.testname}_after_cons.ply")
-    o3d.io.write_point_cloud(save_path, combined_pcd)
-#######
-
-
-    # dbscan all objects and cluster them
-    mem.recluster_via_dbscan(viz=True)
-    mem.remove_object_floors()
-
-    end_time = time.time()
-    print(f"Traversal completed in {end_time - start_time} seconds")
-    frame_counter += 1
-    print(f"{(end_time - start_time)/float(frame_counter)} seconds per image for {frame_counter} images\n")
+#####################################################
 
     pcd_list = []
     
@@ -321,7 +329,8 @@ if __name__=="__main__":
                                             fpfh_local_dist_factor = largs.fpfh_global_dist_factor, 
                                             fpfh_voxel_size = largs.fpfh_voxel_size,
                                             save_localised_pcd_path = localised_mem_save_dir, useLora = largs.useLora,
-                                            consider_floor=largs.consider_floor)
+                                            consider_floor=largs.consider_floor,
+                                            perform_semantic_icp=largs.perform_semantic_icp)
         else:
             estimated_pose, chosen_assignment = mem.localise(image_path=image_file_path, 
                                             depth_image_path=depth_file_path,
@@ -331,7 +340,8 @@ if __name__=="__main__":
                                             fpfh_global_dist_factor = largs.fpfh_global_dist_factor, 
                                             fpfh_local_dist_factor = largs.fpfh_global_dist_factor, 
                                             fpfh_voxel_size = largs.fpfh_voxel_size, useLora = largs.useLora,
-                                            consider_floor=largs.consider_floor)
+                                            consider_floor=largs.consider_floor,
+                                            perform_semantic_icp=largs.perform_semantic_icp)
 
         # save detected objs
         _, _, detected_pcds = mem._get_object_info(image_path=image_file_path, depth_image_path=depth_file_path, useLora=largs.useLora, consider_floor=largs.consider_floor)

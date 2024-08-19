@@ -1,0 +1,260 @@
+Pose 1, image 925
+Translation error 6.649440625169845
+Rotation errors 1.3622717521766334
+Assignment:  [[0, 31], [1, 38]]
+Moved objects:  None
+MISALIGNED
+
+Pose 2, image 938
+Translation error 7.592599850960564
+Rotation errors 0.07909638592041128
+Assignment:  [[0, 27]]
+Moved objects:  None
+MISALIGNED
+
+Pose 3, image 951
+Translation error 2.9094410046301427
+Rotation errors 1.4659195590858252
+Assignment:  [[0, 23]]
+Moved objects:  None
+MISALIGNED
+
+Pose 4, image 964
+Translation error 0.011527445826806199
+Rotation errors 0.0012831554721259367
+Assignment:  [[0, 11], [1, 31]]
+Moved objects:  None
+SUCCESS
+
+Pose 5, image 977
+Translation error 1.7640008878579079
+Rotation errors 1.5370834594141036
+Assignment:  [[0, 36], [2, 33]]
+Moved objects:  None
+MISALIGNED
+
+Pose 6, image 990
+Translation error 9.540731197853887
+Rotation errors 1.4773712239375358
+Assignment:  [[0, 38]]
+Moved objects:  None
+MISALIGNED
+
+Pose 7, image 1003
+Translation error 0.007825535883754526
+Rotation errors 0.0017882691652949287
+Assignment:  [[1, 41], [2, 4]]
+Moved objects:  None
+SUCCESS
+
+Pose 8, image 1016
+Translation error 7.167205708570924
+Rotation errors 1.5653981054395245
+Assignment:  [[0, 32], [1, 11]]
+Moved objects:  None
+MISALIGNED
+
+Pose 9, image 1029
+Translation error 0.09496269454860277
+Rotation errors 0.03461169751970765
+Assignment:  [[0, 41], [3, 31]]
+Moved objects:  None
+SUCCESS
+
+Pose 10, image 1042
+Translation error 0.288378555108578
+Rotation errors 0.05806253340906215
+Assignment:  [[0, 31], [1, 7]]
+Moved objects:  None
+SUCCESS
+
+Pose 11, image 1055
+Translation error 0.04153861171662751
+Rotation errors 0.007115562457838107
+Assignment:  [[0, 27], [1, 34]]
+Moved objects:  None
+SUCCESS
+
+Pose 12, image 1068
+Translation error 11.67822325811129
+Rotation errors 0.9318238933069292
+Assignment:  [[0, 16]]
+Moved objects:  None
+MISALIGNED
+
+Pose 13, image 1081
+Translation error 14.262989211348284
+Rotation errors 0.5154197900748219
+Assignment:  [[0, 43]]
+Moved objects:  None
+MISALIGNED
+
+Pose 14, image 1094
+Translation error 16.398642484769816
+Rotation errors 0.9015706119063314
+Assignment:  [[0, 8]]
+Moved objects:  None
+MISALIGNED
+
+Pose 15, image 1107
+Translation error 9.56225917927423
+Rotation errors 0.8291181611845836
+Assignment:  []
+Moved objects:  []
+MISALIGNED
+
+
+
+Pose 16, image 1120
+Translation error 0.007686917120685779
+Rotation errors 0.0031194986399595147
+Assignment:  [[1, 8], [2, 16]]
+Moved objects:  None
+SUCCESS
+
+Pose 17, image 1133
+Translation error 0.01436331501253204
+Rotation errors 0.0022252772562611537
+Assignment:  [[2, 33], [3, 32]]
+Moved objects:  None
+SUCCESS
+
+Pose 18, image 1146
+Translation error 0.009081950579679535
+Rotation errors 0.0012441009392850275
+Assignment:  [[2, 34], [5, 17]]
+Moved objects:  None
+SUCCESS
+
+Pose 19, image 1159
+Translation error 0.041019576815776976
+Rotation errors 0.004915302007950312
+Assignment:  [[1, 34], [2, 35]]
+Moved objects:  None
+SUCCESS
+
+Pose 20, image 1172
+Translation error 0.08062596131361653
+Rotation errors 0.010471508483871036
+Assignment:  [[1, 33], [2, 35]]
+Moved objects:  None
+SUCCESS
+
+Pose 21, image 1185
+Translation error 0.005551144459484421
+Rotation errors 0.0020076215403029714
+Assignment:  [[1, 22], [2, 14]]
+Moved objects:  None
+SUCCESS
+
+Pose 22, image 1198
+Translation error 10.292560449743021
+Rotation errors 0.6370789560746862
+Assignment:  []
+Moved objects:  []
+MISALIGNED
+
+Pose 23, image 1211
+Translation error 5.928337317582394
+Rotation errors 1.07988874170033
+Assignment:  [[0, 42]]
+Moved objects:  None
+MISALIGNED
+
+Pose 24, image 1224
+Translation error 0.0334031348623962
+Rotation errors 0.011130547035488884
+Assignment:  [[2, 7], [3, 42]]
+Moved objects:  None
+SUCCESS
+
+Pose 25, image 1237
+Translation error 0.146478543613543
+Rotation errors 0.05043694178151532
+Assignment:  [[0, 28], [3, 42]]
+Moved objects:  None
+SUCCESS
+
+Pose 26, image 1250
+Translation error 1.7841862051780546
+Rotation errors 0.7794966780140566
+Assignment:  [[1, 7], [4, 30]]
+Moved objects:  None
+MISALIGNED
+
+Pose 27, image 1263
+Translation error 0.0857385840624431
+Rotation errors 0.016946585421088692
+Assignment:  [[0, 28], [5, 30]]
+Moved objects:  None
+SUCCESS
+
+Pose 28, image 1276
+Translation error 1.190044527607462
+Rotation errors 0.23032344504550464
+Assignment:  [[0, 21], [4, 29]]
+Moved objects:  None
+MISALIGNED
+
+Pose 29, image 1289
+Translation error 10.371115215403554
+Rotation errors 1.312481929391625
+Assignment:  [[0, 35]]
+Moved objects:  None
+MISALIGNED
+
+Pose 30, image 1302
+Translation error 0.011341428448723614
+Rotation errors 0.006137800557162262
+Assignment:  [[0, 7], [1, 23]]
+Moved objects:  None
+SUCCESS
+
+Pose 31, image 1315
+Translation error 5.623255690693743
+Rotation errors 1.2980689050798286
+Assignment:  [[0, 4]]
+Moved objects:  None
+MISALIGNED
+
+Pose 32, image 1328
+Translation error 6.1122320571995825
+Rotation errors 1.562702711570014
+Assignment:  [[0, 34], [1, 16]]
+Moved objects:  None
+MISALIGNED
+
+Pose 33, image 1341
+Translation error 3.698582900698494
+Rotation errors 0.8522483452462671
+Assignment:  [[0, 4]]
+Moved objects:  None
+MISALIGNED
+
+Pose 34, image 1354
+Translation error 12.405329202652574
+Rotation errors 0.2511862076657846
+Assignment:  [[0, 34], [1, 7]]
+Moved objects:  None
+MISALIGNED
+
+Pose 35, image 1367
+Translation error 8.085437564635217
+Rotation errors 0.2620827004555856
+Assignment:  []
+Moved objects:  []
+MISALIGNED
+
+Pose 36, image 1380
+Translation error 0.04169277924979623
+Rotation errors 0.003446741515322372
+Assignment:  [[1, 21], [2, 29]]
+Moved objects:  None
+SUCCESS
+
+Pose 37, image 1393
+Translation error 0.018203619983136007
+Rotation errors 0.002512170090397302
+Assignment:  [[2, 37], [6, 31]]
+Moved objects:  None
+SUCCESS
